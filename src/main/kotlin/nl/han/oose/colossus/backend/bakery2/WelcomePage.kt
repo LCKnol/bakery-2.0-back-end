@@ -10,4 +10,4 @@ class WelcomePage {
     fun helloWorld(): String {
         return "Hello World";
     }
-}w8
+}
