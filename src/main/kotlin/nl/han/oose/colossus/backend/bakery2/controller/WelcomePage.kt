@@ -1,4 +1,4 @@
-package nl.han.oose.colossus.backend.bakery2
+package nl.han.oose.colossus.backend.bakery2.controller
 
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.GetMapping
