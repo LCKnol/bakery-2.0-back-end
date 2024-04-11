@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 
 @RestController
 @RequestMapping("/login")
@@ -16,13 +17,14 @@ class AuthenticationController {
     private val authenticationService = AuthenticationServiceImp()
 
     @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE], produces =[MediaType.APPLICATION_JSON_VALUE])
-    fun login(loginRequest: LoginRequestDto): ResponseEntity<LoginResponseDto> {
+    fun login(@RequestBody loginRequest: LoginRequestDto): ResponseEntity<LoginResponseDto> {
 
-        if (loginRequest.email != "user" || loginRequest.password != "password") {
+        if (loginRequest.getEmail() != "Avisi@outlook.com" || loginRequest.getPassword() != "AvisiPassword") {
+            println(loginRequest.getEmail() + loginRequest.getEmail())
             return ResponseEntity(HttpStatus.UNAUTHORIZED)
         }
-
-        val loginResponse = LoginResponseDto("abcdef")
+        println("works")
+        val loginResponse = LoginResponseDto("1234-1234-1234")
         return ResponseEntity(loginResponse, HttpStatus.OK)
     }
 
