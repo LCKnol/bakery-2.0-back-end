@@ -20,7 +20,7 @@ class PiController {
     //private val authenticator = AuthenticatorImp()
 
     @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE], produces =[MediaType.APPLICATION_JSON_VALUE])
-    fun getUserInfo(@RequestBody token: String): ResponseEntity<PiCollectionDTO> {
+    fun getPis(@RequestBody token: String): ResponseEntity<PiCollectionDTO> {
         //authenticator.authenticate
         println(token)
         val user = userService.getUser(token)
