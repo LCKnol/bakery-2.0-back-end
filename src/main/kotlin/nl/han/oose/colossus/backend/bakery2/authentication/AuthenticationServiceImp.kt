@@ -3,6 +3,7 @@ package nl.han.oose.colossus.backend.bakery2.authentication
 import nl.han.oose.colossus.backend.bakery2.dto.LoginRequestDto
 import nl.han.oose.colossus.backend.bakery2.dto.LoginResponseDto
 import nl.han.oose.colossus.backend.bakery2.authentication.AuthenticationDaoImp
+import nl.han.oose.colossus.backend.bakery2.exceptions.HttpUnauthorizedException
 
 class AuthenticationServiceImp : AuthenticationService {
 
@@ -10,7 +11,7 @@ class AuthenticationServiceImp : AuthenticationService {
 
     override fun authenticate(loginRequest: LoginRequestDto): LoginResponseDto {
         if (!authenticationDao.isValidUser(loginRequest.getEmail(), loginRequest.getPassword())) {
-            //TODO: HttpUnauthorizedExeption
+            throw HttpUnauthorizedException("Invalid login credentials")
         }
         val token = generateToken()
         authenticationDao.insertToken(token)
