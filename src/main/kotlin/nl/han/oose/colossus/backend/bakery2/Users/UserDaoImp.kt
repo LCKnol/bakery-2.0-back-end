@@ -3,7 +3,9 @@ package nl.han.oose.colossus.backend.bakery2.Users
 import nl.han.oose.colossus.backend.bakery2.dto.RoomDTO
 import nl.han.oose.colossus.backend.bakery2.dto.TeamDTO
 import nl.han.oose.colossus.backend.bakery2.dto.UserInfoDTO
+import org.springframework.context.annotation.Primary
 
+@Primary
 class UserDaoImp : UserDao{
     override fun getUserInfo(token: String): UserInfoDTO {
         var room = RoomDTO()

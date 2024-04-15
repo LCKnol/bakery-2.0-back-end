@@ -2,7 +2,9 @@ package nl.han.oose.colossus.backend.bakery2.Pi
 
 import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDTO
 import nl.han.oose.colossus.backend.bakery2.dto.PiDTO
+import org.springframework.context.annotation.Primary
 
+@Primary
 class PiDaoImp : PiDao {
     override fun getPis(user: Int): PiCollectionDTO {
         var pi1 = PiDTO()
