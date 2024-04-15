@@ -2,7 +2,6 @@ package nl.han.oose.colossus.backend.bakery2.authentication
 
 import nl.han.oose.colossus.backend.bakery2.dto.LoginRequestDto
 import nl.han.oose.colossus.backend.bakery2.dto.LoginResponseDto
-import nl.han.oose.colossus.backend.bakery2.exceptions.HttpUnauthorizedException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
@@ -25,12 +24,5 @@ class AuthenticationController @Autowired constructor(
 
         return ResponseEntity(loginResponse, HttpStatus.OK)
     }
-/*
-    @Autowired
-    fun setAuthenticationService(authenticationService: AuthenticationService){
-        this.authenticationService = authenticationService
-    }
-    */
-
 }
 
