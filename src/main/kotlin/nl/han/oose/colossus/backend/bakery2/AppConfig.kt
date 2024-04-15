@@ -26,26 +26,7 @@ class AppConfig {
     fun authenticationDao(): AuthenticationDao {
         return AuthenticationDaoImp()
     }
-
-    @Bean
-    fun userService(userDao : UserDao): UserService {
-        return UserServiceImp(userDao)
-    }
-
-    @Bean
-    fun userDao(): UserDao {
-        return UserDaoImp()
-    }
-
-    @Bean
-    fun piService(piDao : PiDao): PiService {
-        return PiServiceImp(piDao)
-    }
-
-    @Bean
-    fun piDao(): PiDao {
-        return PiDaoImp()
-    }
+    
 
 
 }

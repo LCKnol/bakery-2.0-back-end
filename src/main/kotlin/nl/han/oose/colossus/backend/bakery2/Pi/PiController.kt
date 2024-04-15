@@ -2,6 +2,7 @@ package nl.han.oose.colossus.backend.bakery2.Pi
 
 import nl.han.oose.colossus.backend.bakery2.Users.UserService
 import nl.han.oose.colossus.backend.bakery2.Users.UserServiceImp
+import nl.han.oose.colossus.backend.bakery2.authentication.AuthenticationService
 import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDTO
 import nl.han.oose.colossus.backend.bakery2.dto.UserInfoDTO
 import org.springframework.beans.factory.annotation.Autowired
@@ -18,10 +19,11 @@ import java.net.Authenticator
 @RequestMapping("/pis")
 class PiController @Autowired constructor(
         private var userService: UserService,
-        private var piService: PiService
+        private var piService: PiService,
+        private var authenticationService: AuthenticationService
+
 ){
 
-    //private val authenticator = AuthenticatorImp()
 
     @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE], produces =[MediaType.APPLICATION_JSON_VALUE])
     fun getPis(@RequestBody token: String): ResponseEntity<PiCollectionDTO> {

@@ -15,9 +15,9 @@ import java.net.Authenticator
 @RestController
 @RequestMapping("/user")
 class UserController @Autowired constructor(
-        private var userService: UserService
+        private var userService: UserService,
+        private var authenticationService: AuthenticationService
 ){
-    //private val authenticator = AuthenticatorImp()
 
     @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE], produces =[MediaType.APPLICATION_JSON_VALUE])
     fun getUserInfo(@RequestBody token: String): ResponseEntity<UserInfoDTO> {

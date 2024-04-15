@@ -33,5 +33,4 @@ class AuthenticationServiceImp @Autowired constructor(
         return token
     }
 
-
 }
