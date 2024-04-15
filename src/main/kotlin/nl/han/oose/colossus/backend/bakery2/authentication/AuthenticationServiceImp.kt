@@ -4,6 +4,7 @@ import nl.han.oose.colossus.backend.bakery2.dto.LoginRequestDto
 import nl.han.oose.colossus.backend.bakery2.dto.LoginResponseDto
 import nl.han.oose.colossus.backend.bakery2.authentication.AuthenticationDaoImp
 import nl.han.oose.colossus.backend.bakery2.exceptions.HttpUnauthorizedException
+import java.util.*
 
 class AuthenticationServiceImp : AuthenticationService {
 
@@ -20,10 +21,9 @@ class AuthenticationServiceImp : AuthenticationService {
     }
 
     private fun generateToken(): String {
-        //TODO: Token generation
         var token = ""
         do {
-            token = "1234-1234-1234"
+            token = UUID.randomUUID().toString()
         } while(authenticationDao.tokenExists(token))
         return token
     }
