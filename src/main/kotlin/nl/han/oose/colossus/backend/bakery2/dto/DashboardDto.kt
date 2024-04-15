@@ -2,36 +2,37 @@ package nl.han.oose.colossus.backend.bakery2.dto
 
 class DashboardDto {
 
-     private var Id: Int
+     private var id: Int
 
 
-     private var URL: String
+     private var url: String
 
 
      private var name: String
 
 
-    constructor(Id: Int, URL: String, name: String) {
-        this.Id = Id
-        this.URL = URL
+
+    constructor(id: Int, url: String, name: String) {
+        this.id = id
+        this.url = url
         this.name = name
     }
 
 
     fun setId(newValue: Int) {
-        this.Id = newValue // You can still access it within the class
+        this.id = newValue // You can still access it within the class
     }
 
     fun getId(): Int {
-        return this.Id // You can still access it within the class
+        return this.id // You can still access it within the class
     }
 
     fun setURL(newValue: String) {
-        this.URL = newValue // You can still access it within the class
+        this.url = newValue // You can still access it within the class
     }
 
     fun getURl(): String {
-        return this.URL // You can still access it within the class
+        return this.url // You can still access it within the class
     }
 
 
