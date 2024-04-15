@@ -1,5 +1,8 @@
 package nl.han.oose.colossus.backend.bakery2.authentication
 
+import org.springframework.context.annotation.Primary
+
+@Primary
 class AuthenticationDaoImp : AuthenticationDao {
 //TODO: DB Connection
 override fun isValidUser(email: String, password: String): Boolean {
