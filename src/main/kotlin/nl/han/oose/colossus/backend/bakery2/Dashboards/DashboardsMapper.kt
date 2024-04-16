@@ -2,10 +2,7 @@ package nl.han.oose.colossus.backend.bakery2.Dashboards
 
 import nl.han.oose.colossus.backend.bakery2.dto.DashboardsDto
 
-class DashboardMapperImp {
+interface DashboardsMapper {
 
-//    override fun getAlldashboardsMapper():DashboardsDto {
-//        return null
-//    }
-
+    fun getAlldashboardsMapper(): DashboardsDto
 }
