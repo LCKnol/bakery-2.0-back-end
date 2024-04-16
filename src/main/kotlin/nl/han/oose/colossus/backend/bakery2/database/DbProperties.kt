@@ -1,39 +1,41 @@
-package nl.han.oose.colossus.backend.bakery2.database
-
 import java.io.IOException
 import java.util.*
-
 
 class DbProperties(propertiesFileName: String) {
     protected var properties: Properties = Properties()
 
     val connectionString: String
-        get() = properties.getProperty(CONNECTIONSTRING)
+        get() = properties.getProperty(CONNECTIONSTRING) ?: throw RuntimeException("Connection string is null")
 
     val driver: String
-        get() = properties.getProperty(DRIVER)
+        get() = properties.getProperty(DRIVER) ?: throw RuntimeException("Driver is null")
+
+    val user: String
+        get() = properties.getProperty(USER) ?: throw RuntimeException("User is null")
+
+    val password: String
+        get() = properties.getProperty(PASSWORD) ?: throw RuntimeException("Password is null")
 
     init {
         println("Loading '$propertiesFileName'")
         try {
-            properties.load(javaClass.classLoader.getResourceAsStream(propertiesFileName))
+            val inputStream = javaClass.classLoader.getResourceAsStream(propertiesFileName)
+            if (inputStream != null) {
+                properties.load(inputStream)
+            } else {
+                throw RuntimeException("Cannot load properties file: $propertiesFileName")
+            }
         } catch (e: IOException) {
-            throw RuntimeException(e)
+            throw RuntimeException("Error loading properties file: $propertiesFileName", e)
         }
-        // Laad de in de `.properties` ingesteld database driver/klasse met onderstaand stukje magisch `Class.forName`
-        // code, zodat DAO-objecten de database connectie kunnen opvragen.
+
+        // Load the database driver class
         try {
-            Class.forName(properties.getProperty("driver"))
+            Class.forName(driver)
         } catch (e: ClassNotFoundException) {
-            throw RuntimeException(e)
+            throw RuntimeException("Database driver class not found: $driver", e)
         }
     }
-
-    val user: String
-        get() = properties.getProperty(USER)
-
-    val password: String
-        get() = properties.getProperty(PASSWORD)
 
     companion object {
         private const val CONNECTIONSTRING = "connectionstring"
