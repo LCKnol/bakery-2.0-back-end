@@ -4,6 +4,7 @@ import nl.han.oose.colossus.backend.bakery2.Users.UserService
 import nl.han.oose.colossus.backend.bakery2.Users.UserServiceImp
 import nl.han.oose.colossus.backend.bakery2.authentication.AuthenticationService
 import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDTO
+import nl.han.oose.colossus.backend.bakery2.dto.TokenDto
 import nl.han.oose.colossus.backend.bakery2.dto.UserInfoDTO
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -26,9 +27,9 @@ class PiController @Autowired constructor(
 
 
     @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE], produces =[MediaType.APPLICATION_JSON_VALUE])
-    fun getPis(@RequestBody token: String): ResponseEntity<PiCollectionDTO> {
+    fun getPis(@RequestBody token: TokenDto): ResponseEntity<PiCollectionDTO> {
         //authenticator.authenticate
-        val user = userService.getUser(token)
+        val user = userService.getUser(token.token)
         val pisResponse = piService.getPis(user)
         return ResponseEntity(pisResponse, HttpStatus.OK)
     }
