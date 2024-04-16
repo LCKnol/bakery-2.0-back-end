@@ -1,6 +1,6 @@
 package nl.han.oose.colossus.backend.bakery2.dto
 
-class DashboardsDto {
+class DashboardCollectionDto {
 
     private var dashboards:ArrayList<DashboardDto> = ArrayList()
 
