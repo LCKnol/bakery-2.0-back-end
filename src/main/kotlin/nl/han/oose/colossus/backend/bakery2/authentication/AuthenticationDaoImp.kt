@@ -9,6 +9,7 @@ import java.sql.SQLException
 @Primary
 class AuthenticationDaoImp : AuthenticationDao {
 //TODO: DB Connection
+private val mapper  = AuthenticationMapperImp()
 private val databaseConnection: Connection = DatabaseConnection.getConnection()
 
 
@@ -27,7 +28,7 @@ private val databaseConnection: Connection = DatabaseConnection.getConnection()
 
     //TODO: Remove
     override fun isValidUser(email: String, password: String): Boolean {
-        val query = "SELECT COUNT(*) FROM users WHERE email = ? AND password = ?"
+        val query = "SELECT COUNT(*) FROM user WHERE email = ? AND password = ?"
         return try {
             val preparedStatement = databaseConnection.prepareStatement(query)
             preparedStatement.setString(1, email)
