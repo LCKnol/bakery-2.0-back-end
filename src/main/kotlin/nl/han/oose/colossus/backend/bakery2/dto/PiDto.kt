@@ -1,6 +1,6 @@
 package nl.han.oose.colossus.backend.bakery2.dto
 
-class PiDTO {
+class PiDto {
     private var id : Int = 0
     private var name: String = ""
     private var status: String = ""

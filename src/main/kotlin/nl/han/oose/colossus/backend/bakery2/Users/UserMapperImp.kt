@@ -8,14 +8,14 @@ import java.sql.ResultSet
 @Primary
 @Component
 class UserMapperImp : UserMapper {
-    override fun mapUserInfo(resultSet: ResultSet): UserInfoDTO {
-        var userInfoDTO = UserInfoDTO()
+    override fun mapUserInfo(resultSet: ResultSet): UserInfoDto {
+        var userInfoDTO = UserInfoDto()
         var firstname: String? = null
         var lastname: String? = null
         val uniqueTeams = HashSet<String>()
         val uniqueRooms = HashSet<String>()
-        val teams = ArrayList<TeamDTO>()
-        val rooms = ArrayList<RoomDTO>()
+        val teams = ArrayList<TeamDto>()
+        val rooms = ArrayList<RoomDto>()
 
         while (resultSet.next()) {
             firstname = resultSet.getString("firstname")
@@ -25,12 +25,12 @@ class UserMapperImp : UserMapper {
             val roomno = resultSet.getString("roomno")
 
             if (uniqueTeams.add(teamname)) {
-                val teamDTO = TeamDTO()
+                val teamDTO = TeamDto()
                 teamDTO.setName(teamname)
                 teams.add(teamDTO)
             }
             if (uniqueRooms.add(roomno)) {
-                val roomDTO = RoomDTO()
+                val roomDTO = RoomDto()
                 roomDTO.setRoomNo(roomno)
                 rooms.add(roomDTO)
             }

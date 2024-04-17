@@ -1,17 +1,14 @@
 package nl.han.oose.colossus.backend.bakery2.dto
 
-import nl.han.oose.colossus.backend.bakery2.dto.RoomDTO
-import nl.han.oose.colossus.backend.bakery2.dto.TeamDTO
-
-class UserInfoDTO {
+class UserInfoDto {
     private var firstname: String = ""
     private var lastname: String = ""
-    private var _teams: ArrayList<TeamDTO> = ArrayList()
-    val teams: List<TeamDTO>
+    private var _teams: ArrayList<TeamDto> = ArrayList()
+    val teams: List<TeamDto>
         get() = _teams
 
-    private var _rooms: ArrayList<RoomDTO> = ArrayList()
-    val rooms: List<RoomDTO>
+    private var _rooms: ArrayList<RoomDto> = ArrayList()
+    val rooms: List<RoomDto>
         get() = _rooms
 
     fun getFirstname(): String {
@@ -30,12 +27,12 @@ class UserInfoDTO {
         this.lastname = lastname
     }
 
-    fun setTeams(newTeams: List<TeamDTO>) {
+    fun setTeams(newTeams: List<TeamDto>) {
         _teams.clear()
         _teams.addAll(newTeams)
     }
 
-    fun setRooms(newRooms: List<RoomDTO>) {
+    fun setRooms(newRooms: List<RoomDto>) {
         _rooms.clear()
         _rooms.addAll(newRooms)
     }
