@@ -18,6 +18,15 @@ class DashboardsDaoImp:DashboardsDao {
     private lateinit var dashboardsMapper: DashboardsMapper
 
 
+    fun setDatabaseConnection(connection: DatabaseConnection) {
+        databaseConnection = connection
+    }
+
+    // Setter function for dashboardsMapper
+    fun setDashboardsMapper(mapper: DashboardsMapper) {
+        dashboardsMapper = mapper
+    }
+
     @Throws(ServerErrorException::class)
     override fun getAllDashboards() :DashboardCollectionDto {
 

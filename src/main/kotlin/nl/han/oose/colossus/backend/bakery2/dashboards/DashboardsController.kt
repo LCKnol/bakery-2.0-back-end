@@ -17,6 +17,9 @@ class DashboardsController {
     @Autowired
     private lateinit var dashboardsService : DashboardsService
 
+    fun setDashboardsService(service: DashboardsService) {
+        dashboardsService = service
+    }
 
     @GetMapping(produces = ["application/json"])
 
