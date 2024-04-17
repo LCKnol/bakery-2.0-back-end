@@ -9,12 +9,9 @@ import org.springframework.stereotype.Component
 @Primary
 class DashboardsServiceImp :DashboardsService {
 
+    @Autowired
     private lateinit var dashboardDao : DashboardsDao
 
-    @Autowired
-    fun setDashboardsDao(dashboardDao : DashboardsDao) {
-        this.dashboardDao = dashboardDao
-    }
     override fun getAllDashboards(): DashboardCollectionDto {
         return dashboardDao.getAllDashboards()
     }

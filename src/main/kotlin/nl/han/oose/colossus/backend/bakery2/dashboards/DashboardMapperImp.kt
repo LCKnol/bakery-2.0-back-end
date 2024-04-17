@@ -11,12 +11,10 @@ import java.sql.ResultSet
 class DashboardMapperImp:DashboardsMapper {
 
     override fun getAlldashboardsMapper(resultSet: ResultSet):DashboardCollectionDto {
-        var newDashboardCollectionDto = DashboardCollectionDto()
+        val newDashboardCollectionDto = DashboardCollectionDto()
 
-        if (!resultSet.isBeforeFirst) {
-        }
         while (resultSet.next()) {
-            var newDashboardDto =
+            val newDashboardDto =
                 DashboardDto(resultSet.getInt("DASHBOARDID"), resultSet.getString("DASHBOARDURL"), resultSet.getString("NAME"),resultSet.getString("IMAGEURL"))
             newDashboardCollectionDto.getDashboards().add(newDashboardDto)
         }

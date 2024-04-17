@@ -14,18 +14,15 @@ import org.springframework.web.bind.annotation.RestController
 
 class DashboardsController {
 
+    @Autowired
     private lateinit var dashboardsService : DashboardsService
 
-    @Autowired
-    fun setDashboardsService(dashboardsService : DashboardsService) {
-        this.dashboardsService = dashboardsService
-    }
 
     @GetMapping(produces = ["application/json"])
 
     fun getAllDashboards(@RequestParam token : String): ResponseEntity<DashboardCollectionDto>{
 
-        var result: DashboardCollectionDto = this.dashboardsService.getAllDashboards()
+        val result: DashboardCollectionDto = this.dashboardsService.getAllDashboards()
         return ResponseEntity<DashboardCollectionDto>(result,HttpStatus.OK)
     }
 
