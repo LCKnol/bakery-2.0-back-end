@@ -13,7 +13,7 @@ class UserServiceImp @Autowired constructor(
         private var userDao: UserDao) : UserService {
 
 
-    override fun getUserInfo(token: String): UserInfoDTO{
+    override fun getUserInfo(token: String): UserInfoDTO {
         val user = userDao.getUserInfo(token);
         return user
     }
