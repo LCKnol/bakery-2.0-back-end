@@ -1,7 +1,11 @@
 package nl.han.oose.colossus.backend.bakery2.Users
 
 import nl.han.oose.colossus.backend.bakery2.dto.UserInfoDTO
+import org.springframework.context.annotation.Primary
+import org.springframework.stereotype.Component
 
+@Component
+@Primary
 class UserServiceImp: UserService{
     private val userDao = UserDaoImp()
 

@@ -19,7 +19,7 @@ class DatabaseConnection {
     }
 
     companion object {
-        private fun getConnection(): Connection {
+       internal fun getConnection(): Connection {
             try {
                 val dbProperties = DbProperties("database.properties")
                 val connectionString = dbProperties.connectionString
