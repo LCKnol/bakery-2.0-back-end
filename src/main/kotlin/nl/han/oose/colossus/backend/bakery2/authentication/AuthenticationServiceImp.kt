@@ -19,16 +19,16 @@ class AuthenticationServiceImp :AuthenticationService {
 
 
 
-    override fun authenticate(loginRequest: LoginRequestDto): LoginResponseDto {
+    override fun authenticate(email: String, password: String): LoginResponseDto {
 
-        val passwordHash = authenticationDao.findPassword(loginRequest.getEmail())
+        val passwordHash = authenticationDao.findPassword(email)
 
-        if (!BCrypt.checkpw(loginRequest.getPassword(), passwordHash)) {
+        if (!BCrypt.checkpw(password, passwordHash)) {
             throw HttpUnauthorizedException("Invalid login credentials")
         }
 
         val token = generateToken()
-        authenticationDao.insertToken(loginRequest.getEmail(), token)
+        authenticationDao.insertToken(email, token)
         return LoginResponseDto(generateToken())
     }
 

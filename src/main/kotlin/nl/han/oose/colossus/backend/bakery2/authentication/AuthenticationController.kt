@@ -24,7 +24,7 @@ private lateinit var authenticationService: AuthenticationService
     @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE], produces =[MediaType.APPLICATION_JSON_VALUE])
     fun login(@RequestBody loginRequest: LoginRequestDto): ResponseEntity<LoginResponseDto> {
 
-        val loginResponse = authenticationService.authenticate(loginRequest)
+        val loginResponse = authenticationService.authenticate(loginRequest.getEmail(), loginRequest.getPassword())
 
         return ResponseEntity(loginResponse, HttpStatus.OK)
     }

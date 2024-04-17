@@ -6,7 +6,7 @@ import nl.han.oose.colossus.backend.bakery2.dto.UserDto
 
 
 interface AuthenticationService {
-    fun authenticate(loginRequest: LoginRequestDto): LoginResponseDto
+    fun authenticate(email: String, password: String): LoginResponseDto
 
     fun validateToken(token: String)
 
