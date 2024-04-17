@@ -29,7 +29,7 @@ class AuthenticationServiceImp :AuthenticationService {
 
         val token = generateToken()
         authenticationDao.insertToken(email, token)
-        return LoginResponseDto(generateToken())
+        return LoginResponseDto(token)
     }
 
     override fun validateToken(token: String) {
