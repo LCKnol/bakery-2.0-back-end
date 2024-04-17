@@ -7,13 +7,15 @@ import nl.han.oose.colossus.backend.bakery2.exceptions.HttpUnauthorizedException
 import org.springframework.security.crypto.bcrypt.BCrypt
 import org.springframework.context.annotation.Primary
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.stereotype.Component
 import org.springframework.stereotype.Service
 import java.util.*
 
 @Primary
-@Service
-class AuthenticationServiceImp @Autowired constructor(
-    private var authenticationDao: AuthenticationDao) : AuthenticationService {
+@Component
+class AuthenticationServiceImp :AuthenticationService {
+    @Autowired
+    private lateinit var  authenticationDao: AuthenticationDao
 
 
 

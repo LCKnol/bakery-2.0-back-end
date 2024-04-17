@@ -2,28 +2,38 @@ package nl.han.oose.colossus.backend.bakery2.authentication
 
 import nl.han.oose.colossus.backend.bakery2.database.DatabaseConnection
 import nl.han.oose.colossus.backend.bakery2.dto.UserDto
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Primary
+import org.springframework.stereotype.Component
 import java.sql.Connection
 import java.sql.SQLException
 
 @Primary
+@Component
 class AuthenticationDaoImp : AuthenticationDao {
 //TODO: DB Connection
-private val mapper  = AuthenticationMapperImp()
-private val databaseConnection: Connection = DatabaseConnection.getConnection()
+//private val mapper  = AuthenticationMapperImp()
+    @Autowired
+private lateinit var databaseConnection: DatabaseConnection
 
 
-    override fun findPassword(email: String): String {
-        val query = "SELECT password FROM user WHERE email = ?"
-        try {
-            val preparedStatement = databaseConnection.prepareStatement(query)
-            preparedStatement.setString(1, email)
-            val resultSet = preparedStatement.executeQuery()
-            return mapper.map(resultSet)
-        } catch (e: SQLException) {
-            return "Error accessing database: ${e.message}"
+        override fun findPassword(email: String): String {
+            val query = "SELECT password FROM user WHERE email = ?"
+            var password: String? = null
+            try {
+                databaseConnection.prepareStatement(query).use { preparedStatement ->
+                    preparedStatement.setString(1, email)
+                    preparedStatement.executeQuery().use { resultSet ->
+                        if (resultSet.next()) {
+                            password = resultSet.getString("password")
+                        }
+                    }
+                }
+            } catch (e: SQLException) {
+                return "Error accessing database: ${e.message}"
+            }
+            return password ?: "Password not found"
         }
-    }
 
 
     override fun tokenExists(token: String): Boolean {
