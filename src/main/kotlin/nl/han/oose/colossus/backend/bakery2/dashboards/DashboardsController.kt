@@ -1,6 +1,7 @@
 package nl.han.oose.colossus.backend.bakery2.dashboards
 
 import nl.han.oose.colossus.backend.bakery2.dto.DashboardCollectionDto
+import nl.han.oose.colossus.backend.bakery2.token.Authenticate
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -19,8 +20,8 @@ class DashboardsController {
 
 
     @GetMapping(produces = ["application/json"])
-
-    fun getAllDashboards(@RequestParam token : String): ResponseEntity<DashboardCollectionDto>{
+    @Authenticate
+    fun getAllDashboards(): ResponseEntity<DashboardCollectionDto>{
 
         val result: DashboardCollectionDto = this.dashboardsService.getAllDashboards()
         return ResponseEntity<DashboardCollectionDto>(result,HttpStatus.OK)
