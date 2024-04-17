@@ -20,8 +20,7 @@ class AuthenticationController {
 private lateinit var authenticationService: AuthenticationService
 
 
-    @RequestMapping("/login")
-    @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE], produces =[MediaType.APPLICATION_JSON_VALUE])
+    @PostMapping(path = ["/login"], consumes = [MediaType.APPLICATION_JSON_VALUE], produces =[MediaType.APPLICATION_JSON_VALUE])
     fun login(@RequestBody loginRequest: LoginRequestDto): ResponseEntity<LoginResponseDto> {
 
         val loginResponse = authenticationService.authenticate(loginRequest.getEmail(), loginRequest.getPassword())
@@ -29,8 +28,7 @@ private lateinit var authenticationService: AuthenticationService
         return ResponseEntity(loginResponse, HttpStatus.OK)
     }
 
-    @RequestMapping("/register")
-    @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE])
+    @PostMapping(path = ["/register"], consumes = [MediaType.APPLICATION_JSON_VALUE])
     fun registerUser(@RequestBody userDto: UserDto): ResponseEntity<HttpStatus> {
         //TODO: Only allow with admin privileges
         authenticationService.registerUser(userDto)
