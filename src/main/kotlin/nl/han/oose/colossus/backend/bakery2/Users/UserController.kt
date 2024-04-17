@@ -1,9 +1,10 @@
 package nl.han.oose.colossus.backend.bakery2.Users
 
-import nl.han.oose.colossus.backend.bakery2.dto.UserInfoDTO
+import nl.han.oose.colossus.backend.bakery2.dto.TokenDto
+import nl.han.oose.colossus.backend.bakery2.dto.UserInfoDto
+import org.springframework.beans.factory.annotation.Autowired
 import nl.han.oose.colossus.backend.bakery2.token.Authenticate
 import nl.han.oose.colossus.backend.bakery2.token.TokenService
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -25,10 +26,10 @@ class UserController {
 
     @GetMapping(produces =[MediaType.APPLICATION_JSON_VALUE])
     @Authenticate
-    fun getUserInfo(): ResponseEntity<UserInfoDTO> {
+    fun getUserInfo(): ResponseEntity<UserInfoDto> {
         val token = tokenService.getToken()
-        println(token)
         val user = userService.getUserInfo(token)
         return ResponseEntity(user, HttpStatus.OK)
     }
+
 }
