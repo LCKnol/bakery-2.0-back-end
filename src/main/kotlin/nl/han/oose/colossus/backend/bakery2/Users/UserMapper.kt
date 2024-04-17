@@ -1,10 +1,8 @@
 package nl.han.oose.colossus.backend.bakery2.Users
 
 import nl.han.oose.colossus.backend.bakery2.dto.UserInfoDto
+import java.sql.ResultSet
 
-interface UserService {
-
-    fun getUserInfo(token: String): UserInfoDto
-    fun getUser(token: String): Int
-
+interface UserMapper {
+    fun mapUserInfo(dataset : ResultSet) : UserInfoDto
 }
