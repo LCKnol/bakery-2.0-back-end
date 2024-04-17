@@ -5,6 +5,7 @@ import nl.han.oose.colossus.backend.bakery2.dto.DashboardCollectionDto
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Primary
 import org.springframework.stereotype.Component
+import org.springframework.web.server.ServerErrorException
 import java.sql.SQLException
 
 @Component
@@ -27,7 +28,7 @@ class DashboardsDaoImp:DashboardsDao {
         this.databaseConnection = databaseConnection
     }
 
-    @Throws(SQLException::class)
+    @Throws(ServerErrorException::class)
     override fun getAllDashboards() :DashboardCollectionDto {
 
         var newDashboardCollectionDto: DashboardCollectionDto
