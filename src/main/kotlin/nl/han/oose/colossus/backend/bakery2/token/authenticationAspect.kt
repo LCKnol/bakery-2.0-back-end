@@ -1,6 +1,7 @@
 package nl.han.oose.colossus.backend.bakery2.token
 
 import nl.han.oose.colossus.backend.bakery2.authentication.AuthenticationService
+import nl.han.oose.colossus.backend.bakery2.exceptions.HttpUnauthorizedException
 import org.aspectj.lang.annotation.Aspect
 import org.aspectj.lang.annotation.Before
 import org.springframework.stereotype.Component
@@ -15,9 +16,6 @@ class AuthenticationAspect(val authenticationService: AuthenticationService) {
     fun authenticateAccess() {
         val request = (RequestContextHolder.currentRequestAttributes() as ServletRequestAttributes).request
         val token = request.getHeader("Authorization") ?: throw SecurityException("No authorization token provided.")
-
-        if (!authenticationService.checkToken(token)) {
-            throw HttpUnauthorizedException("Invalid token.")
-        }
+        authenticationService.validateToken(token)
     }
 }
