@@ -26,20 +26,6 @@ private val databaseConnection: Connection = DatabaseConnection.getConnection()
     }
 
 
-    //TODO: Remove
-    override fun isValidUser(email: String, password: String): Boolean {
-        val query = "SELECT COUNT(*) FROM user WHERE email = ? AND password = ?"
-        return try {
-            val preparedStatement = databaseConnection.prepareStatement(query)
-            preparedStatement.setString(1, email)
-            preparedStatement.setString(2, password)
-            val resultSet = preparedStatement.executeQuery()
-            resultSet.next() && resultSet.getInt(1) > 0
-        } catch (e: SQLException) {
-            false
-        }
-    }
-
     override fun tokenExists(token: String): Boolean {
         val query = "SELECT COUNT(*) FROM usersession WHERE token = ?"
         return try {
