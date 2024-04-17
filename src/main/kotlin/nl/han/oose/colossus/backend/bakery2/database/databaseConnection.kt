@@ -1,11 +1,15 @@
 package nl.han.oose.colossus.backend.bakery2.database
 
 import DbProperties
+import org.springframework.context.annotation.Primary
+import org.springframework.stereotype.Component
 import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.PreparedStatement
 import java.sql.SQLException
 
+@Component
+@Primary
 class DatabaseConnection {
     private val connection: Connection = getConnection()
 
