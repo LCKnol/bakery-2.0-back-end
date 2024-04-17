@@ -10,12 +10,14 @@ class DashboardDto {
 
      private var name: String
 
+     private var imageUrl: String
 
 
-    constructor(id: Int, url: String, name: String) {
+    constructor(id: Int, url: String, name: String,imageUrl: String) {
         this.id = id
         this.url = url
         this.name = name
+        this.imageUrl = imageUrl
     }
 
 
@@ -35,6 +37,13 @@ class DashboardDto {
         return this.url // You can still access it within the class
     }
 
+    fun setImageURL(newValue: String) {
+        this.imageUrl = newValue // You can still access it within the class
+    }
+
+    fun getImageURL(): String {
+        return this.imageUrl // You can still access it within the class
+    }
 
     fun setName(newValue: String) {
         this.name = newValue // You can still access it within the class
