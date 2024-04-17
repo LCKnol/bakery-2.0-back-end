@@ -1,5 +1,6 @@
 package nl.han.oose.colossus.backend.bakery2.Users
 
+import nl.han.oose.colossus.backend.bakery2.Pi.PiService
 import nl.han.oose.colossus.backend.bakery2.authentication.AuthenticationService
 import nl.han.oose.colossus.backend.bakery2.dto.TokenDto
 import nl.han.oose.colossus.backend.bakery2.dto.UserInfoDTO
@@ -15,10 +16,9 @@ import java.net.Authenticator
 
 @RestController
 @RequestMapping("/user")
-class UserController @Autowired constructor(
-        private var userService: UserService,
-        private var authenticationService: AuthenticationService
-){
+class UserController{
+@Autowired
+private lateinit var userService : UserService
 
     @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE], produces =[MediaType.APPLICATION_JSON_VALUE])
     fun getUserInfo(@RequestBody token: TokenDto): ResponseEntity<UserInfoDTO> {

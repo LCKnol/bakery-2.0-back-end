@@ -2,8 +2,12 @@ package nl.han.oose.colossus.backend.bakery2.Pi
 
 import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDTO
 import nl.han.oose.colossus.backend.bakery2.dto.PiDTO
+import org.springframework.context.annotation.Primary
+import org.springframework.stereotype.Component
 import java.sql.ResultSet
 
+@Primary
+@Component
 class PiMapperImp : PiMapper {
     override fun mapPis(resultSet: ResultSet): PiCollectionDTO {
 

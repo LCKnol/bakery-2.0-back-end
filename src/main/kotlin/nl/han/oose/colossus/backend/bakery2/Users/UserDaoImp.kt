@@ -1,15 +1,21 @@
 package nl.han.oose.colossus.backend.bakery2.Users
 
+import nl.han.oose.colossus.backend.bakery2.Pi.PiMapper
 import nl.han.oose.colossus.backend.bakery2.database.DatabaseConnection
 import nl.han.oose.colossus.backend.bakery2.dto.RoomDTO
 import nl.han.oose.colossus.backend.bakery2.dto.TeamDTO
 import nl.han.oose.colossus.backend.bakery2.dto.UserInfoDTO
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Primary
+import org.springframework.stereotype.Component
 
 @Primary
+@Component
 class UserDaoImp : UserDao{
-    val dbConnection = DatabaseConnection()
-    val userMapper = UserMapperImp()
+    @Autowired
+    private lateinit var userMapper : UserMapper
+    @Autowired
+    private lateinit var dbConnection: DatabaseConnection
     override fun getUserInfo(token: String): UserInfoDTO {
         val preparedStatement = dbConnection.prepareStatement("select u.firstname, u.lastname, t.teamname, tr.roomno from user u inner join userinteam ut on u.code = ut.code inner join teaminroom tr on ut.teamid = tr.teamid inner join team t on t.TEAMID = ut.TEAMID where u.code = (select code from usersession where token = ?)")
         preparedStatement.setString(1, token)

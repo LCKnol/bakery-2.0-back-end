@@ -4,12 +4,18 @@ import nl.han.oose.colossus.backend.bakery2.Users.UserMapperImp
 import nl.han.oose.colossus.backend.bakery2.database.DatabaseConnection
 import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDTO
 import nl.han.oose.colossus.backend.bakery2.dto.PiDTO
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Primary
+import org.springframework.stereotype.Component
 
 @Primary
+@Component
 class PiDaoImp : PiDao {
-    val dbConnection = DatabaseConnection()
-    val piMapper = PiMapperImp()
+    @Autowired
+    private lateinit var piMapper : PiMapper
+    @Autowired
+    private lateinit var dbConnection: DatabaseConnection
+
 
 
     override fun getPis(user: Int): PiCollectionDTO {
@@ -21,16 +27,5 @@ class PiDaoImp : PiDao {
         preparedStatement.close()
         return pis
 
-//        var pi1 = PiDTO()
-//        var pi2 = PiDTO()
-//        pi1.setDisplay("cool dashboard")
-//        pi1.setName("12-12-12")
-//        pi1.setStatus("online")
-//        pi2.setDisplay("lame dashboard")
-//        pi2.setName("12-12-11")
-//        pi2.setStatus("offline")
-//        var pis = PiCollectionDTO()
-//        pis.setPis(arrayListOf( pi1, pi2))
-//        return pis
     }
 }

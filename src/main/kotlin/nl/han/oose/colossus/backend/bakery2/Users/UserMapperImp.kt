@@ -1,8 +1,12 @@
 package nl.han.oose.colossus.backend.bakery2.Users
 
 import nl.han.oose.colossus.backend.bakery2.dto.*
+import org.springframework.context.annotation.Primary
+import org.springframework.stereotype.Component
 import java.sql.ResultSet
 
+@Primary
+@Component
 class UserMapperImp : UserMapper {
     override fun mapUserInfo(resultSet: ResultSet): UserInfoDTO {
         var userInfoDTO = UserInfoDTO()

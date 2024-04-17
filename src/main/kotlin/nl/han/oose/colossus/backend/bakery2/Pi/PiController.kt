@@ -18,13 +18,11 @@ import java.net.Authenticator
 
 @RestController
 @RequestMapping("/pis")
-class PiController @Autowired constructor(
-        private var userService: UserService,
-        private var piService: PiService,
-        private var authenticationService: AuthenticationService
-
-){
-
+class PiController{
+    @Autowired
+        private lateinit var piService : PiService
+    @Autowired
+        private lateinit var userService : UserService
 
     @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE], produces =[MediaType.APPLICATION_JSON_VALUE])
     fun getPis(@RequestBody token: TokenDto): ResponseEntity<PiCollectionDTO> {
