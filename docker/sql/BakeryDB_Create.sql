@@ -43,6 +43,7 @@ create table PI
    DASHBOARDID          int,
    NAME                 varchar(64) not null,
    MACADRESS            varchar(32) not null,
+   STATUS               varchar(32) null,
    primary key (PIID)
 );
 
