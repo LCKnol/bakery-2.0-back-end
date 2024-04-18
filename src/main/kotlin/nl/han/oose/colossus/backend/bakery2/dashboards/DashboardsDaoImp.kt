@@ -18,12 +18,12 @@ class DashboardsDaoImp:DashboardsDao {
     private lateinit var dashboardsMapper: DashboardsMapper
 
 
-    fun setDatabaseConnection(connection: DatabaseConnection) {
+    override fun setDatabaseConnection(connection: DatabaseConnection) {
         databaseConnection = connection
     }
 
     // Setter function for dashboardsMapper
-    fun setDashboardsMapper(mapper: DashboardsMapper) {
+    override fun setDashboardsMapper(mapper: DashboardsMapper) {
         dashboardsMapper = mapper
     }
 
