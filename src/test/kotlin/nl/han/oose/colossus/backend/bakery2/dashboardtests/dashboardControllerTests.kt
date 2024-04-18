@@ -31,7 +31,7 @@ class dashboardControllerTests {
     fun TestGetAllPlaylistResponse200() {
         // Arrange
         // Act
-        val response = sut.getAllDashboards("test token").statusCode.value()
+        val response = sut.getAllDashboards().statusCode.value()
         // Assert
         assertEquals(200, response)
     }
@@ -42,7 +42,7 @@ class dashboardControllerTests {
         // Arrange
         `when`(dashboardsService.getAllDashboards()).thenReturn(DashboardCollectionDto())
         // Act
-        sut.getAllDashboards("test token")
+        sut.getAllDashboards()
 
         // Assert
         verify(dashboardsService).getAllDashboards()
