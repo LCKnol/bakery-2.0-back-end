@@ -74,4 +74,15 @@ private lateinit var databaseConnection: DatabaseConnection
             println(e.message)
         }
     }
+
+    override fun deleteSession(token: String) {
+        val query = "DELETE FROM UserSession WHERE token = ?"
+        try {
+            val preparedStatement = databaseConnection.prepareStatement(query)
+            preparedStatement.setString(1, token)
+            preparedStatement.executeUpdate()
+        } catch (e: SQLException) {
+            println(e.message)
+        }
+    }
 }
