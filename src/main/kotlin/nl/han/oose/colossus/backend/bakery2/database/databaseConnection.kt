@@ -18,8 +18,7 @@ class DatabaseConnection {
         return connection.prepareStatement(sql)
     }
 
-    companion object {
-       internal fun getConnection(): Connection {
+       fun getConnection(): Connection {
             try {
                 val dbProperties = DbProperties("database.properties")
                 val connectionString = dbProperties.connectionString
@@ -29,6 +28,6 @@ class DatabaseConnection {
             } catch (e: SQLException) {
                 throw RuntimeException("Failed to establish connection to the database", e)
             }
-        }
+
     }
 }

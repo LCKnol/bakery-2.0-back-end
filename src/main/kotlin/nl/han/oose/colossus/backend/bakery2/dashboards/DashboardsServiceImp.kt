@@ -12,6 +12,11 @@ class DashboardsServiceImp :DashboardsService {
     @Autowired
     private lateinit var dashboardDao : DashboardsDao
 
+
+    override fun setDashboardDao(dao: DashboardsDao) {
+        dashboardDao = dao
+    }
+
     override fun getAllDashboards(): DashboardCollectionDto {
         return dashboardDao.getAllDashboards()
     }
