@@ -5,14 +5,11 @@ import nl.han.oose.colossus.backend.bakery2.dashboards.DashboardsDaoImp
 import nl.han.oose.colossus.backend.bakery2.dashboards.DashboardsMapper
 import nl.han.oose.colossus.backend.bakery2.database.DatabaseConnection
 import nl.han.oose.colossus.backend.bakery2.dto.DashboardCollectionDto
-import nl.han.oose.colossus.backend.bakery2.dto.DashboardDto
 import nl.han.oose.colossus.backend.bakery2.util.MockitoHelper
 import nl.han.oose.colossus.backend.bakery2.util.ScriptRunner
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.ArgumentMatchers
-import org.mockito.Mockito
 import org.mockito.Mockito.*
 import java.io.InputStreamReader
 import java.sql.Connection
@@ -36,8 +33,8 @@ class dashboardDaoTests {
         sut = DashboardsDaoImp()
         dashboardsMapper = mock(DashboardsMapper::class.java)
         val dbconnection: DatabaseConnection = DatabaseConnection()
-        val scriptRunner = ScriptRunner(dbconnection.getConnection(), true, true)
-        scriptRunner.runScript(InputStreamReader(ClassLoader.getSystemResourceAsStream("BakeryDB_Create.sql")))
+        val scriptRunner: ScriptRunner = ScriptRunner(dbconnection.getConnection(), true, true)
+        scriptRunner.runScript(InputStreamReader(ClassLoader.getSystemResourceAsStream("BakeryDB_Create.sql")!!))
         sut.setDatabaseConnection(dbconnection)
         sut.setDashboardsMapper(dashboardsMapper)
 
@@ -56,20 +53,8 @@ class dashboardDaoTests {
         val result = sut.getAllDashboards()
 
         //assert
+        verify(dashboardsMapper).getAlldashboardsMapper(MockitoHelper.anyObject())
         Assertions.assertEquals(dashboard, result)
     }
 
-    @Test
-    fun TestGetAllDashboardsCallsMapper() {
-
-        // arrange
-        val dashboard: DashboardCollectionDto = DashboardCollectionDto()
-        `when`(dashboardsMapper.getAlldashboardsMapper(MockitoHelper.anyObject())).thenReturn(dashboard)
-
-        // act
-        val result = sut.getAllDashboards()
-
-        //assert
-        verify(dashboardsMapper).getAlldashboardsMapper(MockitoHelper.anyObject())
-    }
 }

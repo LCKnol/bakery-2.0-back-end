@@ -28,26 +28,16 @@ class dashboardControllerTests {
 
 
     @Test
-    fun TestGetAllPlaylistResponse200() {
+    fun TestGetAllDashboardWorksCorrectly() {
 
+        // Arrange
+        val dashboard: DashboardCollectionDto = DashboardCollectionDto()
+        `when`(dashboardsService.getAllDashboards()).thenReturn(dashboard)
         // Act
         val response = sut.getAllDashboards().statusCode.value()
         // Assert
         assertEquals(200, response)
-    }
-
-
-    @Test
-    fun TestGetAllDashboardsCallsNextServiceFunction() {
-        // Arrange
-        `when`(dashboardsService.getAllDashboards()).thenReturn(DashboardCollectionDto())
-        // Act
-        sut.getAllDashboards()
-
-        // Assert
         verify(dashboardsService).getAllDashboards()
     }
-
-
 
 }
