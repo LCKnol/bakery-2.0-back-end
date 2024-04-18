@@ -32,6 +32,10 @@ class AuthenticationServiceImp :AuthenticationService {
         return LoginResponseDto(token)
     }
 
+    override fun destroySession(token: String) {
+        authenticationDao.deleteSession(token)
+    }
+
     override fun validateToken(token: String) {
         if (!authenticationDao.tokenExists(token)) {
             throw HttpUnauthorizedException("Invalid token")
@@ -50,6 +54,5 @@ class AuthenticationServiceImp :AuthenticationService {
         } while(authenticationDao.tokenExists(token))
         return token
     }
-
 
 }

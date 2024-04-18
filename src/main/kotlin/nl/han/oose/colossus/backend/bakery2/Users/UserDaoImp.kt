@@ -1,27 +1,40 @@
 package nl.han.oose.colossus.backend.bakery2.Users
 
-import nl.han.oose.colossus.backend.bakery2.dto.RoomDTO
-import nl.han.oose.colossus.backend.bakery2.dto.TeamDTO
-import nl.han.oose.colossus.backend.bakery2.dto.UserInfoDTO
+import nl.han.oose.colossus.backend.bakery2.database.DatabaseConnection
+import nl.han.oose.colossus.backend.bakery2.dto.UserInfoDto
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.annotation.Primary
+import org.springframework.stereotype.Component
 
+@Primary
+@Component
 class UserDaoImp : UserDao{
-    override fun getUserInfo(token: String): UserInfoDTO {
-        var room = RoomDTO()
-        var team = TeamDTO()
-        var team2 = TeamDTO()
-        val user = UserInfoDTO()
-        room.setRoomNo("12-12")
-        team.setName("team1")
-        user.setName("Pieter post")
-        user.setTeams(arrayListOf(team, team2))
-        user.setRooms(arrayListOf(room))
-
+    @Autowired
+    private lateinit var userMapper : UserMapper
+    @Autowired
+    private lateinit var dbConnection: DatabaseConnection
+    override fun getUserInfo(token: String): UserInfoDto {
+        val preparedStatement = dbConnection.prepareStatement("select u.firstname, u.lastname, t.teamname, tr.roomno from user u inner join userinteam ut on u.userid = ut.userid inner join teaminroom tr on ut.teamid = tr.teamid inner join team t on t.TEAMID = ut.TEAMID where u.userid = (select userid from usersession where token = ?)")
+        preparedStatement.setString(1, token)
+        val resultSet = preparedStatement.executeQuery()
+        val user = userMapper.mapUserInfo(resultSet)
+        resultSet.close()
+        preparedStatement.close()
         return user
+
     }
 
 
         override fun getUser(token: String): Int {
-            var user = 1
+            var user : Int = 0
+            val preparedStatement = dbConnection.prepareStatement("select userid from user where userid = (select userid from usersession where token = ?)")
+            preparedStatement.setString(1, token)
+            val resultSet = preparedStatement.executeQuery()
+            while (resultSet.next()) {
+                user = resultSet.getInt("userid")
+            }
+            resultSet.close()
+            preparedStatement.close()
             return user
         }
 }

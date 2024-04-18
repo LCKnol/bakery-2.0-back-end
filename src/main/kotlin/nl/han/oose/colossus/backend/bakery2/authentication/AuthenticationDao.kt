@@ -11,4 +11,5 @@ interface AuthenticationDao {
     fun tokenExists(token: String): Boolean
     fun insertToken(email: String, token: String)
     fun insertUser(userDto: UserDto)
+    fun deleteSession(token: String)
 }
