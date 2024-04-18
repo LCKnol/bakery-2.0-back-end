@@ -3,20 +3,20 @@
 /*==============================================================*/
 
 # password: AvisiPassword
-INSERT INTO bakeryDB.USER (USERID, FIRSTNAME, LASTNAME, PASSWORD, EMAIL, ISADMIN)
+INSERT INTO bakeryDB.USERS (USERID, FIRSTNAME, LASTNAME, PASSWORD, EMAIL, ISADMIN)
 VALUES (1, 'Arnoud', 'Visi', '$2a$10$piwNZPAOhMhdG7Xlm/3kkOs/hZeYlfyQPAY/z7SurggdiLxfzu.KC', 'Avisi@outlook.com', 0);
 
 # password: password1234
-INSERT INTO bakeryDB.USER (USERID, FIRSTNAME, LASTNAME, PASSWORD, EMAIL, ISADMIN)
+INSERT INTO bakeryDB.USERS (USERID, FIRSTNAME, LASTNAME, PASSWORD, EMAIL, ISADMIN)
 VALUES (2, 'Piere', 'Formance', '$2a$10$RSCq/K46cwZ2OFt0m482dOh5YATJJmqN4jTn7be/X1QhPiSDZPphe', 'Piere69@hotmail.com',
         0);
 
 # password: CorrectHorseBatteryStaple
-INSERT INTO bakeryDB.USER (USERID, FIRSTNAME, LASTNAME, PASSWORD, EMAIL, ISADMIN)
+INSERT INTO bakeryDB.USERS (USERID, FIRSTNAME, LASTNAME, PASSWORD, EMAIL, ISADMIN)
 VALUES (3, 'Jaque', 'Ouzi', '$2a$10$JM9Yx4oy51Xa4HxslV3zXeJeuAC2e5EHCH3Db3tvhnfzcZWZG2/oC', 'Juzzi@gmail.com', 0);
 
 # password: verySecret!!!!
-INSERT INTO bakeryDB.USER (USERID, FIRSTNAME, LASTNAME, PASSWORD, EMAIL, ISADMIN)
+INSERT INTO bakeryDB.USERS (USERID, FIRSTNAME, LASTNAME, PASSWORD, EMAIL, ISADMIN)
 VALUES (4, 'Justin', 'Case', '$2a$10$06KLmAO9hniJbBznhR4yD.eyLWfwy.wjOt74b3mCbyaYDCz8G22yq', 'JIC@gmail.com', 0);
 
 

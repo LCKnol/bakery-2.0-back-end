@@ -18,7 +18,7 @@ private lateinit var databaseConnection: DatabaseConnection
 
 
         override fun findPassword(email: String): String {
-            val query = "SELECT password FROM user WHERE email = ?"
+            val query = "SELECT password FROM users WHERE email = ?"
             var password: String? = null
             try {
                 databaseConnection.prepareStatement(query).use { preparedStatement ->
@@ -49,7 +49,7 @@ private lateinit var databaseConnection: DatabaseConnection
     }
 
     override fun insertToken(email: String, token: String) {
-        val query = "INSERT INTO usersession (userID, token) SELECT userID, ? FROM User WHERE email = ?"
+        val query = "INSERT INTO usersession (userID, token) SELECT userID, ? FROM Users WHERE email = ?"
         try {
             val preparedStatement = databaseConnection.prepareStatement(query)
             preparedStatement.setString(1, token)
@@ -61,7 +61,7 @@ private lateinit var databaseConnection: DatabaseConnection
     }
 
     override fun insertUser(userDto: UserDto) {
-        val query = "INSERT INTO user(firstName, lastName, email, password, isAdmin) VALUES (?, ?, ?, ?, ?)"
+        val query = "INSERT INTO users(firstName, lastName, email, password, isAdmin) VALUES (?, ?, ?, ?, ?)"
         try {
             val preparedStatement = databaseConnection.prepareStatement(query)
             preparedStatement.setString(1, userDto.firstName)
