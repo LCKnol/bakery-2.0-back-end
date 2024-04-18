@@ -4,134 +4,142 @@
 /*==============================================================*/
 USE bakeryDB;
 
-drop table if exists DASHBOARD;
+DROP TABLE IF EXISTS PI;
 
-drop table if exists PI;
+DROP TABLE IF EXISTS DASHBOARD;
 
-drop table if exists ROOM;
+DROP TABLE IF EXISTS TEAMINROOM;
 
-drop table if exists TEAM;
+DROP TABLE IF EXISTS ROOM;
 
-drop table if exists TEAMINROOM;
+DROP TABLE IF EXISTS USERINTEAM;
 
-drop table if exists USER;
+DROP TABLE IF EXISTS TEAM;
 
-drop table if exists USERINTEAM;
+DROP TABLE IF EXISTS USERSESSION;
 
-drop table if exists USERSESSION;
+DROP TABLE IF EXISTS USER;
 
 /*==============================================================*/
 /* Table: DASHBOARD                                             */
 /*==============================================================*/
-create table DASHBOARD
+CREATE TABLE DASHBOARD
 (
-   DASHBOARDID          int not null AUTO_INCREMENT,
-   USERID               int,
-   NAME                 varchar(64) not null,
-   DASHBOARDURL         varchar(1024) not null,
-   IMAGEURL             varchar(1024),
-   primary key (DASHBOARDID)
+    DASHBOARDID  INT           NOT NULL AUTO_INCREMENT,
+    USERID       INT,
+    NAME         VARCHAR(64)   NOT NULL,
+    DASHBOARDURL VARCHAR(1024) NOT NULL,
+    IMAGEURL     VARCHAR(1024),
+    PRIMARY KEY (DASHBOARDID)
 );
 
 /*==============================================================*/
 /* Table: PI                                                    */
 /*==============================================================*/
-create table PI
+CREATE TABLE PI
 (
-   PIID                 int not null AUTO_INCREMENT,
-   ROOMNO               char(4),
-   DASHBOARDID          int,
-   NAME                 varchar(64) not null,
-   MACADRESS            varchar(32) not null,
-   STATUS               varchar(32) null,
-   primary key (PIID)
+    PIID        INT         NOT NULL AUTO_INCREMENT,
+    ROOMNO      CHAR(4),
+    DASHBOARDID INT,
+    NAME        VARCHAR(64) NOT NULL,
+    MACADRESS   VARCHAR(32) NOT NULL,
+    STATUS      VARCHAR(32) NULL,
+    PRIMARY KEY (PIID)
 );
 
 /*==============================================================*/
 /* Table: ROOM                                                  */
 /*==============================================================*/
-create table ROOM
+CREATE TABLE ROOM
 (
-   ROOMNO               char(4) not null,
-   primary key (ROOMNO)
+    ROOMNO CHAR(4) NOT NULL,
+    PRIMARY KEY (ROOMNO)
 );
 
 /*==============================================================*/
 /* Table: TEAM                                                  */
 /*==============================================================*/
-create table TEAM
+CREATE TABLE TEAM
 (
-   TEAMID               int not null AUTO_INCREMENT,
-   TEAMNAME             varchar(256) not null,
-   primary key (TEAMID)
+    TEAMID   INT          NOT NULL AUTO_INCREMENT,
+    TEAMNAME VARCHAR(256) NOT NULL,
+    PRIMARY KEY (TEAMID)
 );
 
 /*==============================================================*/
 /* Table: TEAMINROOM                                            */
 /*==============================================================*/
-create table TEAMINROOM
+CREATE TABLE TEAMINROOM
 (
-   TEAMID               int not null,
-   ROOMNO               char(4) not null,
-   primary key (TEAMID, ROOMNO)
+    TEAMID INT     NOT NULL,
+    ROOMNO CHAR(4) NOT NULL,
+    PRIMARY KEY (TEAMID, ROOMNO)
 );
 
 /*==============================================================*/
 /* Table: USER                                                  */
 /*==============================================================*/
-create table USER
+CREATE TABLE USER
 (
-   USERID               int not null AUTO_INCREMENT,
-   FIRSTNAME            varchar(64) not null,
-   LASTNAME             varchar(64) not null,
-   PASSWORD             varchar(256) not null,
-   EMAIL                varchar(256) not null,
-   ISADMIN              bool not null,
-   primary key (USERID)
+    USERID    INT          NOT NULL AUTO_INCREMENT,
+    FIRSTNAME VARCHAR(64)  NOT NULL,
+    LASTNAME  VARCHAR(64)  NOT NULL,
+    PASSWORD  VARCHAR(256) NOT NULL,
+    EMAIL     VARCHAR(256) NOT NULL,
+    ISADMIN   BOOL         NOT NULL,
+    PRIMARY KEY (USERID)
 );
 
 /*==============================================================*/
 /* Table: USERINTEAM                                            */
 /*==============================================================*/
-create table USERINTEAM
+CREATE TABLE USERINTEAM
 (
-   USERID               int not null,
-   TEAMID               int not null,
-   primary key (USERID, TEAMID)
+    USERID INT NOT NULL,
+    TEAMID INT NOT NULL,
+    PRIMARY KEY (USERID, TEAMID)
 );
 
 /*==============================================================*/
 /* Table: USERSESSION                                           */
 /*==============================================================*/
-create table USERSESSION
+CREATE TABLE USERSESSION
 (
-   SESSIONID            int not null AUTO_INCREMENT,
-   USERID               int not null,
-   TOKEN                varchar(36) not null,
-   primary key (SESSIONID)
+    SESSIONID INT         NOT NULL AUTO_INCREMENT,
+    USERID    INT         NOT NULL,
+    TOKEN     VARCHAR(36) NOT NULL,
+    PRIMARY KEY (SESSIONID)
 );
 
-alter table DASHBOARD add constraint FK_DASHBOARDFROMUSER foreign key (USERID)
-      references USER (USERID) on delete restrict on update restrict;
+ALTER TABLE DASHBOARD
+    ADD CONSTRAINT FK_DASHBOARDFROMUSER FOREIGN KEY (USERID)
+        REFERENCES USER (USERID) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
-alter table PI add constraint FK_DASHBOARDONPI foreign key (DASHBOARDID)
-      references DASHBOARD (DASHBOARDID) on delete restrict on update restrict;
+ALTER TABLE PI
+    ADD CONSTRAINT FK_DASHBOARDONPI FOREIGN KEY (DASHBOARDID)
+        REFERENCES DASHBOARD (DASHBOARDID) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
-alter table PI add constraint FK_PIINROOM foreign key (ROOMNO)
-      references ROOM (ROOMNO) on delete restrict on update restrict;
+ALTER TABLE PI
+    ADD CONSTRAINT FK_PIINROOM FOREIGN KEY (ROOMNO)
+        REFERENCES ROOM (ROOMNO) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
-alter table TEAMINROOM add constraint FK_TEAMINROOM foreign key (TEAMID)
-      references TEAM (TEAMID) on delete restrict on update restrict;
+ALTER TABLE TEAMINROOM
+    ADD CONSTRAINT FK_TEAMINROOM FOREIGN KEY (TEAMID)
+        REFERENCES TEAM (TEAMID) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
-alter table TEAMINROOM add constraint FK_TEAMINROOM2 foreign key (ROOMNO)
-      references ROOM (ROOMNO) on delete restrict on update restrict;
+ALTER TABLE TEAMINROOM
+    ADD CONSTRAINT FK_TEAMINROOM2 FOREIGN KEY (ROOMNO)
+        REFERENCES ROOM (ROOMNO) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
-alter table USERINTEAM add constraint FK_USERINTEAM foreign key (USERID)
-      references USER (USERID) on delete restrict on update restrict;
+ALTER TABLE USERINTEAM
+    ADD CONSTRAINT FK_USERINTEAM FOREIGN KEY (USERID)
+        REFERENCES USER (USERID) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
-alter table USERINTEAM add constraint FK_USERINTEAM2 foreign key (TEAMID)
-      references TEAM (TEAMID) on delete restrict on update restrict;
+ALTER TABLE USERINTEAM
+    ADD CONSTRAINT FK_USERINTEAM2 FOREIGN KEY (TEAMID)
+        REFERENCES TEAM (TEAMID) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
-alter table USERSESSION add constraint FK_USERSESSION foreign key (USERID)
-      references USER (USERID) on delete restrict on update restrict;
+ALTER TABLE USERSESSION
+    ADD CONSTRAINT FK_USERSESSION FOREIGN KEY (USERID)
+        REFERENCES USER (USERID) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
