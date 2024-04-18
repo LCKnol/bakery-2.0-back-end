@@ -23,8 +23,6 @@ class dashboardDaoTests {
 
     private lateinit var  sut: DashboardsDao
 
-    private var connection: Connection? = null
-
     private lateinit var dashboardsMapper:DashboardsMapper
 
     private lateinit var resultSet: ResultSet
@@ -56,6 +54,8 @@ class dashboardDaoTests {
 
         // act
         val result = sut.getAllDashboards()
+
+        //assert
         Assertions.assertEquals(dashboard, result)
     }
 
@@ -68,6 +68,8 @@ class dashboardDaoTests {
 
         // act
         val result = sut.getAllDashboards()
+
+        //assert
         verify(dashboardsMapper).getAlldashboardsMapper(MockitoHelper.anyObject())
     }
 }
