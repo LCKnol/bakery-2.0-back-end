@@ -101,12 +101,18 @@ VALUES (3, '15.05');
 
 
 /*==============================================================*/
-/* Table: TEAMINROOM                                            */
+/* Table: USERINTEAM                                            */
 /*==============================================================*/
 
-INSERT INTO bakeryDB.USERINTEAM (USERID, TEAMID) VALUES (1, 1);
-INSERT INTO bakeryDB.USERINTEAM (USERID, TEAMID) VALUES (1, 2);
-INSERT INTO bakeryDB.USERINTEAM (USERID, TEAMID) VALUES (2, 2);
-INSERT INTO bakeryDB.USERINTEAM (USERID, TEAMID) VALUES (3, 3);
-INSERT INTO bakeryDB.USERINTEAM (USERID, TEAMID) VALUES (4, 4);
-INSERT INTO bakeryDB.USERINTEAM (USERID, TEAMID) VALUES (4, 3);
+INSERT INTO bakeryDB.USERINTEAM (USERID, TEAMID)
+VALUES (1, 1);
+INSERT INTO bakeryDB.USERINTEAM (USERID, TEAMID)
+VALUES (1, 2);
+INSERT INTO bakeryDB.USERINTEAM (USERID, TEAMID)
+VALUES (2, 2);
+INSERT INTO bakeryDB.USERINTEAM (USERID, TEAMID)
+VALUES (3, 3);
+INSERT INTO bakeryDB.USERINTEAM (USERID, TEAMID)
+VALUES (4, 4);
+INSERT INTO bakeryDB.USERINTEAM (USERID, TEAMID)
+VALUES (4, 3);
