@@ -16,7 +16,7 @@ class UserDaoImp : UserDao {
     private lateinit var dbConnection: DatabaseConnection
     override fun getUserInfo(token: String): UserInfoDto {
         val preparedStatement =
-            dbConnection.prepareStatement("select u.firstname, u.lastname, t.teamname, tr.roomno from USER u inner join USERINTEAM ut on u.userid = ut.userid inner join TEAMINROOM tr on ut.teamid = tr.teamid inner join TEAM t on t.TEAMID = ut.TEAMID where u.userid = (select userid from USERSESSION where token = ?)")
+            dbConnection.prepareStatement("select u.firstname, u.lastname, t.teamname, tr.roomno from USERS u inner join USERINTEAM ut on u.userid = ut.userid inner join TEAMINROOM tr on ut.teamid = tr.teamid inner join TEAM t on t.TEAMID = ut.TEAMID where u.userid = (select userid from USERSESSION where token = ?)")
         preparedStatement.setString(1, token)
         val resultSet = preparedStatement.executeQuery()
         val user = userMapper.mapUserInfo(resultSet)
@@ -25,11 +25,10 @@ class UserDaoImp : UserDao {
         return user
     }
 
-
     override fun getUser(token: String): Int {
         var user: Int = 0
         val preparedStatement =
-            dbConnection.prepareStatement("select userid from USER where userid = (select userid from USERSESSION where token = ?)")
+            dbConnection.prepareStatement("select userid from USERS where userid = (select userid from USERSESSION where token = ?)")
         preparedStatement.setString(1, token)
         val resultSet = preparedStatement.executeQuery()
         while (resultSet.next()) {

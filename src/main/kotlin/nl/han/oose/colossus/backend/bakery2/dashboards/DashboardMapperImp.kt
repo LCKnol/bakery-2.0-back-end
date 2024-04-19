@@ -19,7 +19,8 @@ class DashboardMapperImp : DashboardsMapper {
                     resultSet.getInt("DASHBOARDID"),
                     resultSet.getString("DASHBOARDURL"),
                     resultSet.getString("NAME"),
-                    resultSet.getString("IMAGEURL")
+                    resultSet.getString("IMAGEURL"),
+                    resultSet.getInt("USERID")
                 )
             newDashboardCollectionDto.getDashboards().add(newDashboardDto)
         }

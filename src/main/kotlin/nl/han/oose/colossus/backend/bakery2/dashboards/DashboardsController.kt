@@ -2,10 +2,12 @@ package nl.han.oose.colossus.backend.bakery2.dashboards
 
 import nl.han.oose.colossus.backend.bakery2.Users.UserService
 import nl.han.oose.colossus.backend.bakery2.dto.DashboardCollectionDto
+import nl.han.oose.colossus.backend.bakery2.dto.DashboardDto
 import nl.han.oose.colossus.backend.bakery2.token.Authenticate
 import nl.han.oose.colossus.backend.bakery2.token.TokenService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
@@ -33,6 +35,13 @@ class DashboardsController {
 
         val result: DashboardCollectionDto = this.dashboardsService.getAllDashboards()
         return ResponseEntity<DashboardCollectionDto>(result, HttpStatus.OK)
+    }
+
+    @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE])
+    @Authenticate
+    fun addDashboards(@RequestBody dashboardDto: DashboardDto): ResponseEntity<HttpStatus> {
+        this.dashboardsService.addDashboard(dashboardDto)
+        return ResponseEntity(HttpStatus.CREATED)
     }
 
     @DeleteMapping(path = ["/{dashboardId}"])
