@@ -31,10 +31,11 @@ class DashboardsServiceImp : DashboardsService {
     }
 
     override fun deleteDashboard(dashboardId: Int, userId: Int) {
-        if (dashboardDao.userOwnsDashboard(dashboardId, userId)) {
+        if (dashboardDao.getUserIdFromDashboard(dashboardId) == userId) {
             piDao.setDashboardsNull(dashboardId)
             dashboardDao.deleteDashboard(dashboardId)
         } else {
+            //TODO: Throw different exception, because this automatically logs out the user
             throw HttpUnauthorizedException("Dashboard belongs to different user")
         }
     }

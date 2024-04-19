@@ -4,5 +4,6 @@ import nl.han.oose.colossus.backend.bakery2.dto.UserInfoDto
 import java.sql.ResultSet
 
 interface UserMapper {
-    fun mapUserInfo(dataset : ResultSet) : UserInfoDto
+    fun mapUserInfo(resultSet : ResultSet) : UserInfoDto
+    fun mapUserId(resultSet : ResultSet) : Int?
 }

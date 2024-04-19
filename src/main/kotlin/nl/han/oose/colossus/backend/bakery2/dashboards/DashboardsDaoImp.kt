@@ -29,28 +29,23 @@ class DashboardsDaoImp : DashboardsDao {
 
     @Throws(ServerErrorException::class)
     override fun addDashboard(dashboardDto: DashboardDto) {
-        val connection = databaseConnection.getConnection()
         val statement =
-            connection.prepareStatement("INSERT INTO DASHBOARD (USERID,NAME,DASHBOARDURL,IMAGEURL) VALUES(?,?,?,?)")
+            databaseConnection.prepareStatement("INSERT INTO DASHBOARD (USERID,NAME,DASHBOARDURL,IMAGEURL) VALUES(?,?,?,?)")
         statement.setInt(1, dashboardDto.getUserId())
         statement.setString(2, dashboardDto.getName())
         statement.setString(3, dashboardDto.getDashboardUrl())
         statement.setString(4, dashboardDto.getImageURL())
         statement.executeUpdate()
         statement.close()
-        connection.close()
     }
 
     @Throws(ServerErrorException::class)
     override fun getAllDashboards(): DashboardCollectionDto {
-        val connection = databaseConnection.getConnection()
         val newDashboardCollectionDto: DashboardCollectionDto
         val statement = databaseConnection.prepareStatement("SELECT * FROM DASHBOARD ")
         val resultSet = statement.executeQuery()
         newDashboardCollectionDto = dashboardsMapper.getAlldashboardsMapper(resultSet)
         statement.close()
-        connection.close()
-
         return newDashboardCollectionDto
     }
 
@@ -60,21 +55,23 @@ class DashboardsDaoImp : DashboardsDao {
             val statement = databaseConnection.prepareStatement(query)
             statement.setInt(1, dashboardId)
             statement.executeUpdate()
+            statement.close()
         } catch (e: SQLException) {
             println(e.message)
         }
     }
 
-    override fun userOwnsDashboard(dashboardId: Int, userId: Int): Boolean {
+    override fun getUserIdFromDashboard(dashboardId: Int): Int? {
         val query = "SELECT USERID FROM DASHBOARD WHERE DASHBOARDID = ?"
         try {
             val statement = databaseConnection.prepareStatement(query)
             statement.setInt(1, dashboardId)
             val resultSet = statement.executeQuery()
-            return (dashboardsMapper.getUserIdMapper(resultSet) == userId)
+            statement.close()
+            return dashboardsMapper.getUserIdMapper(resultSet)
         } catch (e: SQLException) {
             println(e.message)
-            return false
+            return null
         }
     }
 }

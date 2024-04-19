@@ -9,15 +9,17 @@ import org.springframework.stereotype.Component
 @Component
 class UserServiceImp : UserService {
     @Autowired
-    private lateinit var userDao : UserDao
+    private lateinit var userDao: UserDao
 
     override fun getUserInfo(token: String): UserInfoDto {
-        val user = userDao.getUserInfo(token);
-        return user    }
+        val user = userDao.getUserInfo(token)
+        return user
+    }
 
     override fun getUser(token: String): Int {
-        val user = userDao.getUser(token);
-        return user
+        val user = userDao.getUser(token)
+        // TODO: decide how to handle this: throw some exception???
+        return user ?: -1
     }
 }
 

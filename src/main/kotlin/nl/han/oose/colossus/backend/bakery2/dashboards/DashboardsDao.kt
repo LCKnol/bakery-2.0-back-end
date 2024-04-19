@@ -8,7 +8,7 @@ interface DashboardsDao {
 
     fun getAllDashboards(): DashboardCollectionDto
     fun deleteDashboard(dashboardId: Int)
-    fun userOwnsDashboard(dashboardId: Int, userId: Int): Boolean
+    fun getUserIdFromDashboard(dashboardId: Int): Int?
     fun setDashboardsMapper(mapper: DashboardsMapper)
     fun setDatabaseConnection(connection: DatabaseConnection)
     fun addDashboard(dashboardDto: DashboardDto)

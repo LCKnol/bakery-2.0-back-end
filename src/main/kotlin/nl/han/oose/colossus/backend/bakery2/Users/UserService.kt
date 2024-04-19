@@ -6,5 +6,4 @@ interface UserService {
 
     fun getUserInfo(token: String): UserInfoDto
     fun getUser(token: String): Int
-
 }

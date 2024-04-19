@@ -25,17 +25,13 @@ class UserDaoImp : UserDao {
         return user
     }
 
-    override fun getUser(token: String): Int {
-        var user: Int = 0
+    override fun getUser(token: String): Int? {
         val preparedStatement =
             dbConnection.prepareStatement("select userid from USERS where userid = (select userid from USERSESSION where token = ?)")
         preparedStatement.setString(1, token)
         val resultSet = preparedStatement.executeQuery()
-        while (resultSet.next()) {
-            user = resultSet.getInt("userid")
-        }
-        resultSet.close()
+        val userId = userMapper.mapUserId(resultSet)
         preparedStatement.close()
-        return user
+        return userId
     }
 }

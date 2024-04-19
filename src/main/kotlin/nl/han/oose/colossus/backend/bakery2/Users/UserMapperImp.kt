@@ -9,7 +9,7 @@ import java.sql.ResultSet
 @Component
 class UserMapperImp : UserMapper {
     override fun mapUserInfo(resultSet: ResultSet): UserInfoDto {
-        var userInfoDTO = UserInfoDto()
+        val userInfoDTO = UserInfoDto()
         var firstname: String? = null
         var lastname: String? = null
         val uniqueTeams = HashSet<String>()
@@ -41,6 +41,14 @@ class UserMapperImp : UserMapper {
         userInfoDTO.setTeams(teams)
         userInfoDTO.setRooms(rooms)
         return userInfoDTO
+    }
+
+    override fun mapUserId(resultSet: ResultSet): Int? {
+        var userId: Int? = null
+        while (resultSet.next()) {
+            userId = resultSet.getInt("userid")
+        }
+        return userId
     }
 }
 
