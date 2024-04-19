@@ -34,7 +34,7 @@ class DashboardsDaoImp:DashboardsDao {
         val statement = connection.prepareStatement("INSERT INTO DASHBOARD (USERID,NAME,DASHBOARDURL,IMAGEURL) VALUES(?,?,?,?) ")
         statement.setInt(1,dashboardDto.getUserId())
         statement.setString(2,dashboardDto.getName())
-        statement.setString(3,dashboardDto.getURl())
+        statement.setString(3,dashboardDto.getDashboardUrl())
         statement.setString(4,dashboardDto.getImageURL())
         statement.executeUpdate()
         statement.close()
