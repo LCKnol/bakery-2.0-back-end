@@ -15,7 +15,7 @@ class AuthenticationAspect(val authenticationService: AuthenticationService) {
     @Before("@annotation(Authenticate)")
     fun authenticateAccess() {
         val request = (RequestContextHolder.currentRequestAttributes() as ServletRequestAttributes).request
-        val token = request.getHeader("Authorization") ?: throw SecurityException("No authorization token provided.")
+        val token = request.getHeader("Authorization") ?: throw HttpUnauthorizedException("No authorization token provided.")
         authenticationService.validateToken(token)
     }
 }

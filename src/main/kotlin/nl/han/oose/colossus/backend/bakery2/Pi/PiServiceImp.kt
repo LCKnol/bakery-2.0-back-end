@@ -1,11 +1,18 @@
 package nl.han.oose.colossus.backend.bakery2.Pi
 
-import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDTO
+import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDto
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.annotation.Primary
+import org.springframework.stereotype.Component
 
+@Primary
+@Component
 class PiServiceImp : PiService {
-    private val piDao = PiDaoImp()
-    override fun getPis(user: Int): PiCollectionDTO {
+    @Autowired
+    private lateinit var piDao : PiDao
+    override fun getPis(user: Int): PiCollectionDto {
         val pis = piDao.getPis(user)
-        return pis
-    }
+        return pis    }
 }
+
+

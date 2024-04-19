@@ -2,23 +2,22 @@
 /* DBMS name:      MySQL 5.0                                    */
 /* Created on:     15-4-2024 15:37:17                           */
 /*==============================================================*/
-USE bakeryDB;
 
-drop table if exists DASHBOARD;
+DROP TABLE IF EXISTS PI;
 
-drop table if exists PI;
+DROP TABLE IF EXISTS DASHBOARD;
 
-drop table if exists ROOM;
+DROP TABLE IF EXISTS TEAMINROOM;
 
-drop table if exists TEAM;
+DROP TABLE IF EXISTS ROOM;
 
-drop table if exists TEAMINROOM;
+DROP TABLE IF EXISTS USERINTEAM;
 
-drop table if exists USER;
+DROP TABLE IF EXISTS TEAM;
 
-drop table if exists USERINTEAM;
+DROP TABLE IF EXISTS USERSESSION;
 
-drop table if exists USERSESSION;
+DROP TABLE IF EXISTS USERS;
 
 /*==============================================================*/
 /* Table: DASHBOARD                                             */
@@ -39,10 +38,11 @@ create table DASHBOARD
 create table PI
 (
    PIID                 int not null AUTO_INCREMENT,
-   ROOMNO               char(4),
+   ROOMNO               varchar(10),
    DASHBOARDID          int,
    NAME                 varchar(64) not null,
    MACADRESS            varchar(32) not null,
+   STATUS               varchar(32) null,
    primary key (PIID)
 );
 
@@ -51,7 +51,7 @@ create table PI
 /*==============================================================*/
 create table ROOM
 (
-   ROOMNO               char(4) not null,
+   ROOMNO               varchar(10) not null,
    primary key (ROOMNO)
 );
 
@@ -71,14 +71,14 @@ create table TEAM
 create table TEAMINROOM
 (
    TEAMID               int not null,
-   ROOMNO               char(4) not null,
+   ROOMNO               varchar(10) not null,
    primary key (TEAMID, ROOMNO)
 );
 
 /*==============================================================*/
 /* Table: USER                                                  */
 /*==============================================================*/
-create table USER
+create table USERS
 (
    USERID               int not null AUTO_INCREMENT,
    FIRSTNAME            varchar(64) not null,
@@ -111,7 +111,7 @@ create table USERSESSION
 );
 
 alter table DASHBOARD add constraint FK_DASHBOARDFROMUSER foreign key (USERID)
-      references USER (USERID) on delete restrict on update restrict;
+      references USERS (USERID) on delete restrict on update restrict;
 
 alter table PI add constraint FK_DASHBOARDONPI foreign key (DASHBOARDID)
       references DASHBOARD (DASHBOARDID) on delete restrict on update restrict;
@@ -126,11 +126,11 @@ alter table TEAMINROOM add constraint FK_TEAMINROOM2 foreign key (ROOMNO)
       references ROOM (ROOMNO) on delete restrict on update restrict;
 
 alter table USERINTEAM add constraint FK_USERINTEAM foreign key (USERID)
-      references USER (USERID) on delete restrict on update restrict;
+      references USERS (USERID) on delete restrict on update restrict;
 
 alter table USERINTEAM add constraint FK_USERINTEAM2 foreign key (TEAMID)
       references TEAM (TEAMID) on delete restrict on update restrict;
 
 alter table USERSESSION add constraint FK_USERSESSION foreign key (USERID)
-      references USER (USERID) on delete restrict on update restrict;
+      references USERS (USERID) on delete restrict on update restrict;
 

@@ -29,7 +29,11 @@ class AuthenticationServiceImp :AuthenticationService {
 
         val token = generateToken()
         authenticationDao.insertToken(email, token)
-        return LoginResponseDto(generateToken())
+        return LoginResponseDto(token)
+    }
+
+    override fun destroySession(token: String) {
+        authenticationDao.deleteSession(token)
     }
 
     override fun validateToken(token: String) {
@@ -50,6 +54,5 @@ class AuthenticationServiceImp :AuthenticationService {
         } while(authenticationDao.tokenExists(token))
         return token
     }
-
 
 }
