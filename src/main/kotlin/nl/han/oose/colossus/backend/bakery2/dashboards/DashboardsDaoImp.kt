@@ -6,10 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Primary
 import org.springframework.stereotype.Component
 import org.springframework.web.server.ServerErrorException
+import java.sql.SQLException
 
 @Component
 @Primary
-class DashboardsDaoImp:DashboardsDao {
+class DashboardsDaoImp : DashboardsDao {
 
     @Autowired
     private lateinit var databaseConnection: DatabaseConnection
@@ -28,7 +29,7 @@ class DashboardsDaoImp:DashboardsDao {
     }
 
     @Throws(ServerErrorException::class)
-    override fun getAllDashboards() :DashboardCollectionDto {
+    override fun getAllDashboards(): DashboardCollectionDto {
 
         val newDashboardCollectionDto: DashboardCollectionDto
         val statement = databaseConnection.prepareStatement("SELECT * FROM DASHBOARD ")
@@ -39,4 +40,27 @@ class DashboardsDaoImp:DashboardsDao {
         return newDashboardCollectionDto
     }
 
+    override fun deleteDashboard(dashboardId: Int) {
+        val query = "DELETE FROM DASHBOARD WHERE DASHBOARDID = ?"
+        try {
+            val statement = databaseConnection.prepareStatement(query)
+            statement.setInt(1, dashboardId)
+            statement.executeUpdate()
+        } catch (e: SQLException) {
+            println(e.message)
+        }
+    }
+
+    override fun userOwnsDashboard(dashboardId: Int, userId: Int): Boolean {
+        val query = "SELECT USERID FROM DASHBOARD WHERE DASHBOARDID = ?"
+        try {
+            val statement = databaseConnection.prepareStatement(query)
+            statement.setInt(1, dashboardId)
+            val resultSet = statement.executeQuery()
+            return (dashboardsMapper.getUserIdMapper(resultSet) == userId)
+        } catch (e: SQLException) {
+            println(e.message)
+            return false
+        }
+    }
 }
