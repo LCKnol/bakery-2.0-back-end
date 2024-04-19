@@ -10,4 +10,5 @@ interface DashboardsDao {
     fun setDashboardsMapper(mapper: DashboardsMapper)
     fun setDatabaseConnection(connection: DatabaseConnection)
     fun addDashboard(dashboardDto: DashboardDto)
+    fun editDashboard(dashboardDto: DashboardDto)
 }

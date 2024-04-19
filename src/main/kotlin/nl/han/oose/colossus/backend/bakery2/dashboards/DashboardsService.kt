@@ -8,4 +8,5 @@ interface DashboardsService {
     fun getAllDashboards(): DashboardCollectionDto
     fun setDashboardDao(dao: DashboardsDao)
     fun addDashboard(dashboardDto: DashboardDto)
+    fun editDashboard(dashboardDto: DashboardDto)
 }

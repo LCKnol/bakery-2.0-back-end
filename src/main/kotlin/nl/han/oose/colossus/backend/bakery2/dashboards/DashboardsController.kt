@@ -36,4 +36,10 @@ class DashboardsController {
         return ResponseEntity(HttpStatus.CREATED)
     }
 
+    @PutMapping(path = ["/{dashboardId}"], consumes = [MediaType.APPLICATION_JSON_VALUE])
+    @Authenticate
+    fun editDashboard(@PathVariable dashboardId: Int, @RequestBody dashboardDto: DashboardDto): ResponseEntity<HttpStatus> {
+        this.dashboardsService.editDashboard(dashboardDto)
+        return ResponseEntity(HttpStatus.NO_CONTENT)
+    }
 }

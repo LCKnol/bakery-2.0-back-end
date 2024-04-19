@@ -25,4 +25,8 @@ class DashboardsServiceImp :DashboardsService {
     override fun getAllDashboards(): DashboardCollectionDto {
         return dashboardDao.getAllDashboards()
     }
+
+    override fun editDashboard(dashboardDto: DashboardDto) {
+        dashboardDao.editDashboard(dashboardDto)
+    }
 }
