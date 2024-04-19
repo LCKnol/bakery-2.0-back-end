@@ -36,5 +36,9 @@ private lateinit var authenticationService: AuthenticationService
         authenticationService.registerUser(userDto)
         return ResponseEntity(HttpStatus.CREATED)
     }
+
+    fun setAuthenticationService(service: AuthenticationService) {
+        this.authenticationService = service
+    }
 }
 
