@@ -32,7 +32,6 @@ class DashboardsController {
     @PostMapping(path = ["/add"],consumes = [MediaType.APPLICATION_JSON_VALUE])
     @Authenticate
     fun addDashboards(@RequestBody dashboardDto: DashboardDto): ResponseEntity<HttpStatus> {
-        var test = dashboardDto
         this.dashboardsService.addDashboard(dashboardDto)
         return ResponseEntity(HttpStatus.CREATED)
     }
