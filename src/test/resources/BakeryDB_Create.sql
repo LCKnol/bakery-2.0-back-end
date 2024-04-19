@@ -38,7 +38,7 @@ create table DASHBOARD
 create table PI
 (
    PIID                 int not null AUTO_INCREMENT,
-   ROOMNO               char(5),
+   ROOMNO               varchar(10),
    DASHBOARDID          int,
    NAME                 varchar(64) not null,
    MACADRESS            varchar(32) not null,
@@ -51,7 +51,7 @@ create table PI
 /*==============================================================*/
 create table ROOM
 (
-   ROOMNO               char(4) not null,
+   ROOMNO               varchar(10) not null,
    primary key (ROOMNO)
 );
 
@@ -71,7 +71,7 @@ create table TEAM
 create table TEAMINROOM
 (
    TEAMID               int not null,
-   ROOMNO               char(4) not null,
+   ROOMNO               varchar(10) not null,
    primary key (TEAMID, ROOMNO)
 );
 
