@@ -36,7 +36,6 @@ class DashboardsDaoImp:DashboardsDao {
         statement.setString(2,dashboardDto.getName())
         statement.setString(3,dashboardDto.getURl())
         statement.setString(4,dashboardDto.getImageURL())
-        println(statement)
         statement.executeUpdate()
         statement.close()
         connection.close()
