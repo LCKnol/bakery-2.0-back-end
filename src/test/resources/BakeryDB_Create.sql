@@ -38,10 +38,11 @@ create table DASHBOARD
 create table PI
 (
    PIID                 int not null AUTO_INCREMENT,
-   ROOMNO               char(4),
+   ROOMNO               char(5),
    DASHBOARDID          int,
    NAME                 varchar(64) not null,
    MACADRESS            varchar(32) not null,
+   STATUS               varchar(32) null,
    primary key (PIID)
 );
 
