@@ -11,33 +11,33 @@ import java.sql.SQLException
 @Primary
 @Component
 class AuthenticationDaoImp : AuthenticationDao {
-//TODO: DB Connection
+    //TODO: DB Connection
 //private val mapper  = AuthenticationMapperImp()
     @Autowired
-private lateinit var databaseConnection: DatabaseConnection
+    private lateinit var databaseConnection: DatabaseConnection
 
 
-        override fun findPassword(email: String): String {
-            val query = "SELECT password FROM users WHERE email = ?"
-            var password: String? = null
-            try {
-                databaseConnection.prepareStatement(query).use { preparedStatement ->
-                    preparedStatement.setString(1, email)
-                    preparedStatement.executeQuery().use { resultSet ->
-                        if (resultSet.next()) {
-                            password = resultSet.getString("password")
-                        }
+    override fun findPassword(email: String): String {
+        val query = "SELECT password FROM USERS WHERE email = ?"
+        var password: String? = null
+        try {
+            databaseConnection.prepareStatement(query).use { preparedStatement ->
+                preparedStatement.setString(1, email)
+                preparedStatement.executeQuery().use { resultSet ->
+                    if (resultSet.next()) {
+                        password = resultSet.getString("password")
                     }
                 }
-            } catch (e: SQLException) {
-                return "Error accessing database: ${e.message}"
             }
-            return password ?: "Password not found"
+        } catch (e: SQLException) {
+            return "Error accessing database: ${e.message}"
         }
+        return password ?: "Password not found"
+    }
 
 
     override fun tokenExists(token: String): Boolean {
-        val query = "SELECT COUNT(*) FROM usersession WHERE token = ?"
+        val query = "SELECT COUNT(*) FROM USERSESSION WHERE token = ?"
         return try {
             val preparedStatement = databaseConnection.prepareStatement(query)
             preparedStatement.setString(1, token)
@@ -49,7 +49,7 @@ private lateinit var databaseConnection: DatabaseConnection
     }
 
     override fun insertToken(email: String, token: String) {
-        val query = "INSERT INTO usersession (userID, token) SELECT userID, ? FROM Users WHERE email = ?"
+        val query = "INSERT INTO USERSESSION (userID, token) SELECT userID, ? FROM USERS WHERE email = ?"
         try {
             val preparedStatement = databaseConnection.prepareStatement(query)
             preparedStatement.setString(1, token)
@@ -61,7 +61,7 @@ private lateinit var databaseConnection: DatabaseConnection
     }
 
     override fun insertUser(userDto: UserDto) {
-        val query = "INSERT INTO users(firstName, lastName, email, password, isAdmin) VALUES (?, ?, ?, ?, ?)"
+        val query = "INSERT INTO USERS(firstName, lastName, email, password, isAdmin) VALUES (?, ?, ?, ?, ?)"
         try {
             val preparedStatement = databaseConnection.prepareStatement(query)
             preparedStatement.setString(1, userDto.firstName)
@@ -76,7 +76,7 @@ private lateinit var databaseConnection: DatabaseConnection
     }
 
     override fun deleteSession(token: String) {
-        val query = "DELETE FROM UserSession WHERE token = ?"
+        val query = "DELETE FROM USERSESSION WHERE token = ?"
         try {
             val preparedStatement = databaseConnection.prepareStatement(query)
             preparedStatement.setString(1, token)
