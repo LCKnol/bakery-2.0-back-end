@@ -1,5 +1,6 @@
 package nl.han.oose.colossus.backend.bakery2.Pi
 
+import nl.han.oose.colossus.backend.bakery2.dashboards.DashboardsDao
 import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDto
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Primary
@@ -13,6 +14,10 @@ class PiServiceImp : PiService {
     override fun getPis(user: Int): PiCollectionDto {
         val pis = piDao.getPis(user)
         return pis    }
+
+    override fun setPiDao(dao: PiDao) {
+        piDao = dao
+    }
 }
 
 

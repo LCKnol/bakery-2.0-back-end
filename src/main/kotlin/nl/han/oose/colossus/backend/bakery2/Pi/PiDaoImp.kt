@@ -1,5 +1,6 @@
 package nl.han.oose.colossus.backend.bakery2.Pi
 
+import nl.han.oose.colossus.backend.bakery2.dashboards.DashboardsMapper
 import nl.han.oose.colossus.backend.bakery2.database.DatabaseConnection
 import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDto
 import org.springframework.beans.factory.annotation.Autowired
@@ -15,6 +16,13 @@ class PiDaoImp : PiDao {
     private lateinit var dbConnection: DatabaseConnection
 
 
+    override fun setDatabaseConnection(connection: DatabaseConnection) {
+        dbConnection = connection
+    }
+
+    override fun setPiMapper(mapper: PiMapper) {
+        piMapper = mapper
+    }
 
     override fun getPis(user: Int): PiCollectionDto {
         val preparedStatement = dbConnection.prepareStatement("SELECT p.*, d.NAME AS dashboardname FROM Pi p INNER JOIN DASHBOARD d ON p.DASHBOARDID = d.DASHBOARDID WHERE p.roomno IN (SELECT roomno FROM teaminroom WHERE teamid IN (SELECT teamid FROM userinteam WHERE userid = ?))")
