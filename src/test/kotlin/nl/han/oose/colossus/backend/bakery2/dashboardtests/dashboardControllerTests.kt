@@ -5,10 +5,12 @@ import nl.han.oose.colossus.backend.bakery2.dashboards.DashboardsController
 import nl.han.oose.colossus.backend.bakery2.dashboards.DashboardsService
 import nl.han.oose.colossus.backend.bakery2.dto.DashboardCollectionDto
 import nl.han.oose.colossus.backend.bakery2.dto.DashboardDto
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.*
-
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 
 
 class dashboardControllerTests {
@@ -48,10 +50,11 @@ class dashboardControllerTests {
         doNothing().`when`(dashboardsService).editDashboard(dashboard)
 
         // Act
-        sut.editDashboard(1, dashboard)
+        val result = sut.editDashboard(1, dashboard).statusCode
 
         // Assert
         verify(dashboardsService).editDashboard(dashboard)
+        Assertions.assertEquals(204, result.value())
     }
 
 }
