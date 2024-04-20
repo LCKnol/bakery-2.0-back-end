@@ -5,19 +5,21 @@ class DashboardDto {
      private var id: Int
 
 
-     private var url: String
-
+     private var dashboardUrl: String
 
      private var name: String
 
      private var imageUrl: String
 
+     private var userId: Int
 
-    constructor(id: Int, url: String, name: String,imageUrl: String) {
+
+    constructor(id: Int, dashboardUrl: String, name: String,imageUrl: String,userId: Int) {
         this.id = id
-        this.url = url
+        this.dashboardUrl = dashboardUrl
         this.name = name
         this.imageUrl = imageUrl
+        this.userId = userId
     }
 
 
@@ -25,16 +27,24 @@ class DashboardDto {
         this.id = newValue // You can still access it within the class
     }
 
+    fun getUserId(): Int {
+        return this.userId // You can still access it within the class
+    }
+
+    fun setUserId(newValue: Int) {
+        this.userId = newValue // You can still access it within the class
+    }
+
     fun getId(): Int {
         return this.id // You can still access it within the class
     }
 
-    fun setURL(newValue: String) {
-        this.url = newValue // You can still access it within the class
+    fun setDashboardUrl(newValue: String) {
+        this.dashboardUrl = newValue // You can still access it within the class
     }
 
-    fun getURl(): String {
-        return this.url // You can still access it within the class
+    fun getDashboardUrl(): String {
+        return this.dashboardUrl // You can still access it within the class
     }
 
     fun setImageURL(newValue: String) {

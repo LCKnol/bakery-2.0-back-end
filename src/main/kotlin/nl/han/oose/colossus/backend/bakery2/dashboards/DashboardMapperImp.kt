@@ -15,7 +15,7 @@ class DashboardMapperImp:DashboardsMapper {
 
         while (resultSet.next()) {
             val newDashboardDto =
-                DashboardDto(resultSet.getInt("DASHBOARDID"), resultSet.getString("DASHBOARDURL"), resultSet.getString("NAME"),resultSet.getString("IMAGEURL"))
+                DashboardDto(resultSet.getInt("DASHBOARDID"), resultSet.getString("DASHBOARDURL"), resultSet.getString("NAME"),resultSet.getString("IMAGEURL"),resultSet.getInt("USERID"))
             newDashboardCollectionDto.getDashboards().add(newDashboardDto)
         }
         return newDashboardCollectionDto
