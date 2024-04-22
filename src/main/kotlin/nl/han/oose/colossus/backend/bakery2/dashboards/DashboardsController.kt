@@ -29,6 +29,14 @@ class DashboardsController {
         dashboardsService = service
     }
 
+    fun setTokenService(service: TokenService) {
+        tokenService = service
+    }
+
+    fun setUserService(service: UserService) {
+        userService = service
+    }
+
     @GetMapping(produces = ["application/json"])
     @Authenticate
     fun getAllDashboards(): ResponseEntity<DashboardCollectionDto> {
