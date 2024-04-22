@@ -19,7 +19,7 @@ class PiDaoImp : PiDao {
 
     override fun getPis(user: Int): PiCollectionDto {
         val preparedStatement =
-            dbConnection.prepareStatement("SELECT p.*, d.NAME AS dashboardname FROM Pi p INNER JOIN DASHBOARD d ON p.DASHBOARDID = d.DASHBOARDID WHERE p.roomno IN (SELECT roomno FROM teaminroom WHERE teamid IN (SELECT teamid FROM userinteam WHERE userid = ?))")
+            dbConnection.prepareStatement("SELECT p.*, d.NAME AS dashboardname FROM PI p LEFT JOIN DASHBOARD d ON p.DASHBOARDID = d.DASHBOARDID WHERE p.roomno IN (SELECT roomno FROM TEAMINROOM WHERE teamid IN (SELECT teamid FROM USERINTEAM WHERE userid = ?))")
         preparedStatement.setInt(1, user)
         val resultSet = preparedStatement.executeQuery()
         val pis = piMapper.mapPis(resultSet)

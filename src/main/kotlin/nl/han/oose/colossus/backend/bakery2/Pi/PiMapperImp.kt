@@ -11,8 +11,8 @@ import java.sql.ResultSet
 class PiMapperImp : PiMapper {
     override fun mapPis(resultSet: ResultSet): PiCollectionDto {
 
-        var piCollection = PiCollectionDto()
-        var pis = arrayListOf<PiDto>()
+        val piCollection = PiCollectionDto()
+        val pis = arrayListOf<PiDto>()
         while (resultSet.next()) {
             val id = resultSet.getInt("piid")
             val name = resultSet.getString("name")
@@ -20,8 +20,8 @@ class PiMapperImp : PiMapper {
             val status = resultSet.getString("status")
             val piDTO = PiDto()
             piDTO.setId(id)
-            piDTO.setName(name)
-            piDTO.setDisplay(dashboard)
+            piDTO.setName(name ?: "-")
+            piDTO.setDisplay(dashboard ?: "-")
             piDTO.setStatus(status)
             pis.add(piDTO)
         }
