@@ -33,7 +33,7 @@ class DashboardsDaoImp : DashboardsDao {
         statement.setInt(1, dashboardDto.getUserId())
         statement.setString(2, dashboardDto.getName())
         statement.setString(3, dashboardDto.getDashboardUrl())
-        statement.setString(4, dashboardDto.getImageURL())
+        statement.setString(4, dashboardDto.getImageUrl())
         statement.executeUpdate()
         statement.close()
     }
@@ -66,7 +66,7 @@ class DashboardsDaoImp : DashboardsDao {
         statement.setInt(1, dashboardDto.getUserId())
         statement.setString(2, dashboardDto.getName())
         statement.setString(3,dashboardDto.getDashboardUrl())
-        statement.setString(4,dashboardDto.getImageURL())
+        statement.setString(4,dashboardDto.getImageUrl())
         statement.setInt(5, dashboardDto.getId())
         statement.executeUpdate()
         statement.close()
