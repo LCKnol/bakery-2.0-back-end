@@ -1,6 +1,6 @@
 package nl.han.oose.colossus.backend.bakery2.dashboards
 
-import nl.han.oose.colossus.backend.bakery2.Users.UserService
+import nl.han.oose.colossus.backend.bakery2.users.UserService
 import nl.han.oose.colossus.backend.bakery2.dto.DashboardCollectionDto
 import nl.han.oose.colossus.backend.bakery2.dto.DashboardDto
 import nl.han.oose.colossus.backend.bakery2.token.Authenticate
@@ -27,6 +27,14 @@ class DashboardsController {
 
     fun setDashboardsService(service: DashboardsService) {
         dashboardsService = service
+    }
+
+    fun setTokenService(service: TokenService) {
+        tokenService = service
+    }
+
+    fun setUserService(service: UserService) {
+        userService = service
     }
 
     @GetMapping(produces = ["application/json"])

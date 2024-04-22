@@ -1,8 +1,7 @@
-package nl.han.oose.colossus.backend.bakery2.Pi
+package nl.han.oose.colossus.backend.bakery2.pi
 
-import nl.han.oose.colossus.backend.bakery2.Users.UserService
+import nl.han.oose.colossus.backend.bakery2.users.UserService
 import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDto
-import nl.han.oose.colossus.backend.bakery2.dto.TokenDto
 import nl.han.oose.colossus.backend.bakery2.token.Authenticate
 import nl.han.oose.colossus.backend.bakery2.token.TokenService
 import org.springframework.beans.factory.annotation.Autowired
@@ -10,10 +9,8 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import java.net.Authenticator
 
 @RestController
 @RequestMapping("/pis")

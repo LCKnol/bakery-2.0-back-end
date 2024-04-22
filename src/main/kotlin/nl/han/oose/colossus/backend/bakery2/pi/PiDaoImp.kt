@@ -1,4 +1,4 @@
-package nl.han.oose.colossus.backend.bakery2.Pi
+package nl.han.oose.colossus.backend.bakery2.pi
 
 import nl.han.oose.colossus.backend.bakery2.dashboards.DashboardsMapper
 import nl.han.oose.colossus.backend.bakery2.database.DatabaseConnection
@@ -6,6 +6,7 @@ import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDto
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Primary
 import org.springframework.stereotype.Component
+import org.springframework.web.server.ServerErrorException
 import java.sql.SQLException
 
 @Primary
@@ -17,7 +18,6 @@ class PiDaoImp : PiDao {
     @Autowired
     private lateinit var dbConnection: DatabaseConnection
 
-
     override fun setDatabaseConnection(connection: DatabaseConnection) {
         dbConnection = connection
     }
@@ -26,9 +26,10 @@ class PiDaoImp : PiDao {
         piMapper = mapper
     }
 
+    @Throws(ServerErrorException::class)
     override fun getPis(user: Int): PiCollectionDto {
         val preparedStatement =
-            dbConnection.prepareStatement("SELECT p.*, d.NAME AS dashboardname FROM Pi p INNER JOIN DASHBOARD d ON p.DASHBOARDID = d.DASHBOARDID WHERE p.roomno IN (SELECT roomno FROM teaminroom WHERE teamid IN (SELECT teamid FROM userinteam WHERE userid = ?))")
+            dbConnection.prepareStatement("SELECT p.*, d.NAME AS dashboardname FROM PI p LEFT JOIN DASHBOARD d ON p.DASHBOARDID = d.DASHBOARDID WHERE p.roomno IN (SELECT roomno FROM TEAMINROOM WHERE teamid IN (SELECT teamid FROM USERINTEAM WHERE userid = ?))")
         preparedStatement.setInt(1, user)
         val resultSet = preparedStatement.executeQuery()
         val pis = piMapper.mapPis(resultSet)

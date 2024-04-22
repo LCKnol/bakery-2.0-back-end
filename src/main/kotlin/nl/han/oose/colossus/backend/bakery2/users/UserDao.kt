@@ -1,4 +1,4 @@
-package nl.han.oose.colossus.backend.bakery2.Users
+package nl.han.oose.colossus.backend.bakery2.users
 
 import nl.han.oose.colossus.backend.bakery2.Pi.PiMapper
 import nl.han.oose.colossus.backend.bakery2.database.DatabaseConnection

@@ -1,6 +1,5 @@
-package nl.han.oose.colossus.backend.bakery2.Users
+package nl.han.oose.colossus.backend.bakery2.users
 
-import nl.han.oose.colossus.backend.bakery2.dto.TokenDto
 import nl.han.oose.colossus.backend.bakery2.dto.UserInfoDto
 import org.springframework.beans.factory.annotation.Autowired
 import nl.han.oose.colossus.backend.bakery2.token.Authenticate
@@ -9,11 +8,8 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import java.net.Authenticator
 
 @RestController
 @RequestMapping("/user")
