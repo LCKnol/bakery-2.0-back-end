@@ -29,7 +29,7 @@ class AuthenticationDaoTests {
         sut = AuthenticationDaoImp()
         val databaseConnection: DatabaseConnection = DatabaseConnection()
         val scriptRunner: ScriptRunner = ScriptRunner(databaseConnection.getConnection(), true, true)
-        scriptRunner.runScript(InputStreamReader(ClassLoader.getSystemResourceAsStream("BakeryDB_Create (1).sql")!!))
+        scriptRunner.runScript(InputStreamReader(ClassLoader.getSystemResourceAsStream("BakeryDB_Create.sql")!!))
         sut.setDatabaseConnection(databaseConnection)
 
         sut.setDatabaseConnection(databaseConnection)
