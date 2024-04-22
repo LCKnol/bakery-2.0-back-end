@@ -54,7 +54,7 @@ class dashboardServiceTests {
         doNothing().`when`(dashboardsDao).editDashboard(dashboard)
 
         // Act
-        sut.editDashboard(dashboard)
+        sut.editDashboard(dashboard,1)
 
         // Assert
         verify(dashboardsDao).editDashboard(dashboard)
