@@ -64,11 +64,11 @@ class AuthenticationDaoImp : AuthenticationDao {
         val query = "INSERT INTO USERS(firstName, lastName, email, password, isAdmin) VALUES (?, ?, ?, ?, ?)"
         try {
             val preparedStatement = databaseConnection.prepareStatement(query)
-            preparedStatement.setString(1, userDto.firstName)
-            preparedStatement.setString(2, userDto.lastName)
-            preparedStatement.setString(3, userDto.email)
-            preparedStatement.setString(4, userDto.password)
-            preparedStatement.setBoolean(5, userDto.isAdmin)
+            preparedStatement.setString(1, userDto.getFirstName())
+            preparedStatement.setString(2, userDto.getLastName())
+            preparedStatement.setString(3, userDto.getEmail())
+            preparedStatement.setString(4, userDto.getPassword())
+            preparedStatement.setBoolean(5, userDto.getIsAdmin())
             preparedStatement.executeUpdate()
         } catch (e: SQLException) {
             println(e.message)

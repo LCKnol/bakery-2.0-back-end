@@ -48,7 +48,7 @@ class DashboardsController {
     @Authenticate
     fun deleteDashboard(@PathVariable dashboardId: Int) {
         val token = tokenService.getToken()
-        val userId = userService.getUser(token)
+        val userId = userService.getUserId(token)
         dashboardsService.deleteDashboard(dashboardId, userId)
     }
 }

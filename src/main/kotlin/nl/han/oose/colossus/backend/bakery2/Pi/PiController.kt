@@ -31,7 +31,7 @@ class PiController {
     @Authenticate
     fun getPis(): ResponseEntity<PiCollectionDto> {
         val token = tokenService.getToken()
-        val user = userService.getUser(token)
+        val user = userService.getUserId(token)
         val pisResponse = piService.getPis(user)
         return ResponseEntity(pisResponse, HttpStatus.OK)
     }

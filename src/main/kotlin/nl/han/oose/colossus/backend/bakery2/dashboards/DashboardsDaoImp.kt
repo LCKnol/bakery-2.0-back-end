@@ -62,13 +62,14 @@ class DashboardsDaoImp : DashboardsDao {
     }
 
     override fun getUserIdFromDashboard(dashboardId: Int): Int? {
-        val query = "SELECT USERID FROM DASHBOARD WHERE DASHBOARDID = ?"
+        val query = "select USERID from dashboard where DASHBOARDID = ?"
         try {
             val statement = databaseConnection.prepareStatement(query)
             statement.setInt(1, dashboardId)
             val resultSet = statement.executeQuery()
+            val result =  dashboardsMapper.getUserIdMapper(resultSet)
             statement.close()
-            return dashboardsMapper.getUserIdMapper(resultSet)
+            return result
         } catch (e: SQLException) {
             println(e.message)
             return null

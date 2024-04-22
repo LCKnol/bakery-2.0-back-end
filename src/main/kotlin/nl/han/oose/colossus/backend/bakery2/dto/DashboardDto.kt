@@ -24,16 +24,16 @@ class DashboardDto {
         this.id = newValue // You can still access it within the class
     }
 
+    fun getId(): Int {
+        return this.id // You can still access it within the class
+    }
+
     fun getUserId(): Int {
         return this.userId // You can still access it within the class
     }
 
     fun setUserId(newValue: Int) {
         this.userId = newValue // You can still access it within the class
-    }
-
-    fun getId(): Int {
-        return this.id // You can still access it within the class
     }
 
     fun setDashboardUrl(newValue: String) {

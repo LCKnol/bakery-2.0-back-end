@@ -1,5 +1,6 @@
 package nl.han.oose.colossus.backend.bakery2.Users
 
+import nl.han.oose.colossus.backend.bakery2.dto.UserDto
 import nl.han.oose.colossus.backend.bakery2.dto.UserInfoDto
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Primary
@@ -16,10 +17,14 @@ class UserServiceImp : UserService {
         return user
     }
 
-    override fun getUser(token: String): Int {
-        val user = userDao.getUser(token)
+    override fun getUserId(token: String): Int {
+        val user: UserDto? = userDao.getUser(token)
+        if (user != null) {
+            val id = user.getId()
+            return id
+        }
         // TODO: decide how to handle this: throw some exception???
-        return user ?: -1
+        return -1
     }
 }
 

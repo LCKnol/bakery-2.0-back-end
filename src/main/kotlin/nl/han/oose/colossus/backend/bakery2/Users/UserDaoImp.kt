@@ -1,6 +1,7 @@
 package nl.han.oose.colossus.backend.bakery2.Users
 
 import nl.han.oose.colossus.backend.bakery2.database.DatabaseConnection
+import nl.han.oose.colossus.backend.bakery2.dto.UserDto
 import nl.han.oose.colossus.backend.bakery2.dto.UserInfoDto
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Primary
@@ -25,13 +26,13 @@ class UserDaoImp : UserDao {
         return user
     }
 
-    override fun getUser(token: String): Int? {
+    override fun getUser(token: String): UserDto? {
         val preparedStatement =
-            dbConnection.prepareStatement("select userid from USERS where userid = (select userid from USERSESSION where token = ?)")
+            dbConnection.prepareStatement("select userid, firstname, lastname, password, email, isadmin from USERS where userid = (select userid from USERSESSION where token = ?)")
         preparedStatement.setString(1, token)
         val resultSet = preparedStatement.executeQuery()
-        val userId = userMapper.mapUserId(resultSet)
+        val user = userMapper.mapUserId(resultSet)
         preparedStatement.close()
-        return userId
+        return user
     }
 }

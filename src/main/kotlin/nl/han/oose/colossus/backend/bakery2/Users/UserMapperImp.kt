@@ -43,12 +43,19 @@ class UserMapperImp : UserMapper {
         return userInfoDTO
     }
 
-    override fun mapUserId(resultSet: ResultSet): Int? {
-        var userId: Int? = null
+    override fun mapUserId(resultSet: ResultSet): UserDto? {
+        var user: UserDto? = null
         while (resultSet.next()) {
-            userId = resultSet.getInt("userid")
+            user = UserDto(
+                resultSet.getInt("userid"),
+                resultSet.getString("FIRSTNAME"),
+                resultSet.getString("LASTNAME"),
+                resultSet.getString("PASSWORD"),
+                resultSet.getString("EMAIL"),
+                resultSet.getBoolean("ISADMIN")
+            )
         }
-        return userId
+        return user
     }
 }
 
