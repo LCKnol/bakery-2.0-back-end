@@ -13,5 +13,5 @@ interface AuthenticationDao {
     fun insertToken(email: String, token: String)
     fun insertUser(userDto: UserDto)
     fun deleteSession(token: String)
-     fun setDatabaseConnection(dbconnection: DatabaseConnection)
+     fun setDatabaseConnection(databaseConnection: DatabaseConnection)
 }

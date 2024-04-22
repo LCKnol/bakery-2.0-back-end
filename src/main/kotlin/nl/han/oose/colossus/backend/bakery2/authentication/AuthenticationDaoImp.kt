@@ -89,4 +89,5 @@ class AuthenticationDaoImp : AuthenticationDao {
     override fun setDatabaseConnection(databaseConnection: DatabaseConnection) {
       this.databaseConnection = databaseConnection
     }
+
 }
