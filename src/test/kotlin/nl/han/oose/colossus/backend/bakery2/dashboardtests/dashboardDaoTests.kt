@@ -51,13 +51,13 @@ class dashboardDaoTests {
 
         // arrange
         val dashboard: DashboardCollectionDto = DashboardCollectionDto()
-        `when`(dashboardsMapper.getAlldashboardsMapper(MockitoHelper.anyObject())).thenReturn(dashboard)
+        `when`(dashboardsMapper.getAllDashboardsMapper(MockitoHelper.anyObject())).thenReturn(dashboard)
 
         // act
         val result = sut.getAllDashboards()
 
         //assert
-        verify(dashboardsMapper).getAlldashboardsMapper(MockitoHelper.anyObject())
+        verify(dashboardsMapper).getAllDashboardsMapper(MockitoHelper.anyObject())
         Assertions.assertEquals(dashboard, result)
     }
 
