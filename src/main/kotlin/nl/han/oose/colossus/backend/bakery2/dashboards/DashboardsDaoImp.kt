@@ -29,8 +29,7 @@ class DashboardsDaoImp : DashboardsDao {
 
     @Throws(ServerErrorException::class)
     override fun addDashboard(dashboardDto: DashboardDto) {
-        val statement =
-            databaseConnection.prepareStatement("INSERT INTO DASHBOARD (USERID,NAME,DASHBOARDURL,IMAGEURL) VALUES(?,?,?,?)")
+        val statement =  databaseConnection.prepareStatement("INSERT INTO DASHBOARD (USERID,NAME,DASHBOARDURL,IMAGEURL) VALUES(?,?,?,?)")
         statement.setInt(1, dashboardDto.getUserId())
         statement.setString(2, dashboardDto.getName())
         statement.setString(3, dashboardDto.getDashboardUrl())
