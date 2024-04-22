@@ -2,6 +2,8 @@ package nl.han.oose.colossus.backend.bakery2.Users
 
 import nl.han.oose.colossus.backend.bakery2.dto.UserInfoDto
 import nl.han.oose.colossus.backend.bakery2.token.TokenService
+import nl.han.oose.colossus.backend.bakery2.users.UserController
+import nl.han.oose.colossus.backend.bakery2.users.UserService
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 

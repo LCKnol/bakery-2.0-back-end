@@ -2,6 +2,9 @@ package nl.han.oose.colossus.backend.bakery2.Pi
 
 import junit.framework.Assert.assertEquals
 import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDto
+import nl.han.oose.colossus.backend.bakery2.pi.PiDao
+import nl.han.oose.colossus.backend.bakery2.pi.PiService
+import nl.han.oose.colossus.backend.bakery2.pi.PiServiceImp
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.*

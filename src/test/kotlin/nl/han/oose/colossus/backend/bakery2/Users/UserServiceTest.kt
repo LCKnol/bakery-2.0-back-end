@@ -4,6 +4,8 @@ import junit.framework.Assert.assertEquals
 import junit.framework.Assert.assertSame
 import nl.han.oose.colossus.backend.bakery2.dto.UserDto
 import nl.han.oose.colossus.backend.bakery2.dto.UserInfoDto
+import nl.han.oose.colossus.backend.bakery2.users.UserDao
+import nl.han.oose.colossus.backend.bakery2.users.UserServiceImp
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 

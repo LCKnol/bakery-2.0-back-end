@@ -1,6 +1,5 @@
 package nl.han.oose.colossus.backend.bakery2.users
 
-import nl.han.oose.colossus.backend.bakery2.Pi.PiDao
 import nl.han.oose.colossus.backend.bakery2.dto.UserDto
 import nl.han.oose.colossus.backend.bakery2.dto.UserInfoDto
 import org.springframework.beans.factory.annotation.Autowired
