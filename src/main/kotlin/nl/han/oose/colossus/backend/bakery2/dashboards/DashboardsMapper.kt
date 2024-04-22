@@ -6,4 +6,5 @@ import java.sql.ResultSet
 interface DashboardsMapper {
 
     fun getAlldashboardsMapper(resultSet: ResultSet): DashboardCollectionDto
+    fun getUserIdMapper(resultSet: ResultSet): Int?
 }
