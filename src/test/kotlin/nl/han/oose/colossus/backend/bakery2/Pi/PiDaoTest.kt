@@ -1,20 +1,15 @@
 package nl.han.oose.colossus.backend.bakery2.Pi
 
-import nl.han.oose.colossus.backend.bakery2.dashboards.DashboardsDao
-import nl.han.oose.colossus.backend.bakery2.dashboards.DashboardsDaoImp
-import nl.han.oose.colossus.backend.bakery2.dashboards.DashboardsMapper
 import nl.han.oose.colossus.backend.bakery2.database.DatabaseConnection
-import nl.han.oose.colossus.backend.bakery2.dto.DashboardCollectionDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDto
 import nl.han.oose.colossus.backend.bakery2.util.MockitoHelper
 import nl.han.oose.colossus.backend.bakery2.util.ScriptRunner
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito
-import org.mockito.Mockito.mock
+import org.mockito.Mockito.*
 import java.io.InputStreamReader
-import java.sql.ResultSet
+
 
 class PiDaoTest {
 
@@ -39,13 +34,13 @@ class PiDaoTest {
 
         // arrange
         val pi: PiCollectionDto = PiCollectionDto()
-        Mockito.`when`(piMapper.mapPis(MockitoHelper.anyObject())).thenReturn(pi)
+        `when`(piMapper.mapPis(MockitoHelper.anyObject())).thenReturn(pi)
 
         // act
         val result = sut.getPis(1)
 
         //assert
-        Mockito.verify(piMapper).mapPis(MockitoHelper.anyObject())
+        verify(piMapper).mapPis(MockitoHelper.anyObject())
         Assertions.assertEquals(pi, result)
     }
 }

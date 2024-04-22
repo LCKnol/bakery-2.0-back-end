@@ -22,6 +22,8 @@ class UserServiceImp : UserService {
         return user
     }
 
+
+
     override fun getUserId(token: String): Int {
         val user: UserDto? = userDao.getUser(token)
         if (user != null) {

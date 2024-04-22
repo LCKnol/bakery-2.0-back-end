@@ -37,7 +37,7 @@ class UserDaoImp : UserDao {
 
     override fun getUser(token: String): UserDto? {
         val preparedStatement =
-            dbConnection.prepareStatement("select userid, firstname, lastname, password, email, isadmin from USERS where userid = (select userid from USERSESSION where token = ?)")
+            dbConnection.prepareStatement("SELECT userid, firstname, lastname, password, email, isadmin FROM USERS WHERE userid = (SELECT userid FROM USERSESSION WHERE token = ?)")
         preparedStatement.setString(1, token)
         val resultSet = preparedStatement.executeQuery()
         val user = userMapper.mapUserId(resultSet)

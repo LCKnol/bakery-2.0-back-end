@@ -166,6 +166,9 @@ VALUES (4, 4);
 INSERT INTO USERINTEAM (USERID, TEAMID)
 VALUES (4, 3);
 
+INSERT INTO USERSESSION (USERID, TOKEN)
+VALUES (1, '123');
+
 
 alter table DASHBOARD add constraint FK_DASHBOARDFROMUSER foreign key (USERID)
       references USERS (USERID) on delete restrict on update restrict;

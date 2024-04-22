@@ -1,20 +1,17 @@
 package nl.han.oose.colossus.backend.bakery2.Users
 
 import nl.han.oose.colossus.backend.bakery2.database.DatabaseConnection
-import nl.han.oose.colossus.backend.bakery2.dto.DashboardCollectionDto
+import nl.han.oose.colossus.backend.bakery2.dto.UserDto
 import nl.han.oose.colossus.backend.bakery2.dto.UserInfoDto
 import nl.han.oose.colossus.backend.bakery2.util.MockitoHelper
 import nl.han.oose.colossus.backend.bakery2.util.ScriptRunner
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.ArgumentMatchers.anyString
-import org.mockito.Mockito
-import org.mockito.Mockito.mock
-import org.mockito.Mockito.`when`
+import org.mockito.Mockito.*
 import java.io.InputStreamReader
-import java.sql.PreparedStatement
-import java.sql.ResultSet
+
 
 class UserDaoTest {
 
@@ -26,7 +23,7 @@ class UserDaoTest {
     @BeforeEach
     fun setUp() {
         sut = UserDaoImp()
-        userMapper = Mockito.mock(UserMapper::class.java)
+        userMapper = mock(UserMapper::class.java)
         dbConnection = DatabaseConnection()
         val scriptRunner: ScriptRunner = ScriptRunner(dbConnection.getConnection(), true, true)
         scriptRunner.runScript(InputStreamReader(ClassLoader.getSystemResourceAsStream("BakeryDB_Create.sql")!!))
@@ -52,13 +49,13 @@ class UserDaoTest {
     @Test
     fun testGetUser() {
         // Arrange
-        val token: String = "fake token"
-        val user: Int = 0
+        val token: String = "123"
+        val user : UserDto = UserDto(1, "pieter", "post", "123", "123", true)
 
         // Act
         val result = sut.getUser(token)
 
         // Assert
-        assertEquals(user, result)
+        Assertions.assertEquals(user, result)
     }
 }

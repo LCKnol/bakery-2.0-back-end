@@ -1,14 +1,10 @@
 package nl.han.oose.colossus.backend.bakery2.Pi
 
-import junit.framework.Assert.assertSame
-import nl.han.oose.colossus.backend.bakery2.dashboards.DashboardsDao
-import nl.han.oose.colossus.backend.bakery2.dashboards.DashboardsServiceImp
-import nl.han.oose.colossus.backend.bakery2.dto.DashboardCollectionDto
+import junit.framework.Assert.assertEquals
 import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDto
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito
-import org.mockito.Mockito.`when`
+import org.mockito.Mockito.*
 
 class PiServiceTest {
 
@@ -20,7 +16,7 @@ class PiServiceTest {
     @BeforeEach
     fun setUp() {
         sut = PiServiceImp()
-        piDao = Mockito.mock(PiDao::class.java)
+        piDao = mock(PiDao::class.java)
         sut.setPiDao(piDao)
     }
 
@@ -34,8 +30,8 @@ class PiServiceTest {
         val actualPis: PiCollectionDto = sut.getPis(1)
 
         // Assert
-        Mockito.verify(piDao).getPis(1)
-        assertSame(expectedPis, actualPis)
+        verify(piDao).getPis(1)
+        assertEquals(expectedPis, actualPis)
     }
 
     }

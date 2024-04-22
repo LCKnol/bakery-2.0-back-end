@@ -1,13 +1,13 @@
 package nl.han.oose.colossus.backend.bakery2.Users
 
+import junit.framework.Assert.assertEquals
 import junit.framework.Assert.assertSame
+import nl.han.oose.colossus.backend.bakery2.dto.UserDto
 import nl.han.oose.colossus.backend.bakery2.dto.UserInfoDto
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-import org.mockito.Mockito
-import org.mockito.Mockito.verify
-import org.mockito.Mockito.`when`
+import org.mockito.Mockito.*
 
 class UserServiceTest {
     private lateinit var sut: UserServiceImp
@@ -17,7 +17,7 @@ class UserServiceTest {
     @BeforeEach
     fun setUp() {
         sut = UserServiceImp()
-        userDao = Mockito.mock(UserDao::class.java)
+        userDao = mock(UserDao::class.java)
         sut.setUserDao(userDao)
     }
 
@@ -41,14 +41,14 @@ class UserServiceTest {
     fun testGetUser() {
         // Arrange
         val token = "fakeToken"
-        val userId = 123
-        Mockito.`when`(userDao.getUser(token)).thenReturn(userId)
+        val user : UserDto = UserDto(1, "pieter", "post", "123", "123", true)
+        `when`(userDao.getUser(token)).thenReturn(user)
 
         // Act
-        val result = sut.getUser(token)
+        val result = sut.getUserId(token)
 
         // Assert
-        assert(result == userId)
-        Mockito.verify(userDao).getUser(token)
+        assertEquals(result, user.getId())
+        verify(userDao).getUser(token)
     }
 }
