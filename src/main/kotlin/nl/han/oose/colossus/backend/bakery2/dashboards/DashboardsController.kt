@@ -37,6 +37,12 @@ class DashboardsController {
         return ResponseEntity<DashboardCollectionDto>(result, HttpStatus.OK)
     }
 
+    @GetMapping(path = ["/{dashboardId}"], produces = ["application/json"])
+    fun getDashboard(@PathVariable("dashboardId") dashboardId: Int): ResponseEntity<DashboardDto> {
+        val result = this.dashboardsService.getDashboard(dashboardId)
+        return ResponseEntity(result, HttpStatus.OK)
+    }
+
     @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE])
     @Authenticate
     fun addDashboards(@RequestBody dashboardDto: DashboardDto): ResponseEntity<HttpStatus> {
@@ -45,6 +51,15 @@ class DashboardsController {
         dashboardDto.setUserId(userId)
         this.dashboardsService.addDashboard(dashboardDto)
         return ResponseEntity(HttpStatus.CREATED)
+    }
+
+    @PutMapping(consumes = [MediaType.APPLICATION_JSON_VALUE])
+    @Authenticate
+    fun editDashboard(@RequestBody dashboardDto: DashboardDto): ResponseEntity<HttpStatus> {
+        val token = this.tokenService.getToken()
+        val userId = this.userService.getUserId(token)
+        this.dashboardsService.editDashboard(dashboardDto, userId)
+        return ResponseEntity(HttpStatus.OK)
     }
 
     @DeleteMapping(path = ["/{dashboardId}"])

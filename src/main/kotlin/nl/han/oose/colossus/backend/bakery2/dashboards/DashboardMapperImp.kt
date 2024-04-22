@@ -27,6 +27,22 @@ class DashboardMapperImp : DashboardsMapper {
         return newDashboardCollectionDto
     }
 
+    override fun getDashboardMapper(resultSet: ResultSet): DashboardDto? {
+
+        var dashboard: DashboardDto? = null
+
+        while (resultSet.next()) {
+            dashboard = DashboardDto(
+                resultSet.getInt("dashboardId"),
+                resultSet.getString("dashboardUrl"),
+                resultSet.getString("name"),
+                resultSet.getString("imageUrl"),
+                resultSet.getInt("userId")
+            )
+        }
+        return dashboard
+    }
+
     override fun getUserIdMapper(resultSet: ResultSet): Int? {
         var userId: Int? = null
         while (resultSet.next()) {

@@ -48,6 +48,31 @@ class DashboardsDaoImp : DashboardsDao {
         return newDashboardCollectionDto
     }
 
+    override fun getDashboard(dashboardId: Int): DashboardDto? {
+        val connection = databaseConnection.getConnection()
+        val statement = databaseConnection.prepareStatement("SELECT * FROM DASHBOARD WHERE DASHBOARDID = ?")
+        statement.setInt(1, dashboardId)
+        val result = statement.executeQuery()
+        val dashboard = dashboardsMapper.getDashboardMapper(result)
+        statement.close()
+        connection.close()
+        return dashboard
+    }
+
+    @Throws(ServerErrorException::class)
+    override fun editDashboard(dashboardDto: DashboardDto) {
+        val connection = databaseConnection.getConnection()
+        val statement = connection.prepareStatement("UPDATE DASHBOARD SET USERID = ?, NAME = ?, DASHBOARDURL = ?, IMAGEURL = ? WHERE DASHBOARDID = ?")
+        statement.setInt(1, dashboardDto.getUserId())
+        statement.setString(2, dashboardDto.getName())
+        statement.setString(3,dashboardDto.getDashboardUrl())
+        statement.setString(4,dashboardDto.getImageURL())
+        statement.setInt(5, dashboardDto.getId())
+        statement.executeUpdate()
+        statement.close()
+        connection.close()
+    }
+
     override fun deleteDashboard(dashboardId: Int) {
         val query = "DELETE FROM DASHBOARD WHERE DASHBOARDID = ?"
         try {
@@ -74,4 +99,5 @@ class DashboardsDaoImp : DashboardsDao {
             return null
         }
     }
+
 }
