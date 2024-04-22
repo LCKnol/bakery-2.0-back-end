@@ -17,7 +17,6 @@ class DbProperties(propertiesFileName: String) {
         get() = properties.getProperty(PASSWORD) ?: throw RuntimeException("Password is null")
 
     init {
-        println("Loading '$propertiesFileName'")
         try {
             val inputStream = javaClass.classLoader.getResourceAsStream(propertiesFileName)
             if (inputStream != null) {

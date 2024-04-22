@@ -41,20 +41,17 @@ class DashboardsServiceImp : DashboardsService {
     }
 
     override fun deleteDashboard(dashboardId: Int, userId: Int) {
-        if (dashboardDao.getUserIdFromDashboard(dashboardId) == userId) {
-            piDao.setDashboardsNull(dashboardId)
-            dashboardDao.deleteDashboard(dashboardId)
-        } else {
-            //TODO: Throw different exception, because this automatically logs out the user
-            throw HttpUnauthorizedException("Dashboard belongs to different user")
-        }
+        checkUserPerms(dashboardId, userId)
+        piDao.setDashboardsNull(dashboardId)
+        dashboardDao.deleteDashboard(dashboardId)
     }
 
     override fun getAllDashboards(): DashboardCollectionDto {
         return dashboardDao.getAllDashboards()
     }
 
-    override fun editDashboard(dashboardDto: DashboardDto) {
+    override fun editDashboard(dashboardDto: DashboardDto, userId: Int) {
+        checkUserPerms(dashboardDto.getId(), userId)
         dashboardDao.editDashboard(dashboardDto)
     }
 
