@@ -4,6 +4,7 @@ import nl.han.oose.colossus.backend.bakery2.dto.LoginRequestDto
 import nl.han.oose.colossus.backend.bakery2.dto.LoginResponseDto
 import nl.han.oose.colossus.backend.bakery2.dto.UserDto
 import nl.han.oose.colossus.backend.bakery2.exceptions.HttpUnauthorizedException
+import nl.han.oose.colossus.backend.bakery2.token.TokenService
 import org.springframework.security.crypto.bcrypt.BCrypt
 import org.springframework.context.annotation.Primary
 import org.springframework.beans.factory.annotation.Autowired
@@ -16,6 +17,7 @@ import java.util.*
 class AuthenticationServiceImp :AuthenticationService {
     @Autowired
     private lateinit var  authenticationDao: AuthenticationDao
+    private lateinit var  tokenService: TokenService
 
 
 
@@ -27,7 +29,7 @@ class AuthenticationServiceImp :AuthenticationService {
             throw HttpUnauthorizedException("Invalid login credentials")
         }
 
-        val token = generateToken()
+        val token = tokenService.generateToken()
         authenticationDao.insertToken(email, token)
         return LoginResponseDto(token)
     }
@@ -51,6 +53,10 @@ class AuthenticationServiceImp :AuthenticationService {
         this.authenticationDao = authenticationDao
     }
 
+    fun setTokenService(tokenService: TokenService) {
+        this.tokenService = tokenService
+    }
+/*
     private fun generateToken(): String {
         var token: String
         do {
@@ -58,5 +64,5 @@ class AuthenticationServiceImp :AuthenticationService {
         } while(authenticationDao.tokenExists(token))
         return token
     }
-
+*/
 }

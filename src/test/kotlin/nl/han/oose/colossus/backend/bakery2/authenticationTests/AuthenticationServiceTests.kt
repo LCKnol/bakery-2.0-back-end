@@ -1,10 +1,13 @@
 import nl.han.oose.colossus.backend.bakery2.authentication.AuthenticationDao
 import nl.han.oose.colossus.backend.bakery2.authentication.AuthenticationServiceImp
+import nl.han.oose.colossus.backend.bakery2.exceptions.HttpUnauthorizedException
+import nl.han.oose.colossus.backend.bakery2.token.TokenService
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.mockito.Mockito
-import org.mockito.Mockito.mock
-import org.mockito.Mockito.verify
+import org.mockito.Mockito.*
 import org.springframework.security.crypto.bcrypt.BCrypt
 import java.util.*
 
@@ -12,34 +15,94 @@ class AuthenticationServiceTests {
 
     private lateinit var sut: AuthenticationServiceImp  // System Under Test
     private lateinit var authenticationDao: AuthenticationDao
+    private lateinit var tokenService: TokenService
 
     @BeforeEach
     fun setup() {
-        sut = AuthenticationServiceImp()
-        authenticationDao = Mockito.mock(AuthenticationDao::class.java)
-        sut.setAuthenticationDao(authenticationDao)
-    }
-/*
-    @Test
-    fun `authenticate should return token on successful authentication`() {
-        // Arrange
-        val email = "Avisi@outlook.com"
-        val password = "password123"
-       // val hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt())
-        val hashedPassword = "$2a$10"+'$'+"piwNZPAOhMhdG7Xlm/3kkOs/hZeYlfyQPAY/z7SurggdiLxfzu.KC"
-        val expectedToken = UUID.randomUUID().toString()
 
-        Mockito.`when`(authenticationDao.findPassword(email)).thenReturn(hashedPassword)
-        Mockito.`when`(authenticationDao.tokenExists(anyOrNull())).thenReturn(false)
-        Mockito.`when`(authenticationDao.insertToken(anyOrNull(), anyOrNull())).thenReturn(Unit)
+        sut = AuthenticationServiceImp()
+        authenticationDao = mock(AuthenticationDao::class.java)
+        tokenService = mock(TokenService::class.java)
+        sut.setAuthenticationDao(authenticationDao)
+        sut.setTokenService(tokenService)
+        }
+
+
+    @Test
+    fun authenticateThrowsHttpUnauthorizedExceptionIfPasswordIsIncorrect() {
+        // Arrange
+        val email = "user@example.com"
+        val password = "wrongPassword"
+        val storedHash = BCrypt.hashpw("correctPassword", BCrypt.gensalt())
+
+        `when`(authenticationDao.findPassword(email)).thenReturn(storedHash)
+
+        // Act & Assert
+        assertThrows<HttpUnauthorizedException> {
+            sut.authenticate(email, password)
+        }
+    }
+
+
+    @Test
+    fun authenticateReturnsValidTokenIfCredentialsCorrect() {
+        // Arrange
+        val email = "user@example.com"
+        val password = "correctPassword"
+        val storedHash = BCrypt.hashpw(password, BCrypt.gensalt())
+        val token = "newToken"
+
+        `when`(authenticationDao.findPassword(email)).thenReturn(storedHash)
+        `when`(tokenService.generateToken()).thenReturn(token)
 
         // Act
-        val result = sut.authenticate(email, hashedPassword)
+        val result = sut.authenticate(email, password)
 
         // Assert
-        assert(result.token.isNotBlank())
-        verify(authenticationDao).insertToken(email, result.token)
+        assert(result.token == token)
     }
 
- */
-}
+
+    @Test
+        fun testDestroySession() {
+            // Arrange
+            val token = "testToken123"
+
+            // Act
+            sut.destroySession(token)
+
+            // Assert
+            verify(authenticationDao).deleteSession(token)
+        }
+
+        @Test
+        fun validateTokenThrowHttpUnauthorizedExceptionIfTokenDoesNotExist() {
+            // Arrange
+            val token = "nonExistentToken"
+            `when`(authenticationDao.tokenExists(token)).thenReturn(false)
+
+            // Act & Assert
+            assertThrows<HttpUnauthorizedException> {
+                sut.validateToken(token)
+            }
+        }
+
+        @Test
+        fun validateTokenSucceed() {
+            // Arrange
+            val token = "existingToken"
+            `when`(authenticationDao.tokenExists(token)).thenReturn(true)
+
+            // Act
+            sut.validateToken(token)
+
+            // Assert
+            verify(authenticationDao).tokenExists(token)
+        }
+
+
+
+
+    }
+
+
