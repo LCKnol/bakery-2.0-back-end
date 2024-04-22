@@ -7,17 +7,17 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Primary
 import org.springframework.stereotype.Component
 import org.springframework.web.server.ServerErrorException
+import java.sql.SQLException
 
 @Component
 @Primary
-class DashboardsDaoImp:DashboardsDao {
+class DashboardsDaoImp : DashboardsDao {
 
     @Autowired
     private lateinit var databaseConnection: DatabaseConnection
 
     @Autowired
     private lateinit var dashboardsMapper: DashboardsMapper
-
 
     override fun setDatabaseConnection(connection: DatabaseConnection) {
         databaseConnection = connection
@@ -27,32 +27,51 @@ class DashboardsDaoImp:DashboardsDao {
         dashboardsMapper = mapper
     }
 
-
     @Throws(ServerErrorException::class)
     override fun addDashboard(dashboardDto: DashboardDto) {
-        val connection = databaseConnection.getConnection()
-        val statement = connection.prepareStatement("INSERT INTO DASHBOARD (USERID,NAME,DASHBOARDURL,IMAGEURL) VALUES(?,?,?,?) ")
-        statement.setInt(1,dashboardDto.getUserId())
-        statement.setString(2,dashboardDto.getName())
-        statement.setString(3,dashboardDto.getDashboardUrl())
-        statement.setString(4,dashboardDto.getImageURL())
+        val statement =  databaseConnection.prepareStatement("INSERT INTO DASHBOARD (USERID,NAME,DASHBOARDURL,IMAGEURL) VALUES(?,?,?,?)")
+        statement.setInt(1, dashboardDto.getUserId())
+        statement.setString(2, dashboardDto.getName())
+        statement.setString(3, dashboardDto.getDashboardUrl())
+        statement.setString(4, dashboardDto.getImageURL())
         statement.executeUpdate()
         statement.close()
-        connection.close()
     }
 
-
     @Throws(ServerErrorException::class)
-    override fun getAllDashboards() :DashboardCollectionDto {
-        val connection = databaseConnection.getConnection()
+    override fun getAllDashboards(): DashboardCollectionDto {
         val newDashboardCollectionDto: DashboardCollectionDto
-        val statement = connection .prepareStatement("SELECT * FROM DASHBOARD ")
+        val statement = databaseConnection.prepareStatement("SELECT * FROM DASHBOARD ")
         val resultSet = statement.executeQuery()
         newDashboardCollectionDto = dashboardsMapper.getAlldashboardsMapper(resultSet)
         statement.close()
-        connection.close()
-
         return newDashboardCollectionDto
     }
 
+    override fun deleteDashboard(dashboardId: Int) {
+        val query = "DELETE FROM DASHBOARD WHERE DASHBOARDID = ?"
+        try {
+            val statement = databaseConnection.prepareStatement(query)
+            statement.setInt(1, dashboardId)
+            statement.executeUpdate()
+            statement.close()
+        } catch (e: SQLException) {
+            println(e.message)
+        }
+    }
+
+    override fun getUserIdFromDashboard(dashboardId: Int): Int? {
+        val query = "select USERID from dashboard where DASHBOARDID = ?"
+        try {
+            val statement = databaseConnection.prepareStatement(query)
+            statement.setInt(1, dashboardId)
+            val resultSet = statement.executeQuery()
+            val result =  dashboardsMapper.getUserIdMapper(resultSet)
+            statement.close()
+            return result
+        } catch (e: SQLException) {
+            println(e.message)
+            return null
+        }
+    }
 }

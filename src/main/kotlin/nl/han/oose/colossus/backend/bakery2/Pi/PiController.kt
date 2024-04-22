@@ -17,21 +17,21 @@ import java.net.Authenticator
 
 @RestController
 @RequestMapping("/pis")
-class PiController{
+class PiController {
     @Autowired
-        private lateinit var piService : PiService
+    private lateinit var piService: PiService
+
     @Autowired
-        private lateinit var userService : UserService
+    private lateinit var userService: UserService
 
     @Autowired
     private lateinit var tokenService: TokenService
 
-
-    @GetMapping(produces =[MediaType.APPLICATION_JSON_VALUE])
+    @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
     @Authenticate
     fun getPis(): ResponseEntity<PiCollectionDto> {
         val token = tokenService.getToken()
-        val user = userService.getUser(token)
+        val user = userService.getUserId(token)
         val pisResponse = piService.getPis(user)
         return ResponseEntity(pisResponse, HttpStatus.OK)
     }

@@ -43,7 +43,7 @@ class AuthenticationServiceImp :AuthenticationService {
     }
 
     override fun registerUser(userDto: UserDto) {
-        userDto.password = BCrypt.hashpw(userDto.password, BCrypt.gensalt())
+        userDto.setPassword(BCrypt.hashpw(userDto.getPassword(), BCrypt.gensalt()))
         authenticationDao.insertUser(userDto)
     }
 
