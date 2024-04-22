@@ -20,9 +20,9 @@ class PiMapperImp : PiMapper {
             val status = resultSet.getString("status")
             val piDTO = PiDto()
             piDTO.setId(id)
-            piDTO.setName(name ?: "-")
+            piDTO.setName(name)
             piDTO.setDisplay(dashboard ?: "-")
-            piDTO.setStatus(status)
+            piDTO.setStatus(status ?: "-")
             pis.add(piDTO)
         }
         piCollection.setPis(pis)
