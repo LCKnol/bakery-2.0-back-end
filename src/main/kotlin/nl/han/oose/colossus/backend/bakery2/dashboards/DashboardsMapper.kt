@@ -6,8 +6,7 @@ import java.sql.ResultSet
 
 interface DashboardsMapper {
 
-    fun getAlldashboardsMapper(resultSet: ResultSet): DashboardCollectionDto
-
+    fun getAllDashboardsMapper(resultSet: ResultSet): DashboardCollectionDto
     fun getDashboardMapper(resultSet: ResultSet): DashboardDto?
     fun getUserIdMapper(resultSet: ResultSet): Int?
 }

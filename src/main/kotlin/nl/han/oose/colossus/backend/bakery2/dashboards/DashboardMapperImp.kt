@@ -10,7 +10,7 @@ import java.sql.ResultSet
 @Primary
 class DashboardMapperImp : DashboardsMapper {
 
-    override fun getAlldashboardsMapper(resultSet: ResultSet): DashboardCollectionDto {
+    override fun getAllDashboardsMapper(resultSet: ResultSet): DashboardCollectionDto {
         val newDashboardCollectionDto = DashboardCollectionDto()
 
         while (resultSet.next()) {

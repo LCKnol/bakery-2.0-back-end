@@ -2,7 +2,6 @@ package nl.han.oose.colossus.backend.bakery2.dashboards
 
 import nl.han.oose.colossus.backend.bakery2.Pi.PiDao
 import nl.han.oose.colossus.backend.bakery2.dto.DashboardCollectionDto
-import nl.han.oose.colossus.backend.bakery2.exceptions.HttpUnauthorizedException
 import nl.han.oose.colossus.backend.bakery2.dto.DashboardDto
 import nl.han.oose.colossus.backend.bakery2.exceptions.HttpForbiddenException
 import nl.han.oose.colossus.backend.bakery2.exceptions.HttpNotFoundException
@@ -29,10 +28,8 @@ class DashboardsServiceImp : DashboardsService {
     }
 
     override fun getDashboard(dashboardId: Int): DashboardDto {
-        val dashboard = dashboardDao.getDashboard(dashboardId)
-        if (dashboard == null) {
-            throw HttpNotFoundException("Dashboard does not exist")
-        }
+        val dashboard =
+            dashboardDao.getDashboard(dashboardId) ?: throw HttpNotFoundException("Dashboard does not exist")
         return dashboard
     }
 
