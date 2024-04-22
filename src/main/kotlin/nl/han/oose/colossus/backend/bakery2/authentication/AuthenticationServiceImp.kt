@@ -56,13 +56,5 @@ class AuthenticationServiceImp :AuthenticationService {
     fun setTokenService(tokenService: TokenService) {
         this.tokenService = tokenService
     }
-/*
-    private fun generateToken(): String {
-        var token: String
-        do {
-            token = UUID.randomUUID().toString()
-        } while(authenticationDao.tokenExists(token))
-        return token
-    }
-*/
+
 }

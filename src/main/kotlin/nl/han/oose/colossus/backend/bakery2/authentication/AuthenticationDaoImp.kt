@@ -12,7 +12,7 @@ import java.sql.SQLException
 @Component
 class AuthenticationDaoImp : AuthenticationDao {
     //TODO: DB Connection
-//private val mapper  = AuthenticationMapperImp()
+
     @Autowired
     private lateinit var databaseConnection: DatabaseConnection
 
