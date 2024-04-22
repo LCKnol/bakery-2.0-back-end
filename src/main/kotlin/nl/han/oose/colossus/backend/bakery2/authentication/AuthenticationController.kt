@@ -47,5 +47,15 @@ private lateinit var tokenService: TokenService
         return ResponseEntity(HttpStatus.CREATED)
     }
 
+    fun setAuthenticationService(service : AuthenticationService) {
+        this.authenticationService = service
+
+    }
+
+    fun setTokenService(tokenService: TokenService) {
+        this.tokenService = tokenService
+
+    }
+
 }
 

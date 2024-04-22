@@ -85,4 +85,8 @@ private lateinit var databaseConnection: DatabaseConnection
             println(e.message)
         }
     }
+
+    override fun setDatabaseConnection(databaseConnection: DatabaseConnection) {
+      this.databaseConnection = databaseConnection
+    }
 }

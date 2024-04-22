@@ -1,5 +1,6 @@
 package nl.han.oose.colossus.backend.bakery2.authentication
 
+import nl.han.oose.colossus.backend.bakery2.database.DatabaseConnection
 import nl.han.oose.colossus.backend.bakery2.dto.UserDto
 
 interface AuthenticationDao {
@@ -12,4 +13,5 @@ interface AuthenticationDao {
     fun insertToken(email: String, token: String)
     fun insertUser(userDto: UserDto)
     fun deleteSession(token: String)
+     fun setDatabaseConnection(dbconnection: DatabaseConnection)
 }

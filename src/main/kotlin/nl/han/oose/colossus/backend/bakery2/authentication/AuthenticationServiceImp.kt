@@ -47,6 +47,10 @@ class AuthenticationServiceImp :AuthenticationService {
         authenticationDao.insertUser(userDto)
     }
 
+    override fun setAuthenticationDao(authenticationDao: AuthenticationDao) {
+        this.authenticationDao = authenticationDao
+    }
+
     private fun generateToken(): String {
         var token: String
         do {
