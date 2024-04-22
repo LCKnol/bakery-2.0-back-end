@@ -22,11 +22,6 @@ class PiDaoTest {
 
     private lateinit var piMapper: PiMapper
 
-    private lateinit var resultSet: ResultSet
-
-
-
-
     @Test
     @BeforeEach
     fun setup() {
@@ -37,10 +32,6 @@ class PiDaoTest {
         scriptRunner.runScript(InputStreamReader(ClassLoader.getSystemResourceAsStream("BakeryDB_Create.sql")!!))
         sut.setDatabaseConnection(dbconnection)
         sut.setPiMapper(piMapper)
-
-        val statement = dbconnection.getConnection().prepareStatement("SELECT p.*, d.NAME AS dashboardname FROM Pi p INNER JOIN DASHBOARD d ON p.DASHBOARDID = d.DASHBOARDID WHERE p.roomno IN (SELECT roomno FROM teaminroom WHERE teamid IN (SELECT teamid FROM userinteam WHERE userid = ?))")
-        statement.setInt(1, 1)
-        this.resultSet = statement.executeQuery()
     }
 
     @Test

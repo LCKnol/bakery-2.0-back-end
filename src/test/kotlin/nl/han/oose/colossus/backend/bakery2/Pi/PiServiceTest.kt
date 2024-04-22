@@ -1,5 +1,6 @@
 package nl.han.oose.colossus.backend.bakery2.Pi
 
+import junit.framework.Assert.assertSame
 import nl.han.oose.colossus.backend.bakery2.dashboards.DashboardsDao
 import nl.han.oose.colossus.backend.bakery2.dashboards.DashboardsServiceImp
 import nl.han.oose.colossus.backend.bakery2.dto.DashboardCollectionDto
@@ -26,11 +27,15 @@ class PiServiceTest {
     @Test
     fun testGetPis() {
         // Arrange
-        `when`(piDao.getPis(1)).thenReturn(PiCollectionDto())
+        val expectedPis: PiCollectionDto = PiCollectionDto()
+        `when`(piDao.getPis(1)).thenReturn(expectedPis)
+
         // Act
-        sut.getPis(1)
+        val actualPis: PiCollectionDto = sut.getPis(1)
 
         // Assert
         Mockito.verify(piDao).getPis(1)
+        assertSame(expectedPis, actualPis)
     }
+
     }
