@@ -29,11 +29,12 @@ class DashboardsDaoImp : DashboardsDao {
 
     @Throws(ServerErrorException::class)
     override fun addDashboard(dashboardDto: DashboardDto) {
-        val statement =  databaseConnection.prepareStatement("INSERT INTO DASHBOARD (USERID,NAME,DASHBOARDURL,IMAGEURL) VALUES(?,?,?,?)")
+        val statement =
+            databaseConnection.prepareStatement("INSERT INTO DASHBOARD (USERID,NAME,DASHBOARDURL,IMAGEURL) VALUES(?,?,?,?)")
         statement.setInt(1, dashboardDto.getUserId())
         statement.setString(2, dashboardDto.getName())
         statement.setString(3, dashboardDto.getDashboardUrl())
-        statement.setString(4, dashboardDto.getImageURL())
+        statement.setString(4, dashboardDto.getImageUrl())
         statement.executeUpdate()
         statement.close()
     }
@@ -43,9 +44,35 @@ class DashboardsDaoImp : DashboardsDao {
         val newDashboardCollectionDto: DashboardCollectionDto
         val statement = databaseConnection.prepareStatement("SELECT * FROM DASHBOARD ")
         val resultSet = statement.executeQuery()
-        newDashboardCollectionDto = dashboardsMapper.getAlldashboardsMapper(resultSet)
+        newDashboardCollectionDto = dashboardsMapper.getAllDashboardsMapper(resultSet)
         statement.close()
         return newDashboardCollectionDto
+    }
+
+    override fun getDashboard(dashboardId: Int): DashboardDto? {
+        val connection = databaseConnection.getConnection()
+        val statement = databaseConnection.prepareStatement("SELECT * FROM DASHBOARD WHERE DASHBOARDID = ?")
+        statement.setInt(1, dashboardId)
+        val result = statement.executeQuery()
+        val dashboard = dashboardsMapper.getDashboardMapper(result)
+        statement.close()
+        connection.close()
+        return dashboard
+    }
+
+    @Throws(ServerErrorException::class)
+    override fun editDashboard(dashboardDto: DashboardDto) {
+        val connection = databaseConnection.getConnection()
+        val statement =
+            connection.prepareStatement("UPDATE DASHBOARD SET USERID = ?, NAME = ?, DASHBOARDURL = ?, IMAGEURL = ? WHERE DASHBOARDID = ?")
+        statement.setInt(1, dashboardDto.getUserId())
+        statement.setString(2, dashboardDto.getName())
+        statement.setString(3, dashboardDto.getDashboardUrl())
+        statement.setString(4, dashboardDto.getImageUrl())
+        statement.setInt(5, dashboardDto.getId())
+        statement.executeUpdate()
+        statement.close()
+        connection.close()
     }
 
     override fun deleteDashboard(dashboardId: Int) {
@@ -61,12 +88,12 @@ class DashboardsDaoImp : DashboardsDao {
     }
 
     override fun getUserIdFromDashboard(dashboardId: Int): Int? {
-        val query = "select USERID from dashboard where DASHBOARDID = ?"
+        val query = "SELECT USERID FROM DASHBOARD WHERE DASHBOARDID = ?"
         try {
             val statement = databaseConnection.prepareStatement(query)
             statement.setInt(1, dashboardId)
             val resultSet = statement.executeQuery()
-            val result =  dashboardsMapper.getUserIdMapper(resultSet)
+            val result = dashboardsMapper.getUserIdMapper(resultSet)
             statement.close()
             return result
         } catch (e: SQLException) {
@@ -74,4 +101,5 @@ class DashboardsDaoImp : DashboardsDao {
             return null
         }
     }
+
 }

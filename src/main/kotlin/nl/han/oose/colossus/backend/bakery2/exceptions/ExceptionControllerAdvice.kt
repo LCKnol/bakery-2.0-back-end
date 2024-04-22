@@ -17,4 +17,20 @@ class ExceptionControllerAdvice {
         val responseBody = "Unauthorized: ${e.message}"
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseBody)
     }
+
+    @ExceptionHandler(HttpForbiddenException::class)
+    @ResponseBody
+    @ResponseStatus(value = HttpStatus.FORBIDDEN)
+    fun handle(e: HttpForbiddenException): ResponseEntity<String> {
+        val responseBody = "Forbidden: ${e.message}"
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(responseBody)
+    }
+
+    @ExceptionHandler(HttpNotFoundException::class)
+    @ResponseBody
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    fun handle(e: HttpNotFoundException): ResponseEntity<String> {
+        val responseBody = "Not found: ${e.message}"
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseBody)
+    }
 }
