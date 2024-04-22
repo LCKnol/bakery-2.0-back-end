@@ -52,6 +52,7 @@ class DashboardsServiceImp : DashboardsService {
 
     override fun editDashboard(dashboardDto: DashboardDto, userId: Int) {
         checkUserPerms(dashboardDto.getId(), userId)
+        dashboardDto.setUserId(userId)
         dashboardDao.editDashboard(dashboardDto)
     }
 
