@@ -11,5 +11,6 @@ interface DashboardsService {
     fun setPiDao(dao: PiDao)
     fun deleteDashboard(dashboardId: Int, userId: Int)
     fun addDashboard(dashboardDto: DashboardDto)
-    fun editDashboard(dashboardDto: DashboardDto)
+    fun editDashboard(dashboardDto: DashboardDto, userId: Int)
+    fun getDashboard(dashboardId: Int): DashboardDto
 }

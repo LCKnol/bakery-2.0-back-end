@@ -49,6 +49,17 @@ class DashboardsDaoImp : DashboardsDao {
         return newDashboardCollectionDto
     }
 
+    override fun getDashboard(dashboardId: Int): DashboardDto? {
+        val connection = databaseConnection.getConnection()
+        val statement = databaseConnection.prepareStatement("SELECT * FROM DASHBOARD WHERE DASHBOARDID = ?")
+        statement.setInt(1, dashboardId)
+        val result = statement.executeQuery()
+        val dashboard = dashboardsMapper.getDashboardMapper(result)
+        statement.close()
+        connection.close()
+        return dashboard
+    }
+
     @Throws(ServerErrorException::class)
     override fun editDashboard(dashboardDto: DashboardDto) {
         val connection = databaseConnection.getConnection()
