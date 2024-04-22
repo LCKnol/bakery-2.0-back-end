@@ -1,7 +1,6 @@
 package nl.han.oose.colossus.backend.bakery2.Pi
 
 import nl.han.oose.colossus.backend.bakery2.Users.UserService
-import nl.han.oose.colossus.backend.bakery2.dashboards.DashboardsService
 import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDto
 import nl.han.oose.colossus.backend.bakery2.dto.TokenDto
 import nl.han.oose.colossus.backend.bakery2.token.Authenticate
@@ -18,11 +17,12 @@ import java.net.Authenticator
 
 @RestController
 @RequestMapping("/pis")
-class PiController{
+class PiController {
     @Autowired
-        private lateinit var piService : PiService
+    private lateinit var piService: PiService
+
     @Autowired
-        private lateinit var userService : UserService
+    private lateinit var userService: UserService
 
     @Autowired
     private lateinit var tokenService: TokenService
@@ -36,11 +36,11 @@ class PiController{
     fun setPiService(service: PiService) {
         piService = service
     }
-    @GetMapping(produces =[MediaType.APPLICATION_JSON_VALUE])
+    @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
     @Authenticate
     fun getPis(): ResponseEntity<PiCollectionDto> {
         val token = tokenService.getToken()
-        val user = userService.getUser(token)
+        val user = userService.getUserId(token)
         val pisResponse = piService.getPis(user)
         return ResponseEntity(pisResponse, HttpStatus.OK)
     }
