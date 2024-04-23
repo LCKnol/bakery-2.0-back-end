@@ -1,14 +1,13 @@
 package nl.han.oose.colossus.backend.bakery2.authentication
 
-import nl.han.oose.colossus.backend.bakery2.dto.LoginRequestDto
 import nl.han.oose.colossus.backend.bakery2.dto.LoginResponseDto
 import nl.han.oose.colossus.backend.bakery2.dto.UserDto
 import nl.han.oose.colossus.backend.bakery2.exceptions.HttpUnauthorizedException
+import nl.han.oose.colossus.backend.bakery2.users.UserDao
 import org.springframework.security.crypto.bcrypt.BCrypt
 import org.springframework.context.annotation.Primary
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
-import org.springframework.stereotype.Service
 import java.util.*
 
 @Primary
@@ -17,7 +16,9 @@ class AuthenticationServiceImp :AuthenticationService {
     @Autowired
     private lateinit var  authenticationDao: AuthenticationDao
 
-
+    override fun setAuthenticationDao(authenticationDao: AuthenticationDao) {
+        this.authenticationDao = authenticationDao
+    }
 
     override fun authenticate(email: String, password: String): LoginResponseDto {
 
@@ -27,7 +28,7 @@ class AuthenticationServiceImp :AuthenticationService {
             throw HttpUnauthorizedException("Invalid login credentials")
         }
 
-        val token = generateToken()
+        val token = this.generateToken()
         authenticationDao.insertToken(email, token)
         return LoginResponseDto(token)
     }
@@ -42,11 +43,6 @@ class AuthenticationServiceImp :AuthenticationService {
         }
     }
 
-    override fun registerUser(userDto: UserDto) {
-        userDto.setPassword(BCrypt.hashpw(userDto.getPassword(), BCrypt.gensalt()))
-        authenticationDao.insertUser(userDto)
-    }
-
     private fun generateToken(): String {
         var token: String
         do {
@@ -54,5 +50,4 @@ class AuthenticationServiceImp :AuthenticationService {
         } while(authenticationDao.tokenExists(token))
         return token
     }
-
 }

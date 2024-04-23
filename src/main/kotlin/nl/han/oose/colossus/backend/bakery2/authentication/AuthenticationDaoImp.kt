@@ -12,10 +12,13 @@ import java.sql.SQLException
 @Component
 class AuthenticationDaoImp : AuthenticationDao {
     //TODO: DB Connection
-//private val mapper  = AuthenticationMapperImp()
+
     @Autowired
     private lateinit var databaseConnection: DatabaseConnection
 
+    override fun setDatabaseConnection(databaseConnection: DatabaseConnection) {
+        this.databaseConnection = databaseConnection
+    }
 
     override fun findPassword(email: String): String {
         val query = "SELECT password FROM USERS WHERE email = ?"
@@ -34,7 +37,6 @@ class AuthenticationDaoImp : AuthenticationDao {
         }
         return password ?: "Password not found"
     }
-
 
     override fun tokenExists(token: String): Boolean {
         val query = "SELECT COUNT(*) FROM USERSESSION WHERE token = ?"
@@ -60,20 +62,6 @@ class AuthenticationDaoImp : AuthenticationDao {
         }
     }
 
-    override fun insertUser(userDto: UserDto) {
-        val query = "INSERT INTO USERS(firstName, lastName, email, password, isAdmin) VALUES (?, ?, ?, ?, ?)"
-        try {
-            val preparedStatement = databaseConnection.prepareStatement(query)
-            preparedStatement.setString(1, userDto.getFirstName())
-            preparedStatement.setString(2, userDto.getLastName())
-            preparedStatement.setString(3, userDto.getEmail())
-            preparedStatement.setString(4, userDto.getPassword())
-            preparedStatement.setBoolean(5, userDto.getIsAdmin())
-            preparedStatement.executeUpdate()
-        } catch (e: SQLException) {
-            println(e.message)
-        }
-    }
 
     override fun deleteSession(token: String) {
         val query = "DELETE FROM USERSESSION WHERE token = ?"

@@ -1,4 +1,4 @@
-package nl.han.oose.colossus.backend.bakery2.token
+package nl.han.oose.colossus.backend.bakery2.header
 
 
 @Target(AnnotationTarget.FUNCTION)

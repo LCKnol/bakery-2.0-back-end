@@ -3,7 +3,7 @@ package nl.han.oose.colossus.backend.bakery2.Pi
 import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDto
 import nl.han.oose.colossus.backend.bakery2.pi.PiController
 import nl.han.oose.colossus.backend.bakery2.pi.PiService
-import nl.han.oose.colossus.backend.bakery2.token.TokenService
+import nl.han.oose.colossus.backend.bakery2.header.HeaderService
 import nl.han.oose.colossus.backend.bakery2.users.UserService
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
@@ -17,7 +17,7 @@ class PiControllerTests {
     private lateinit var sut: PiController
     private lateinit var piService: PiService
     private lateinit var userService: UserService
-    private lateinit var tokenService: TokenService
+    private lateinit var tokenService: HeaderService
 
     @Test
     @BeforeEach
@@ -25,7 +25,7 @@ class PiControllerTests {
 
         piService = mock(PiService::class.java)
         userService = mock(UserService::class.java)
-        tokenService = mock(TokenService::class.java)
+        tokenService = mock(HeaderService::class.java)
 
 
         sut = PiController()
@@ -35,7 +35,7 @@ class PiControllerTests {
     }
 
     @Test
-    fun TestGetPisWorksCorrectly() {
+    fun testGetPisWorksCorrectly() {
         // Arrange
         val pi: PiCollectionDto = PiCollectionDto()
         `when`(tokenService.getToken()).thenReturn("fakeToken")

@@ -6,20 +6,19 @@ import nl.han.oose.colossus.backend.bakery2.dashboards.DashboardsController
 import nl.han.oose.colossus.backend.bakery2.dashboards.DashboardsService
 import nl.han.oose.colossus.backend.bakery2.dto.DashboardCollectionDto
 import nl.han.oose.colossus.backend.bakery2.dto.DashboardDto
-import nl.han.oose.colossus.backend.bakery2.token.TokenService
 import nl.han.oose.colossus.backend.bakery2.util.MockitoHelper
+import nl.han.oose.colossus.backend.bakery2.header.HeaderService
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.*
 import org.springframework.http.HttpStatus
 
 class DashboardControllerTests {
-
     private lateinit var sut: DashboardsController
 
     private lateinit var dashboardsService: DashboardsService
 
-    private lateinit var tokenService: TokenService
+    private lateinit var headerService: HeaderService
 
     private lateinit var userService: UserService
 
@@ -27,15 +26,16 @@ class DashboardControllerTests {
     fun setup() {
         sut = DashboardsController()
         dashboardsService = mock(DashboardsService::class.java)
-        tokenService = mock(TokenService::class.java)
+        headerService = mock(HeaderService::class.java)
         userService = mock(UserService::class.java)
         sut.setDashboardsService(dashboardsService)
-        sut.setTokenService(tokenService)
+        sut.setTokenService(headerService)
         sut.setUserService(userService)
     }
 
     @Test
     fun testGetAllDashboardWorksCorrectly() {
+
         // Arrange
         val dashboard = DashboardCollectionDto()
         `when`(dashboardsService.getAllDashboards()).thenReturn(dashboard)
@@ -44,6 +44,18 @@ class DashboardControllerTests {
         // Assert
         assertEquals(200, response)
         verify(dashboardsService).getAllDashboards()
+    }
+
+    @Test
+    fun testAddDashboardsCorrectly() {
+
+        // Arrange
+        val dashboard = DashboardDto(1, "test", "test", "test", 1)
+        // Act
+        val response = sut.addDashboards(dashboard).statusCode.value()
+        // Assert
+        assertEquals(201, response)
+        verify(dashboardsService).addDashboard(dashboard)
     }
 
     @Test
@@ -72,24 +84,13 @@ class DashboardControllerTests {
     }
 
     @Test
-    fun testAddDashboardsCorrectly() {
-        // Arrange
-        val dashboard = DashboardDto(1, "test", "test", "test", 1)
-        // Act
-        val response = sut.addDashboards(dashboard).statusCode.value()
-        // Assert
-        assertEquals(201, response)
-        verify(dashboardsService).addDashboard(dashboard)
-    }
-
-    @Test
     fun testDeleteDashboardsCorrectly() {
         // Arrange
         val mockToken = "9e8b4196-b691-45f9-8fb7-acec4f0f9a4b"
         val dashboardId = 2
         val mockUserId = 1
 
-        `when`(tokenService.getToken()).thenReturn(mockToken)
+        `when`(headerService.getToken()).thenReturn(mockToken)
         `when`(userService.getUserId(mockToken)).thenReturn(mockUserId)
 
         // Act
@@ -98,7 +99,7 @@ class DashboardControllerTests {
         // Assert
         assertEquals(HttpStatus.OK, response)
 
-        verify(tokenService).getToken()
+        verify(headerService).getToken()
         verify(userService).getUserId(mockToken)
         verify(dashboardsService).deleteDashboard(dashboardId, mockUserId)
     }

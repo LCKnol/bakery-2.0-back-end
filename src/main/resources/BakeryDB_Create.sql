@@ -16,87 +16,87 @@ DROP TABLE IF EXISTS USERS;
 
 create table DASHBOARD
 (
-   DASHBOARDID          int not null AUTO_INCREMENT,
-   USERID               int,
-   NAME                 varchar(64) not null,
-   DASHBOARDURL         varchar(1024) not null,
-   IMAGEURL             varchar(1024),
-   primary key (DASHBOARDID)
+    DASHBOARDID          int not null AUTO_INCREMENT,
+    USERID               int,
+    NAME                 varchar(64) not null,
+    DASHBOARDURL         varchar(1024) not null,
+    IMAGEURL             varchar(1024),
+    primary key (DASHBOARDID)
 );
 
 create table PI
 (
-   PIID                 int not null AUTO_INCREMENT,
-   ROOMNO               varchar(10),
-   DASHBOARDID          int,
-   NAME                 varchar(64) not null,
-   MACADRESS            varchar(32) not null,
-   STATUS               varchar(32) null,
-   primary key (PIID)
+    PIID                 int not null AUTO_INCREMENT,
+    ROOMNO               varchar(10),
+    DASHBOARDID          int,
+    NAME                 varchar(64) not null,
+    MACADRESS            varchar(32) not null,
+    STATUS               varchar(32) null,
+    primary key (PIID)
 );
 
 create table ROOM
 (
-   ROOMNO               varchar(10) not null,
-   primary key (ROOMNO)
+    ROOMNO               varchar(10) not null,
+    primary key (ROOMNO)
 );
 
 create table TEAM
 (
-   TEAMID               int not null AUTO_INCREMENT,
-   TEAMNAME             varchar(256) not null,
-   primary key (TEAMID)
+    TEAMID               int not null AUTO_INCREMENT,
+    TEAMNAME             varchar(256) not null,
+    primary key (TEAMID)
 );
 
 create table TEAMINROOM
 (
-   TEAMID               int not null,
-   ROOMNO               varchar(10) not null,
-   primary key (TEAMID, ROOMNO)
+    TEAMID               int not null,
+    ROOMNO               varchar(10) not null,
+    primary key (TEAMID, ROOMNO)
 );
 
 create table USERS
 (
-   USERID               int not null AUTO_INCREMENT,
-   FIRSTNAME            varchar(64) not null,
-   LASTNAME             varchar(64) not null,
-   PASSWORD             varchar(256) not null,
-   EMAIL                varchar(256) not null,
-   ISADMIN              bool not null,
-   primary key (USERID)
+    USERID               int not null AUTO_INCREMENT,
+    FIRSTNAME            varchar(64) not null,
+    LASTNAME             varchar(64) not null,
+    PASSWORD             varchar(256) not null,
+    EMAIL                varchar(256) not null unique,
+    ISADMIN              bool not null,
+    primary key (USERID)
 );
 
 create table USERINTEAM
 (
-   USERID               int not null,
-   TEAMID               int not null,
-   primary key (USERID, TEAMID)
+    USERID               int not null,
+    TEAMID               int not null,
+    primary key (USERID, TEAMID)
 );
 
 create table USERSESSION
 (
-   SESSIONID            int not null AUTO_INCREMENT,
-   USERID               int not null,
-   TOKEN                varchar(36) not null,
-   primary key (SESSIONID)
+    SESSIONID            int not null AUTO_INCREMENT,
+    USERID               int not null,
+    TOKEN                varchar(36) not null,
+    primary key (SESSIONID)
 );
 
 /*password: AvisiPassword*/
-INSERT INTO USERS (USERID, FIRSTNAME, LASTNAME, PASSWORD, EMAIL, ISADMIN)
-VALUES (1, 'Arnoud', 'Visi', '$2a$10$piwNZPAOhMhdG7Xlm/3kkOs/hZeYlfyQPAY/z7SurggdiLxfzu.KC', 'Avisi@outlook.com', 0);
+INSERT INTO USERS (FIRSTNAME, LASTNAME, PASSWORD, EMAIL, ISADMIN)
+VALUES ('Arnoud', 'Visi', '$2a$10$piwNZPAOhMhdG7Xlm/3kkOs/hZeYlfyQPAY/z7SurggdiLxfzu.KC', 'Avisi@outlook.com', 0);
 
 /* password: password1234*/
-INSERT INTO USERS (USERID, FIRSTNAME, LASTNAME, PASSWORD, EMAIL, ISADMIN)
-VALUES (2, 'Piere', 'Formance', '$2a$10$RSCq/K46cwZ2OFt0m482dOh5YATJJmqN4jTn7be/X1QhPiSDZPphe', 'Piere69@hotmail.com',
+INSERT INTO USERS (FIRSTNAME, LASTNAME, PASSWORD, EMAIL, ISADMIN)
+VALUES ('Piere', 'Formance', '$2a$10$RSCq/K46cwZ2OFt0m482dOh5YATJJmqN4jTn7be/X1QhPiSDZPphe', 'Piere69@hotmail.com',
         0);
 
 /* password: CorrectHorseBatteryStaple*/
-INSERT INTO USERS (USERID, FIRSTNAME, LASTNAME, PASSWORD, EMAIL, ISADMIN)
-VALUES (3, 'Jaque', 'Ouzi', '$2a$10$JM9Yx4oy51Xa4HxslV3zXeJeuAC2e5EHCH3Db3tvhnfzcZWZG2/oC', 'Juzzi@gmail.com', 0);
+INSERT INTO USERS (FIRSTNAME, LASTNAME, PASSWORD, EMAIL, ISADMIN)
+VALUES ('Jaque', 'Ouzi', '$2a$10$JM9Yx4oy51Xa4HxslV3zXeJeuAC2e5EHCH3Db3tvhnfzcZWZG2/oC', 'Juzzi@gmail.com', 0);
 
 /*password: verySecret!!!!*/
-INSERT INTO USERS (USERID, FIRSTNAME, LASTNAME, PASSWORD, EMAIL, ISADMIN)
-VALUES (4, 'Justin', 'Case', '$2a$10$06KLmAO9hniJbBznhR4yD.eyLWfwy.wjOt74b3mCbyaYDCz8G22yq', 'JIC@gmail.com', 0);
+INSERT INTO USERS (FIRSTNAME, LASTNAME, PASSWORD, EMAIL, ISADMIN)
+VALUES ('Justin', 'Case', '$2a$10$06KLmAO9hniJbBznhR4yD.eyLWfwy.wjOt74b3mCbyaYDCz8G22yq', 'JIC@gmail.com', 0);
 
 INSERT INTO ROOM (ROOMNO)
 VALUES ('14.02');
@@ -168,27 +168,28 @@ VALUES (4, 3);
 
 
 alter table DASHBOARD add constraint FK_DASHBOARDFROMUSER foreign key (USERID)
-      references USERS (USERID) on delete restrict on update restrict;
+    references USERS (USERID) on delete restrict on update restrict;
 
 alter table PI add constraint FK_DASHBOARDONPI foreign key (DASHBOARDID)
-      references DASHBOARD (DASHBOARDID) on delete restrict on update restrict;
+    references DASHBOARD (DASHBOARDID) on delete restrict on update restrict;
 
 alter table PI add constraint FK_PIINROOM foreign key (ROOMNO)
-      references ROOM (ROOMNO) on delete restrict on update restrict;
+    references ROOM (ROOMNO) on delete restrict on update restrict;
 
 alter table TEAMINROOM add constraint FK_TEAMINROOM foreign key (TEAMID)
-      references TEAM (TEAMID) on delete restrict on update restrict;
+    references TEAM (TEAMID) on delete restrict on update restrict;
 
 alter table TEAMINROOM add constraint FK_TEAMINROOM2 foreign key (ROOMNO)
-      references ROOM (ROOMNO) on delete restrict on update restrict;
+    references ROOM (ROOMNO) on delete restrict on update restrict;
 
 alter table USERINTEAM add constraint FK_USERINTEAM foreign key (USERID)
-      references USERS (USERID) on delete restrict on update restrict;
+    references USERS (USERID) on delete restrict on update restrict;
 
 alter table USERINTEAM add constraint FK_USERINTEAM2 foreign key (TEAMID)
-      references TEAM (TEAMID) on delete restrict on update restrict;
+    references TEAM (TEAMID) on delete restrict on update restrict;
 
 alter table USERSESSION add constraint FK_USERSESSION foreign key (USERID)
-      references USERS (USERID) on delete restrict on update restrict;
+    references USERS (USERID) on delete restrict on update restrict;
+
 
 

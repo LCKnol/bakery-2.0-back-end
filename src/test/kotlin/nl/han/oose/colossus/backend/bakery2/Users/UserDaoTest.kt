@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.mockito.Mockito
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
 import java.io.InputStreamReader
@@ -38,8 +39,8 @@ class UserDaoTest {
     @Test
     fun testGetUserInfo() {
         // Arrange
-        val token: String = "fake token"
-        val userInfo: UserInfoDto = UserInfoDto()
+        val token = "fake token"
+        val userInfo = UserInfoDto()
         `when`(userMapper.mapUserInfo(MockitoHelper.anyObject())).thenReturn(userInfo)
 
 
@@ -70,6 +71,29 @@ class UserDaoTest {
         val result = sut.getUser(token)
 
         // Assert
-        Assertions.assertEquals(user, result)
+        assertEquals(user, result)
+    }
+
+    @Test
+    fun insertUser() {
+        // Arrange
+        val userDto = UserDto(-1, "John", "Doe", "john.doe@example.com", "securePassword123", true)
+
+        dbConnection = DatabaseConnection()
+        val insertStatement = dbConnection.getConnection().prepareStatement(
+            "SELECT FIRSTNAME FROM USERS WHERE EMAIL = ?;"
+        )
+        insertStatement.setString(1, "john.doe@example.com")
+
+        // Act
+        sut.insertUser(userDto)
+
+        // Assert
+        val resultSet = insertStatement.executeQuery()
+        resultSet.next()
+        println(resultSet.getString(1))
+        val result = resultSet.getString(1)
+
+        assertEquals(result, "John")
     }
 }
