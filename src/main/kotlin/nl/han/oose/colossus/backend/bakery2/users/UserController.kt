@@ -24,8 +24,8 @@ class UserController {
         userService = service
     }
 
-    fun setTokenService(service: TokenService) {
-        tokenService = service
+    fun setTokenService(service: HeaderService) {
+        headerService = service
     }
     @GetMapping(produces =[MediaType.APPLICATION_JSON_VALUE])
     @Authenticate

@@ -117,24 +117,7 @@ class AuthenticationDaoTests {
     }
 
 
-//    @Test
-//    fun insertUser() {
-//        // Arrange
-//        val userDto = UserDto(1, "John", "Doe", "john.doe@example.com", "securePassword123", true)
-//        val expectedQuery = "INSERT INTO USERS(firstName, lastName, email, password, isAdmin) VALUES (?, ?, ?, ?, ?)"
-//
-//        // Act
-//        sut.insertUser(userDto)
-//
-//        // Assert
-//        Mockito.verify(mockDatabaseConnection).prepareStatement(expectedQuery)
-//        Mockito.verify(mockPreparedStatement).setString(1, userDto.getFirstName())
-//        Mockito.verify(mockPreparedStatement).setString(2, userDto.getLastName())
-//        Mockito.verify(mockPreparedStatement).setString(3, userDto.getEmail())
-//        Mockito.verify(mockPreparedStatement).setString(4, userDto.getPassword())
-//        Mockito.verify(mockPreparedStatement).setBoolean(5, userDto.getIsAdmin())
-//        Mockito.verify(mockPreparedStatement).executeUpdate()
-//    }
+
 
     @Test
     fun deleteSessionDeleteTokenCorrectly() {

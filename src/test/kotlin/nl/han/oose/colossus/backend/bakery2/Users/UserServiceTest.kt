@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 import org.mockito.Mockito.*
+import org.springframework.security.crypto.bcrypt.BCrypt
 
 class UserServiceTest {
     private lateinit var sut: UserServiceImp
@@ -52,5 +53,28 @@ class UserServiceTest {
         // Assert
         assertEquals(result, user.getId())
         verify(userDao).getUser(token)
+    }
+
+    @Test
+    fun registerUserSucceed() {
+        // Arrange
+        val userDto = UserDto(
+            id = 1,
+            firstname = "reem",
+            lastname = "man",
+            email = "reem.@gmail.com",
+            password = "mypassword",
+            isAdmin = true
+        )
+
+        val userPassword = BCrypt.hashpw(userDto.getPassword(), BCrypt.gensalt())
+        userDto.setPassword(userPassword)
+
+        doNothing().`when`(userDao).insertUser(userDto)
+        // Act
+        sut.registerUser(userDto)
+
+        // Assert
+        verify(userDao).insertUser(userDto)
     }
 }

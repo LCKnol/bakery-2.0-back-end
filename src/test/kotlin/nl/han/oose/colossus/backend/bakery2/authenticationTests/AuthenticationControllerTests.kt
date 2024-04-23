@@ -71,26 +71,6 @@ class AuthenticationControllerTests {
         Assert.assertEquals(HttpStatus.NO_CONTENT, response.statusCode)
     }
 
-//    @Test
-//    fun testRegisterUserSuccess() {
-//        // Arrange
-//        val userDto = UserDto(
-//            id = 1,
-//            firstname = "reem",
-//            lastname = "man",
-//            email = "reem.@gmail.com",
-//            password = "mypassword",
-//            isAdmin = true
-//        )
-//        Mockito.doNothing().`when`(authenticationService).registerUser(userDto)
-//
-//        // Act
-//        val response: ResponseEntity<HttpStatus> = sut.registerUser(userDto)
-//
-//        // Assert
-//        verify(authenticationService).registerUser(userDto)
-//        assertEquals(HttpStatus.CREATED, response.statusCode)
-//    }
 
 
 }

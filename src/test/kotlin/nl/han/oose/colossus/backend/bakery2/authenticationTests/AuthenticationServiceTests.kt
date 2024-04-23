@@ -99,33 +99,6 @@ class AuthenticationServiceTests {
             // Assert
             verify(authenticationDao).tokenExists(token)
         }
-
-//        @Test
-//        fun registerUserSucceed() {
-//            // Arrange
-//            val userDto = UserDto(
-//                id = 1,
-//                firstname = "reem",
-//                lastname = "man",
-//                email = "reem.@gmail.com",
-//                password = "mypassword",
-//                isAdmin = true
-//            )
-//
-//            val userPassword = BCrypt.hashpw(userDto.getPassword(), BCrypt.gensalt())
-//            userDto.setPassword(userPassword)
-//
-//            doNothing().`when`(authenticationDao).insertUser(userDto)
-//            // Act
-//            sut.registerUser(userDto)
-//
-//            // Assert
-//            verify(authenticationDao).insertUser(userDto)
-//        }
-
-
-
-
     }
 
 

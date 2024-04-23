@@ -56,6 +56,7 @@ class UserDaoImp : UserDao {
             preparedStatement.setString(4, userDto.getPassword())
             preparedStatement.setBoolean(5, userDto.getIsAdmin())
             preparedStatement.executeUpdate()
+            preparedStatement.close()
         } catch (e: SQLException) {
             println(e.message)
         }

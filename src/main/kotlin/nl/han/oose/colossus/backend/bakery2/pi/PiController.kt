@@ -27,8 +27,8 @@ class PiController {
     fun setUserService(service: UserService) {
         userService = service
     }
-    fun setTokenService(service: TokenService) {
-        tokenService = service
+    fun setTokenService(service: HeaderService) {
+        headerService = service
     }
     fun setPiService(service: PiService) {
         piService = service
