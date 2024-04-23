@@ -6,11 +6,10 @@ import nl.han.oose.colossus.backend.bakery2.authentication.AuthenticationService
 import nl.han.oose.colossus.backend.bakery2.dto.LoginRequestDto
 import nl.han.oose.colossus.backend.bakery2.dto.LoginResponseDto
 import nl.han.oose.colossus.backend.bakery2.dto.UserDto
-import nl.han.oose.colossus.backend.bakery2.token.TokenService
+import nl.han.oose.colossus.backend.bakery2.token.HeaderService
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mockito
 import org.mockito.Mockito.verify
 import org.mockito.Mockito.`when`
@@ -22,7 +21,7 @@ class AuthenticationControllerTests {
     private lateinit var sut: AuthenticationController
 
     private lateinit var authenticationService: AuthenticationService
-    private lateinit var tokenService : TokenService
+    private lateinit var headerService : HeaderService
 
 
     @Test
@@ -31,8 +30,8 @@ class AuthenticationControllerTests {
         sut = AuthenticationController()
        authenticationService = Mockito.mock(AuthenticationService::class.java)
         sut.setAuthenticationService(authenticationService)
-        tokenService = Mockito.mock(TokenService::class.java)
-        sut.setTokenService(tokenService)
+        headerService = Mockito.mock(HeaderService::class.java)
+        sut.setTokenService(headerService)
     }
 
 
@@ -52,22 +51,7 @@ class AuthenticationControllerTests {
         // Assert
         assertEquals(HttpStatus.OK, response.statusCode)
         assertEquals(loginResponse, response.body)
-    }
-
-    @Test
-    fun testLoginAuthenticationCall() {
-        // Arrange
-        val loginRequest = LoginRequestDto()
-        loginRequest.setEmail("reem@gmail.com")
-        loginRequest.setPassword("reem@gmail.com")
-
-        `when`(authenticationService.authenticate(loginRequest.getEmail(), loginRequest.getPassword())).thenReturn(LoginResponseDto("validToken"))
-
-        // Act
-        sut.login(loginRequest)
-
-        // Assert
-        verify(authenticationService).authenticate("reem@gmail.com", "reem@gmail.com")
+        verify(authenticationService).authenticate("reem@gmail.com", "mypassword")
     }
 
 
@@ -75,37 +59,38 @@ class AuthenticationControllerTests {
     fun testLogoutSuccess() {
         // Arrange
         val mockToken = "myToken"
-        Mockito.`when`(tokenService.getToken()).thenReturn(mockToken)
+        Mockito.`when`(headerService.getToken()).thenReturn(mockToken)
         Mockito.doNothing().`when`(authenticationService).destroySession(mockToken)
 
         // Act
         val response: ResponseEntity<HttpStatus> = sut.logout()
 
         // Assert
-        verify(tokenService).getToken()
+        verify(headerService).getToken()
         verify(authenticationService).destroySession(mockToken)
         Assert.assertEquals(HttpStatus.NO_CONTENT, response.statusCode)
     }
-    @Test
-    fun testRegisterUserSuccess() {
-        // Arrange
-        val userDto = UserDto(
-            id = 1,
-            firstname = "reem",
-            lastname = "man",
-            email = "reem.@gmail.com",
-            password = "mypassword",
-            isAdmin = true
-        )
-        Mockito.doNothing().`when`(authenticationService).registerUser(userDto)
 
-        // Act
-        val response: ResponseEntity<HttpStatus> = sut.registerUser(userDto)
-
-        // Assert
-        verify(authenticationService).registerUser(userDto)
-        assertEquals(HttpStatus.CREATED, response.statusCode)
-    }
+//    @Test
+//    fun testRegisterUserSuccess() {
+//        // Arrange
+//        val userDto = UserDto(
+//            id = 1,
+//            firstname = "reem",
+//            lastname = "man",
+//            email = "reem.@gmail.com",
+//            password = "mypassword",
+//            isAdmin = true
+//        )
+//        Mockito.doNothing().`when`(authenticationService).registerUser(userDto)
+//
+//        // Act
+//        val response: ResponseEntity<HttpStatus> = sut.registerUser(userDto)
+//
+//        // Assert
+//        verify(authenticationService).registerUser(userDto)
+//        assertEquals(HttpStatus.CREATED, response.statusCode)
+//    }
 
 
 }

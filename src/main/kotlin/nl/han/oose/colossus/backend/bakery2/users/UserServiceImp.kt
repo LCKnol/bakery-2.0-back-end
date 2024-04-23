@@ -4,6 +4,7 @@ import nl.han.oose.colossus.backend.bakery2.dto.UserDto
 import nl.han.oose.colossus.backend.bakery2.dto.UserInfoDto
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Primary
+import org.springframework.security.crypto.bcrypt.BCrypt
 import org.springframework.stereotype.Component
 
 @Primary
@@ -25,6 +26,11 @@ class UserServiceImp : UserService {
         }
         // TODO: decide how to handle this: throw some exception???
         return -1
+    }
+
+    override fun registerUser(userDto: UserDto) {
+        userDto.setPassword(BCrypt.hashpw(userDto.getPassword(), BCrypt.gensalt()))
+        userDao.insertUser(userDto)
     }
 }
 

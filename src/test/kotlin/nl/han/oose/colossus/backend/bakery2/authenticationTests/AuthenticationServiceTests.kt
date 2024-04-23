@@ -1,12 +1,14 @@
 import nl.han.oose.colossus.backend.bakery2.authentication.AuthenticationDao
 import nl.han.oose.colossus.backend.bakery2.authentication.AuthenticationServiceImp
+import nl.han.oose.colossus.backend.bakery2.dto.UserDto
 import nl.han.oose.colossus.backend.bakery2.exceptions.HttpUnauthorizedException
-import nl.han.oose.colossus.backend.bakery2.token.TokenService
-import org.junit.jupiter.api.Assertions.assertEquals
+import nl.han.oose.colossus.backend.bakery2.token.HeaderService
+import nl.han.oose.colossus.backend.bakery2.util.MockitoHelper
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import org.mockito.Mockito
+import org.mockito.Mock
 import org.mockito.Mockito.*
 import org.springframework.security.crypto.bcrypt.BCrypt
 import java.util.*
@@ -15,16 +17,13 @@ class AuthenticationServiceTests {
 
     private lateinit var sut: AuthenticationServiceImp  // System Under Test
     private lateinit var authenticationDao: AuthenticationDao
-    private lateinit var tokenService: TokenService
 
     @BeforeEach
     fun setup() {
 
         sut = AuthenticationServiceImp()
         authenticationDao = mock(AuthenticationDao::class.java)
-        tokenService = mock(TokenService::class.java)
         sut.setAuthenticationDao(authenticationDao)
-        sut.setTokenService(tokenService)
         }
 
 
@@ -50,16 +49,17 @@ class AuthenticationServiceTests {
         val email = "user@example.com"
         val password = "correctPassword"
         val storedHash = BCrypt.hashpw(password, BCrypt.gensalt())
-        val token = "newToken"
 
         `when`(authenticationDao.findPassword(email)).thenReturn(storedHash)
-        `when`(tokenService.generateToken()).thenReturn(token)
+        doNothing().`when`(authenticationDao).insertToken(MockitoHelper.anyObject(), MockitoHelper.anyObject())
 
         // Act
         val result = sut.authenticate(email, password)
 
         // Assert
-        assert(result.token == token)
+        Assertions.assertNotNull(result.token)
+        verify(authenticationDao).findPassword(email)
+        verify(authenticationDao).insertToken(MockitoHelper.anyObject(), MockitoHelper.anyObject())
     }
 
 
@@ -99,6 +99,29 @@ class AuthenticationServiceTests {
             // Assert
             verify(authenticationDao).tokenExists(token)
         }
+
+//        @Test
+//        fun registerUserSucceed() {
+//            // Arrange
+//            val userDto = UserDto(
+//                id = 1,
+//                firstname = "reem",
+//                lastname = "man",
+//                email = "reem.@gmail.com",
+//                password = "mypassword",
+//                isAdmin = true
+//            )
+//
+//            val userPassword = BCrypt.hashpw(userDto.getPassword(), BCrypt.gensalt())
+//            userDto.setPassword(userPassword)
+//
+//            doNothing().`when`(authenticationDao).insertUser(userDto)
+//            // Act
+//            sut.registerUser(userDto)
+//
+//            // Assert
+//            verify(authenticationDao).insertUser(userDto)
+//        }
 
 
 

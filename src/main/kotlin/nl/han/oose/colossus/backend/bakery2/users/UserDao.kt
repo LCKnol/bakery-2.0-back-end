@@ -8,4 +8,6 @@ interface UserDao {
 
     fun getUser(token: String): UserDto?
 
+    fun insertUser(userDto: UserDto)
+
 }

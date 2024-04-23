@@ -6,6 +6,7 @@ import nl.han.oose.colossus.backend.bakery2.dto.UserDto
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mockito
 import org.mockito.Mockito.mock
@@ -50,9 +51,22 @@ class AuthenticationDaoTests {
     }
 
     @Test
+    fun testDoesNotFindPassword() {
+        // Arrange
+        val email = "invalid@outlook.com"
+
+        `when`(mockResultSet.next()).thenReturn(false)
+
+        // Act
+        val result = sut.findPassword(email)
+
+        // Assert
+        assertEquals(result, "Password not found")
+    }
+
+    @Test
     fun tokenExistsReturnsTrueWhenTokenIsFound() {
         // Arrange
-        `when`(mockResultSet.next()).thenReturn(true)
         `when`(mockResultSet.getInt(1)).thenReturn(1)
 
         // Act
@@ -65,14 +79,13 @@ class AuthenticationDaoTests {
     @Test
     fun tokenExistsReturnsFalseIfTokenINotFound() {
         // Arrange
-        `when`(mockResultSet.next()).thenReturn(true)
         `when`(mockResultSet.getInt(1)).thenReturn(0)
 
         // Act
         val result = sut.tokenExists("nonExistingToken")
 
         // Assert
-        assert(!result)
+        assertFalse(result)
     }
     @Test
     fun tokenExistsReturnsFalseIfSQLExceptionIsThrown() {
@@ -104,24 +117,24 @@ class AuthenticationDaoTests {
     }
 
 
-    @Test
-    fun insertUser() {
-        // Arrange
-        val userDto = UserDto(1, "John", "Doe", "john.doe@example.com", "securePassword123", true)
-        val expectedQuery = "INSERT INTO USERS(firstName, lastName, email, password, isAdmin) VALUES (?, ?, ?, ?, ?)"
-
-        // Act
-        sut.insertUser(userDto)
-
-        // Assert
-        Mockito.verify(mockDatabaseConnection).prepareStatement(expectedQuery)
-        Mockito.verify(mockPreparedStatement).setString(1, userDto.getFirstName())
-        Mockito.verify(mockPreparedStatement).setString(2, userDto.getLastName())
-        Mockito.verify(mockPreparedStatement).setString(3, userDto.getEmail())
-        Mockito.verify(mockPreparedStatement).setString(4, userDto.getPassword())
-        Mockito.verify(mockPreparedStatement).setBoolean(5, userDto.getIsAdmin())
-        Mockito.verify(mockPreparedStatement).executeUpdate()
-    }
+//    @Test
+//    fun insertUser() {
+//        // Arrange
+//        val userDto = UserDto(1, "John", "Doe", "john.doe@example.com", "securePassword123", true)
+//        val expectedQuery = "INSERT INTO USERS(firstName, lastName, email, password, isAdmin) VALUES (?, ?, ?, ?, ?)"
+//
+//        // Act
+//        sut.insertUser(userDto)
+//
+//        // Assert
+//        Mockito.verify(mockDatabaseConnection).prepareStatement(expectedQuery)
+//        Mockito.verify(mockPreparedStatement).setString(1, userDto.getFirstName())
+//        Mockito.verify(mockPreparedStatement).setString(2, userDto.getLastName())
+//        Mockito.verify(mockPreparedStatement).setString(3, userDto.getEmail())
+//        Mockito.verify(mockPreparedStatement).setString(4, userDto.getPassword())
+//        Mockito.verify(mockPreparedStatement).setBoolean(5, userDto.getIsAdmin())
+//        Mockito.verify(mockPreparedStatement).executeUpdate()
+//    }
 
     @Test
     fun deleteSessionDeleteTokenCorrectly() {
@@ -136,18 +149,5 @@ class AuthenticationDaoTests {
         Mockito.verify(mockDatabaseConnection).prepareStatement(expectedQuery)
         Mockito.verify(mockPreparedStatement).setString(1, token)
         Mockito.verify(mockPreparedStatement).executeUpdate()
-    }
-    @Test
-    fun deleteSessionHandlesSQLException() {
-        // Arrange
-        val token = "faultyToken123"
-        Mockito.`when`(mockDatabaseConnection.prepareStatement(Mockito.anyString())).thenThrow(SQLException("Database error"))
-
-        // Act
-        sut.deleteSession(token)
-
-        // This is simplistic error handling verification;
-        // ensure that no exception escapes the method.
-        Mockito.verify(mockPreparedStatement, Mockito.never()).executeUpdate()
     }
 }

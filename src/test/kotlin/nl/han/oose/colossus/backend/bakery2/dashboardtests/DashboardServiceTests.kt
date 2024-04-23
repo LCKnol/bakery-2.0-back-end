@@ -1,6 +1,5 @@
 package nl.han.oose.colossus.backend.bakery2.dashboardtests
 
-import junit.framework.Assert
 import nl.han.oose.colossus.backend.bakery2.dashboards.*
 import nl.han.oose.colossus.backend.bakery2.dto.DashboardCollectionDto
 import nl.han.oose.colossus.backend.bakery2.dto.DashboardDto
@@ -8,7 +7,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.*
 
-class dashboardServiceTests {
+class DashboardServiceTests {
 
 
     private lateinit var sut: DashboardsService
@@ -25,7 +24,7 @@ class dashboardServiceTests {
     }
 
     @Test
-    fun TestGetAllDashboardsCallsNextDaoFunction() {
+    fun testGetAllDashboardsCallsNextDaoFunction() {
         // Arrange
         `when`(dashboardsDao.getAllDashboards()).thenReturn(DashboardCollectionDto())
         // Act
@@ -36,7 +35,7 @@ class dashboardServiceTests {
     }
 
     @Test
-    fun TestAddDashboardsCallsNextDaoFunction() {
+    fun testAddDashboardsCallsNextDaoFunction() {
         // Arrange
         val dashboard: DashboardDto = DashboardDto(1,"test","test","test",1)
         // Act

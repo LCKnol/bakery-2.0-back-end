@@ -1,15 +1,13 @@
 package nl.han.oose.colossus.backend.bakery2.authentication
 
-import nl.han.oose.colossus.backend.bakery2.dto.LoginRequestDto
 import nl.han.oose.colossus.backend.bakery2.dto.LoginResponseDto
 import nl.han.oose.colossus.backend.bakery2.dto.UserDto
 import nl.han.oose.colossus.backend.bakery2.exceptions.HttpUnauthorizedException
-import nl.han.oose.colossus.backend.bakery2.token.TokenService
+import nl.han.oose.colossus.backend.bakery2.users.UserDao
 import org.springframework.security.crypto.bcrypt.BCrypt
 import org.springframework.context.annotation.Primary
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
-import org.springframework.stereotype.Service
 import java.util.*
 
 @Primary
@@ -17,9 +15,10 @@ import java.util.*
 class AuthenticationServiceImp :AuthenticationService {
     @Autowired
     private lateinit var  authenticationDao: AuthenticationDao
-    private lateinit var  tokenService: TokenService
 
-
+    override fun setAuthenticationDao(authenticationDao: AuthenticationDao) {
+        this.authenticationDao = authenticationDao
+    }
 
     override fun authenticate(email: String, password: String): LoginResponseDto {
 
@@ -29,7 +28,7 @@ class AuthenticationServiceImp :AuthenticationService {
             throw HttpUnauthorizedException("Invalid login credentials")
         }
 
-        val token = tokenService.generateToken()
+        val token = this.generateToken()
         authenticationDao.insertToken(email, token)
         return LoginResponseDto(token)
     }
@@ -44,17 +43,11 @@ class AuthenticationServiceImp :AuthenticationService {
         }
     }
 
-    override fun registerUser(userDto: UserDto) {
-        userDto.setPassword(BCrypt.hashpw(userDto.getPassword(), BCrypt.gensalt()))
-        authenticationDao.insertUser(userDto)
+    private fun generateToken(): String {
+        var token: String
+        do {
+            token = UUID.randomUUID().toString()
+        } while(authenticationDao.tokenExists(token))
+        return token
     }
-
-    override fun setAuthenticationDao(authenticationDao: AuthenticationDao) {
-        this.authenticationDao = authenticationDao
-    }
-
-    fun setTokenService(tokenService: TokenService) {
-        this.tokenService = tokenService
-    }
-
 }

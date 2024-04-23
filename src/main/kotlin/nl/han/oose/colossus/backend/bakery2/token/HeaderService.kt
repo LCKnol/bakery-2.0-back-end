@@ -1,6 +1,5 @@
 package nl.han.oose.colossus.backend.bakery2.token
 
-interface TokenService {
+interface HeaderService {
     fun getToken(): String
-   fun generateToken() :String
 }

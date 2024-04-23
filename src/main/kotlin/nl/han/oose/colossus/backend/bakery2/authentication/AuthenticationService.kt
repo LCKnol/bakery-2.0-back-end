@@ -12,6 +12,5 @@ interface AuthenticationService {
 
     fun validateToken(token: String)
 
-    fun registerUser(userDto: UserDto)
-     fun setAuthenticationDao(authenticationDao: AuthenticationDao)
+    fun setAuthenticationDao(authenticationDao: AuthenticationDao)
 }

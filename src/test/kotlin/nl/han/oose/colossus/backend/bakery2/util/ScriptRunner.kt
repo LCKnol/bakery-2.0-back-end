@@ -88,7 +88,7 @@ class ScriptRunner
         var command: StringBuffer? = null
         try {
             val lineReader = LineNumberReader(reader)
-            var line: String? = null
+            var line: String?
             while (lineReader.readLine().also { line = it } != null) {
                 if (command == null) {
                     command = StringBuffer()

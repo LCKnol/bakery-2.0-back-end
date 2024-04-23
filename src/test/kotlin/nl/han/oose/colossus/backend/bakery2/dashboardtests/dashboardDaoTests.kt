@@ -43,7 +43,7 @@ class dashboardDaoTests {
     }
 
     @Test
-    fun TestGetAllDashboardsCallWorksCorrectly() {
+    fun testGetAllDashboardsCallWorksCorrectly() {
 
         // arrange
         val dashboard: DashboardCollectionDto = DashboardCollectionDto()
@@ -58,7 +58,7 @@ class dashboardDaoTests {
     }
 
         @Test
-    fun TestAdddashboardWorksCorrectly() {
+    fun testAdddashboardWorksCorrectly() {
 
         // arrange
         val dashboard: DashboardDto = DashboardDto(12,"test","uniek","test",1)
