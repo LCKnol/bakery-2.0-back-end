@@ -1,11 +1,12 @@
 package nl.han.oose.colossus.backend.bakery2.dashboardtests
 
-import junit.framework.Assert
 import nl.han.oose.colossus.backend.bakery2.dashboards.*
 import nl.han.oose.colossus.backend.bakery2.dto.DashboardCollectionDto
 import nl.han.oose.colossus.backend.bakery2.dto.DashboardDto
+import nl.han.oose.colossus.backend.bakery2.pi.PiDao
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertDoesNotThrow
 import org.mockito.Mockito.*
 
 class dashboardServiceTests {
@@ -15,6 +16,7 @@ class dashboardServiceTests {
 
     private lateinit var dashboardsDao: DashboardsDao
 
+    private lateinit var piDao: PiDao
 
 
     @BeforeEach
@@ -22,10 +24,12 @@ class dashboardServiceTests {
         sut = DashboardsServiceImp()
         dashboardsDao = mock(DashboardsDao::class.java)
         sut.setDashboardDao(dashboardsDao)
+        piDao = mock(PiDao::class.java)
+        sut.setPiDao(piDao)
     }
 
     @Test
-    fun TestGetAllDashboardsCallsNextDaoFunction() {
+    fun testGetAllDashboardsCallsNextDaoFunction() {
         // Arrange
         `when`(dashboardsDao.getAllDashboards()).thenReturn(DashboardCollectionDto())
         // Act
@@ -36,9 +40,9 @@ class dashboardServiceTests {
     }
 
     @Test
-    fun TestAddDashboardsCallsNextDaoFunction() {
+    fun testAddDashboardsCallsNextDaoFunction() {
         // Arrange
-        val dashboard: DashboardDto = DashboardDto(1,"test","test","test",1)
+        val dashboard: DashboardDto = DashboardDto(1, "test", "test", "test", 1)
         // Act
         sut.addDashboard(dashboard)
 
@@ -46,6 +50,20 @@ class dashboardServiceTests {
         verify(dashboardsDao).addDashboard(dashboard)
     }
 
+    @Test
+    fun testDeleteDashboardCallsNextDaoFunction() {
+        // Arrange
+        val mockDashboardId = 1
+        val mockUserId = 2
+
+        `when`(dashboardsDao.getUserIdFromDashboard(mockDashboardId)).thenReturn(mockUserId)
+
+        // Act & Assert
+        assertDoesNotThrow { sut.deleteDashboard(mockDashboardId, mockUserId) }
+
+        verify(piDao).setDashboardsNull(mockDashboardId)
+        verify(dashboardsDao).deleteDashboard(mockDashboardId)
+    }
 
 //    @Test
 //    fun testEditDashboardCallsNextDaoFunction() {
