@@ -1,5 +1,3 @@
-package nl.han.oose.colossus.backend.bakery2.dashboardtests
-
 import junit.framework.Assert.assertEquals
 import nl.han.oose.colossus.backend.bakery2.users.UserService
 import nl.han.oose.colossus.backend.bakery2.dashboards.DashboardsController
