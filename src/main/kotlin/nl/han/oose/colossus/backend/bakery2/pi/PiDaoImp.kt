@@ -1,5 +1,6 @@
 package nl.han.oose.colossus.backend.bakery2.pi
 
+import nl.han.oose.colossus.backend.bakery2.dashboards.DashboardsMapper
 import nl.han.oose.colossus.backend.bakery2.database.DatabaseConnection
 import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDto
 import org.springframework.beans.factory.annotation.Autowired
@@ -16,6 +17,14 @@ class PiDaoImp : PiDao {
 
     @Autowired
     private lateinit var dbConnection: DatabaseConnection
+
+    override fun setDatabaseConnection(connection: DatabaseConnection) {
+        dbConnection = connection
+    }
+
+    override fun setPiMapper(mapper: PiMapper) {
+        piMapper = mapper
+    }
 
     @Throws(ServerErrorException::class)
     override fun getPis(user: Int): PiCollectionDto {

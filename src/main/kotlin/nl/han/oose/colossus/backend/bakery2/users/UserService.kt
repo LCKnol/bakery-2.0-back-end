@@ -7,6 +7,8 @@ interface UserService {
 
     fun getUserInfo(token: String): UserInfoDto
 
+    fun setUserDao(dao: UserDao)
+
     fun getUserId(token: String): Int
 
     fun registerUser(userDto: UserDto)
