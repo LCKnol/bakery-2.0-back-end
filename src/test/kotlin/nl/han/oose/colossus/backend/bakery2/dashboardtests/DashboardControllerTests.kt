@@ -6,9 +6,13 @@ import nl.han.oose.colossus.backend.bakery2.dashboards.DashboardsController
 import nl.han.oose.colossus.backend.bakery2.dashboards.DashboardsService
 import nl.han.oose.colossus.backend.bakery2.dto.DashboardCollectionDto
 import nl.han.oose.colossus.backend.bakery2.dto.DashboardDto
+import nl.han.oose.colossus.backend.bakery2.token.TokenService
+import nl.han.oose.colossus.backend.bakery2.util.MockitoHelper
+import org.junit.jupiter.api.Assertions
 import nl.han.oose.colossus.backend.bakery2.token.HeaderService
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.mockito.Mockito
 import org.mockito.Mockito.*
 
 
@@ -42,7 +46,7 @@ class DashboardControllerTests {
     fun testGetAllDashboardWorksCorrectly() {
 
         // Arrange
-        val dashboard: DashboardCollectionDto = DashboardCollectionDto()
+        val dashboard = DashboardCollectionDto()
         `when`(dashboardsService.getAllDashboards()).thenReturn(dashboard)
         // Act
         val response = sut.getAllDashboards().statusCode.value()
@@ -54,12 +58,39 @@ class DashboardControllerTests {
     fun testaddDashboardsCorrectly() {
 
         // Arrange
-        val dashboard: DashboardDto = DashboardDto(1,"test","test","test",1)
+        val dashboard = DashboardDto(1,"test","test","test",1)
         // Act
         val response = sut.addDashboards(dashboard).statusCode.value()
         // Assert
         assertEquals(201, response)
         verify(dashboardsService).addDashboard(dashboard)
+    }
+
+    @Test
+    fun testGetDashboardWorksCorrectly() {
+
+        //Arrange
+        val dashboard = DashboardDto(1, "test", "test", "test", 1)
+        `when`(dashboardsService.getDashboard(1)).thenReturn(dashboard)
+        //Act
+        val response = sut.getDashboard(1).statusCode.value()
+        //Assert
+        assertEquals(200, response)
+        verify(dashboardsService).getDashboard(1)
+    }
+
+    @Test
+    fun testEditDashboardWorksCorrectly() {
+
+        //Arrange
+        val dashboard = DashboardDto(1, "test", "test", "test", 1)
+        `when`(userService.getUserId(MockitoHelper.anyObject())).thenReturn(1)
+        doNothing().`when`(dashboardsService).editDashboard(dashboard, 1)
+        //Act
+        val response = sut.editDashboard(dashboard).statusCode.value()
+        //Assert
+        assertEquals(200, response)
+        verify(dashboardsService).editDashboard(dashboard, 1)
     }
 
 
