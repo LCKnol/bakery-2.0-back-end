@@ -61,7 +61,7 @@ create table USERS
     FIRSTNAME            varchar(64) not null,
     LASTNAME             varchar(64) not null,
     PASSWORD             varchar(256) not null,
-    EMAIL                varchar(256) not null,
+    EMAIL                varchar(256) not null unique,
     ISADMIN              bool not null,
     primary key (USERID)
 );
