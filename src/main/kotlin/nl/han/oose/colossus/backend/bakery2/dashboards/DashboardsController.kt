@@ -72,9 +72,10 @@ class DashboardsController {
 
     @DeleteMapping(path = ["/{dashboardId}"])
     @Authenticate
-    fun deleteDashboard(@PathVariable dashboardId: Int) {
+    fun deleteDashboard(@PathVariable dashboardId: Int): ResponseEntity<HttpStatus> {
         val token = tokenService.getToken()
         val userId = userService.getUserId(token)
         dashboardsService.deleteDashboard(dashboardId, userId)
+        return ResponseEntity(HttpStatus.OK)
     }
 }
