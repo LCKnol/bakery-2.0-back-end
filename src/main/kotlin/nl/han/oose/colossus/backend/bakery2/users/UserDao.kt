@@ -10,5 +10,8 @@ interface UserDao {
     fun getUser(token: String): UserDto?
 
     fun setUserMapper(mapper: UserMapper)
+
     fun setDatabaseConnection(connection: DatabaseConnection)
+
+    fun insertUser(userDto: UserDto)
 }

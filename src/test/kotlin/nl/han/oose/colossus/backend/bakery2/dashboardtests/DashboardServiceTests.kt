@@ -13,7 +13,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.*
 
-class dashboardServiceTests {
+class DashboardServiceTests {
 
 
     private lateinit var sut: DashboardsService
@@ -30,7 +30,7 @@ class dashboardServiceTests {
     }
 
     @Test
-    fun TestGetAllDashboardsCallsNextDaoFunction() {
+    fun testGetAllDashboardsCallsNextDaoFunction() {
         // Arrange
         val expectedDashboards = DashboardCollectionDto()
         `when`(dashboardsDao.getAllDashboards()).thenReturn(expectedDashboards)
@@ -44,7 +44,7 @@ class dashboardServiceTests {
     }
 
     @Test
-    fun TestAddDashboardsCallsNextDaoFunction() {
+    fun testAddDashboardsCallsNextDaoFunction() {
         // Arrange
         val dashboard = DashboardDto(1,"test","test","test",1)
         // Act

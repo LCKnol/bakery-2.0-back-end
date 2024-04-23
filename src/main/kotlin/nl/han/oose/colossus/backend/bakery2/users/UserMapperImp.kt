@@ -26,12 +26,12 @@ class UserMapperImp : UserMapper {
 
             if (uniqueTeams.add(teamname)) {
                 val teamDTO = TeamDto()
-                teamDTO.setName(teamname)
+                teamDTO.setName(teamname ?: "")
                 teams.add(teamDTO)
             }
             if (uniqueRooms.add(roomno)) {
                 val roomDTO = RoomDto()
-                roomDTO.setRoomNo(roomno)
+                roomDTO.setRoomNo(roomno ?: "")
                 rooms.add(roomDTO)
             }
         }

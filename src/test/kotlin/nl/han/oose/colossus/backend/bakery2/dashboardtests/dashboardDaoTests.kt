@@ -59,7 +59,7 @@ class dashboardDaoTests {
     }
 
         @Test
-    fun testAddDashboardWorksCorrectly() {
+    fun testAdddashboardWorksCorrectly() {
 
         // Arrange
         val dashboard = DashboardDto(12,"test","uniek","test",1)

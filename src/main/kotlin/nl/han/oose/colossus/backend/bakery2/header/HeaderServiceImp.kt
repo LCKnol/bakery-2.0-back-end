@@ -1,4 +1,4 @@
-package nl.han.oose.colossus.backend.bakery2.token
+package nl.han.oose.colossus.backend.bakery2.header
 
 import nl.han.oose.colossus.backend.bakery2.exceptions.HttpUnauthorizedException
 import org.springframework.context.annotation.Primary
@@ -8,7 +8,7 @@ import org.springframework.web.context.request.ServletRequestAttributes
 
 @Component
 @Primary
-class TokenServiceImp: TokenService {
+class HeaderServiceImp: HeaderService {
     override fun getToken(): String {
         val request = (RequestContextHolder.currentRequestAttributes() as ServletRequestAttributes).request
         val token = request.getHeader("Authorization") ?: throw HttpUnauthorizedException("No authorization token provided.")

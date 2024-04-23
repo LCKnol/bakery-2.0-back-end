@@ -3,8 +3,8 @@ package nl.han.oose.colossus.backend.bakery2.dashboards
 import nl.han.oose.colossus.backend.bakery2.users.UserService
 import nl.han.oose.colossus.backend.bakery2.dto.DashboardCollectionDto
 import nl.han.oose.colossus.backend.bakery2.dto.DashboardDto
-import nl.han.oose.colossus.backend.bakery2.token.Authenticate
-import nl.han.oose.colossus.backend.bakery2.token.TokenService
+import nl.han.oose.colossus.backend.bakery2.header.Authenticate
+import nl.han.oose.colossus.backend.bakery2.header.HeaderService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
@@ -20,7 +20,7 @@ class DashboardsController {
     private lateinit var dashboardsService: DashboardsService
 
     @Autowired
-    private lateinit var tokenService: TokenService
+    private lateinit var headerService: HeaderService
 
     @Autowired
     private lateinit var userService: UserService
@@ -29,8 +29,8 @@ class DashboardsController {
         dashboardsService = service
     }
 
-    fun setTokenService(service: TokenService) {
-        tokenService = service
+    fun setTokenService(service: HeaderService) {
+        headerService = service
     }
 
     fun setUserService(service: UserService) {
@@ -54,7 +54,7 @@ class DashboardsController {
     @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE])
     @Authenticate
     fun addDashboards(@RequestBody dashboardDto: DashboardDto): ResponseEntity<HttpStatus> {
-        val token = tokenService.getToken()
+        val token = headerService.getToken()
         var userId = userService.getUserId(token)
         dashboardDto.setUserId(userId)
         this.dashboardsService.addDashboard(dashboardDto)
@@ -64,7 +64,7 @@ class DashboardsController {
     @PutMapping(consumes = [MediaType.APPLICATION_JSON_VALUE])
     @Authenticate
     fun editDashboard(@RequestBody dashboardDto: DashboardDto): ResponseEntity<HttpStatus> {
-        val token = this.tokenService.getToken()
+        val token = this.headerService.getToken()
         val userId = this.userService.getUserId(token)
         this.dashboardsService.editDashboard(dashboardDto, userId)
         return ResponseEntity(HttpStatus.OK)
@@ -73,7 +73,7 @@ class DashboardsController {
     @DeleteMapping(path = ["/{dashboardId}"])
     @Authenticate
     fun deleteDashboard(@PathVariable dashboardId: Int) {
-        val token = tokenService.getToken()
+        val token = headerService.getToken()
         val userId = userService.getUserId(token)
         dashboardsService.deleteDashboard(dashboardId, userId)
     }

@@ -1,29 +1,25 @@
-package nl.han.oose.colossus.backend.bakery2.dashboardtests
-
 import junit.framework.Assert.assertEquals
 import nl.han.oose.colossus.backend.bakery2.users.UserService
 import nl.han.oose.colossus.backend.bakery2.dashboards.DashboardsController
 import nl.han.oose.colossus.backend.bakery2.dashboards.DashboardsService
 import nl.han.oose.colossus.backend.bakery2.dto.DashboardCollectionDto
 import nl.han.oose.colossus.backend.bakery2.dto.DashboardDto
-import nl.han.oose.colossus.backend.bakery2.token.TokenService
 import nl.han.oose.colossus.backend.bakery2.util.MockitoHelper
-import org.junit.jupiter.api.Assertions
+import nl.han.oose.colossus.backend.bakery2.header.HeaderService
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito
 import org.mockito.Mockito.*
 
 
 
-class dashboardControllerTests {
+class DashboardControllerTests {
 
 
     private lateinit var sut: DashboardsController
 
     private lateinit var dashboardsService: DashboardsService
 
-    private lateinit var  tokenService: TokenService
+    private lateinit var  headerService: HeaderService
 
     private lateinit var userService: UserService
 
@@ -33,16 +29,16 @@ class dashboardControllerTests {
     fun setup() {
         sut = DashboardsController()
         dashboardsService = mock(DashboardsService::class.java)
-        tokenService = mock(TokenService::class.java)
+        headerService = mock(HeaderService::class.java)
         userService = mock(UserService::class.java)
         sut.setDashboardsService(dashboardsService)
-        sut.setTokenService(tokenService)
+        sut.setTokenService(headerService)
         sut.setUserService(userService)
     }
 
 
     @Test
-    fun TestGetAllDashboardWorksCorrectly() {
+    fun testGetAllDashboardWorksCorrectly() {
 
         // Arrange
         val dashboard = DashboardCollectionDto()
@@ -54,7 +50,7 @@ class dashboardControllerTests {
         verify(dashboardsService).getAllDashboards()
     }
     @Test
-    fun TestaddDashboardsCorrectly() {
+    fun testaddDashboardsCorrectly() {
 
         // Arrange
         val dashboard = DashboardDto(1,"test","test","test",1)

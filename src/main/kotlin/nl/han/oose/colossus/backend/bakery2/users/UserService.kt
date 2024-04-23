@@ -1,5 +1,6 @@
 package nl.han.oose.colossus.backend.bakery2.users
 
+import nl.han.oose.colossus.backend.bakery2.dto.UserDto
 import nl.han.oose.colossus.backend.bakery2.dto.UserInfoDto
 
 interface UserService {
@@ -9,4 +10,6 @@ interface UserService {
     fun setUserDao(dao: UserDao)
 
     fun getUserId(token: String): Int
+
+    fun registerUser(userDto: UserDto)
 }
