@@ -38,8 +38,8 @@ class UserMapperImp : UserMapper {
 
         userInfoDTO.setFirstname(firstname ?: "")
         userInfoDTO.setLastname(lastname ?: "")
-        userInfoDTO.setTeams(teams)
-        userInfoDTO.setRooms(rooms)
+        userInfoDTO.setTeams(teams ?: emptyList())
+        userInfoDTO.setRooms(rooms ?: emptyList())
         return userInfoDTO
     }
 
