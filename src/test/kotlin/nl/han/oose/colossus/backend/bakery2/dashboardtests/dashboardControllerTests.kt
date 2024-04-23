@@ -6,11 +6,9 @@ import nl.han.oose.colossus.backend.bakery2.dashboards.DashboardsController
 import nl.han.oose.colossus.backend.bakery2.dashboards.DashboardsService
 import nl.han.oose.colossus.backend.bakery2.dto.DashboardCollectionDto
 import nl.han.oose.colossus.backend.bakery2.dto.DashboardDto
-import nl.han.oose.colossus.backend.bakery2.dto.UserDto
 import nl.han.oose.colossus.backend.bakery2.token.TokenService
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertDoesNotThrow
 import org.mockito.Mockito.*
 import org.springframework.http.HttpStatus
 
