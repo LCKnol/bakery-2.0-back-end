@@ -66,7 +66,7 @@ class dashboardControllerTests {
     }
 
     @Test
-    fun TestgetDashboardWorksCorrectly() {
+    fun testGetDashboardWorksCorrectly() {
 
         //Arrange
         val dashboard = DashboardDto(1, "test", "test", "test", 1)
@@ -79,7 +79,7 @@ class dashboardControllerTests {
     }
 
     @Test
-    fun TesteditDashboardWorksCorrectly() {
+    fun testEditDashboardWorksCorrectly() {
 
         //Arrange
         val dashboard = DashboardDto(1, "test", "test", "test", 1)
