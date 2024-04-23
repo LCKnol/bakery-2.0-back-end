@@ -1,35 +1,36 @@
-package nl.han.oose.colossus.backend.bakery2.Users
+package nl.han.oose.colossus.backend.bakery2.pi
 
-import nl.han.oose.colossus.backend.bakery2.dto.TokenDto
-import nl.han.oose.colossus.backend.bakery2.dto.UserInfoDto
-import org.springframework.beans.factory.annotation.Autowired
+import nl.han.oose.colossus.backend.bakery2.users.UserService
+import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDto
 import nl.han.oose.colossus.backend.bakery2.token.Authenticate
 import nl.han.oose.colossus.backend.bakery2.token.TokenService
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import java.net.Authenticator
 
 @RestController
-@RequestMapping("/user")
-class UserController {
+@RequestMapping("/pis")
+class PiController {
+    @Autowired
+    private lateinit var piService: PiService
+
     @Autowired
     private lateinit var userService: UserService
 
     @Autowired
     private lateinit var tokenService: TokenService
 
-    @GetMapping(produces =[MediaType.APPLICATION_JSON_VALUE])
+    @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
     @Authenticate
-    fun getUserInfo(): ResponseEntity<UserInfoDto> {
+    fun getPis(): ResponseEntity<PiCollectionDto> {
         val token = tokenService.getToken()
-        val user = userService.getUserInfo(token)
-        return ResponseEntity(user, HttpStatus.OK)
+        val user = userService.getUserId(token)
+        val pisResponse = piService.getPis(user)
+        return ResponseEntity(pisResponse, HttpStatus.OK)
     }
 
 }

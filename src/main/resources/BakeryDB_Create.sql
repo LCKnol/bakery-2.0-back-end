@@ -192,3 +192,4 @@ alter table USERSESSION add constraint FK_USERSESSION foreign key (USERID)
     references USERS (USERID) on delete restrict on update restrict;
 
 
+

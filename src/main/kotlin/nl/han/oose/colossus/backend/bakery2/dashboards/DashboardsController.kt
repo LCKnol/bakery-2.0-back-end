@@ -1,6 +1,6 @@
 package nl.han.oose.colossus.backend.bakery2.dashboards
 
-import nl.han.oose.colossus.backend.bakery2.Users.UserService
+import nl.han.oose.colossus.backend.bakery2.users.UserService
 import nl.han.oose.colossus.backend.bakery2.dto.DashboardCollectionDto
 import nl.han.oose.colossus.backend.bakery2.dto.DashboardDto
 import nl.han.oose.colossus.backend.bakery2.token.Authenticate
@@ -29,12 +29,26 @@ class DashboardsController {
         dashboardsService = service
     }
 
+    fun setTokenService(service: TokenService) {
+        tokenService = service
+    }
+
+    fun setUserService(service: UserService) {
+        userService = service
+    }
+
     @GetMapping(produces = ["application/json"])
     @Authenticate
     fun getAllDashboards(): ResponseEntity<DashboardCollectionDto> {
 
         val result: DashboardCollectionDto = this.dashboardsService.getAllDashboards()
         return ResponseEntity<DashboardCollectionDto>(result, HttpStatus.OK)
+    }
+
+    @GetMapping(path = ["/{dashboardId}"], produces = ["application/json"])
+    fun getDashboard(@PathVariable("dashboardId") dashboardId: Int): ResponseEntity<DashboardDto> {
+        val result = this.dashboardsService.getDashboard(dashboardId)
+        return ResponseEntity(result, HttpStatus.OK)
     }
 
     @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE])
@@ -45,6 +59,15 @@ class DashboardsController {
         dashboardDto.setUserId(userId)
         this.dashboardsService.addDashboard(dashboardDto)
         return ResponseEntity(HttpStatus.CREATED)
+    }
+
+    @PutMapping(consumes = [MediaType.APPLICATION_JSON_VALUE])
+    @Authenticate
+    fun editDashboard(@RequestBody dashboardDto: DashboardDto): ResponseEntity<HttpStatus> {
+        val token = this.tokenService.getToken()
+        val userId = this.userService.getUserId(token)
+        this.dashboardsService.editDashboard(dashboardDto, userId)
+        return ResponseEntity(HttpStatus.OK)
     }
 
     @DeleteMapping(path = ["/{dashboardId}"])

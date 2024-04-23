@@ -1,4 +1,4 @@
-package nl.han.oose.colossus.backend.bakery2.Pi
+package nl.han.oose.colossus.backend.bakery2.pi
 
 import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiDto
@@ -11,8 +11,8 @@ import java.sql.ResultSet
 class PiMapperImp : PiMapper {
     override fun mapPis(resultSet: ResultSet): PiCollectionDto {
 
-        var piCollection = PiCollectionDto()
-        var pis = arrayListOf<PiDto>()
+        val piCollection = PiCollectionDto()
+        val pis = arrayListOf<PiDto>()
         while (resultSet.next()) {
             val id = resultSet.getInt("piid")
             val name = resultSet.getString("name")
@@ -21,8 +21,8 @@ class PiMapperImp : PiMapper {
             val piDTO = PiDto()
             piDTO.setId(id)
             piDTO.setName(name)
-            piDTO.setDisplay(dashboard)
-            piDTO.setStatus(status)
+            piDTO.setDisplay(dashboard ?: "-")
+            piDTO.setStatus(status ?: "-")
             pis.add(piDTO)
         }
         piCollection.setPis(pis)

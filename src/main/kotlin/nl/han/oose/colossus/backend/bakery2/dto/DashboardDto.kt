@@ -44,11 +44,11 @@ class DashboardDto {
         return this.dashboardUrl // You can still access it within the class
     }
 
-    fun setImageURL(newValue: String) {
+    fun setImageUrl(newValue: String) {
         this.imageUrl = newValue // You can still access it within the class
     }
 
-    fun getImageURL(): String {
+    fun getImageUrl(): String {
         return this.imageUrl // You can still access it within the class
     }
 
