@@ -11,7 +11,8 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito.*
+import org.mockito.Mockito.mock
+import org.mockito.Mockito.`when`
 import java.io.InputStreamReader
 
 
@@ -29,13 +30,6 @@ class UserDaoTest {
         dbConnection = DatabaseConnection()
         val scriptRunner: ScriptRunner = ScriptRunner(dbConnection.getConnection(), true, true)
         scriptRunner.runScript(InputStreamReader(ClassLoader.getSystemResourceAsStream("BakeryDB_Create.sql")!!))
-        val insertStatement = dbConnection.getConnection().prepareStatement(
-                "INSERT INTO USERSESSION (USERID, TOKEN)" +
-                        "VALUES (?, ?);"
-        )
-        insertStatement.setInt(1, 1)
-        insertStatement.setString(2, "123")
-        insertStatement.executeUpdate()
 
         sut.setDatabaseConnection(dbConnection)
         sut.setUserMapper(userMapper)
@@ -59,6 +53,14 @@ class UserDaoTest {
     @Test
     fun testGetUser() {
         // Arrange
+        dbConnection = DatabaseConnection()
+        val insertStatement = dbConnection.getConnection().prepareStatement(
+                "INSERT INTO USERSESSION (USERID, TOKEN)" +
+                        "VALUES (?, ?);"
+        )
+        insertStatement.setInt(1, 1)
+        insertStatement.setString(2, "123")
+        insertStatement.executeUpdate()
         val token: String = "123"
         val user : UserDto = UserDto(1, "Arnoud", "Visi", "Avisi@outlook.com", "test password", false)
         `when`(userMapper.mapUserId(MockitoHelper.anyObject())).thenReturn(user)
