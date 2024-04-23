@@ -27,12 +27,15 @@ class PiController {
     fun setUserService(service: UserService) {
         userService = service
     }
+
     fun setTokenService(service: HeaderService) {
         headerService = service
     }
+
     fun setPiService(service: PiService) {
         piService = service
     }
+
     @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
     @Authenticate
     fun getPis(): ResponseEntity<PiCollectionDto> {
@@ -41,5 +44,4 @@ class PiController {
         val pisResponse = piService.getPis(user)
         return ResponseEntity(pisResponse, HttpStatus.OK)
     }
-
 }

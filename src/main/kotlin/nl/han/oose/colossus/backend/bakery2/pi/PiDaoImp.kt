@@ -1,6 +1,5 @@
 package nl.han.oose.colossus.backend.bakery2.pi
 
-import nl.han.oose.colossus.backend.bakery2.dashboards.DashboardsMapper
 import nl.han.oose.colossus.backend.bakery2.database.DatabaseConnection
 import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDto
 import org.springframework.beans.factory.annotation.Autowired

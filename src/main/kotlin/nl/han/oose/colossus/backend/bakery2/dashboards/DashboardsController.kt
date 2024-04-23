@@ -55,7 +55,7 @@ class DashboardsController {
     @Authenticate
     fun addDashboards(@RequestBody dashboardDto: DashboardDto): ResponseEntity<HttpStatus> {
         val token = headerService.getToken()
-        var userId = userService.getUserId(token)
+        val userId = userService.getUserId(token)
         dashboardDto.setUserId(userId)
         this.dashboardsService.addDashboard(dashboardDto)
         return ResponseEntity(HttpStatus.CREATED)
@@ -72,9 +72,10 @@ class DashboardsController {
 
     @DeleteMapping(path = ["/{dashboardId}"])
     @Authenticate
-    fun deleteDashboard(@PathVariable dashboardId: Int) {
+    fun deleteDashboard(@PathVariable dashboardId: Int): ResponseEntity<HttpStatus> {
         val token = headerService.getToken()
         val userId = userService.getUserId(token)
         dashboardsService.deleteDashboard(dashboardId, userId)
+        return ResponseEntity(HttpStatus.OK)
     }
 }
