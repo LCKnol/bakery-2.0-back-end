@@ -27,7 +27,7 @@ class UserDaoImp : UserDao {
 
     override fun getUserInfo(token: String): UserInfoDto {
         val preparedStatement =
-            dbConnection.prepareStatement("select u.firstname, u.lastname, t.teamname, tr.roomno from USERS u inner join USERINTEAM ut on u.userid = ut.userid inner join TEAMINROOM tr on ut.teamid = tr.teamid inner join TEAM t on t.TEAMID = ut.TEAMID where u.userid = (select userid from USERSESSION where token = ?)")
+            dbConnection.prepareStatement("select u.firstname, u.lastname, t.teamname, tr.roomno from USERS u left join USERINTEAM ut on u.userid = ut.userid left join TEAMINROOM tr on ut.teamid = tr.teamid left join TEAM t on t.TEAMID = ut.TEAMID where u.userid = (select userid from USERSESSION where token = ?)")
         preparedStatement.setString(1, token)
         val resultSet = preparedStatement.executeQuery()
         val user = userMapper.mapUserInfo(resultSet)
