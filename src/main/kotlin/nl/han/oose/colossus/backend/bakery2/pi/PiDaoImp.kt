@@ -17,6 +17,14 @@ class PiDaoImp : PiDao {
     @Autowired
     private lateinit var dbConnection: DatabaseConnection
 
+    override fun setDatabaseConnection(connection: DatabaseConnection) {
+        dbConnection = connection
+    }
+
+    override fun setPiMapper(mapper: PiMapper) {
+        piMapper = mapper
+    }
+
     @Throws(ServerErrorException::class)
     override fun getPis(user: Int): PiCollectionDto {
         val preparedStatement =

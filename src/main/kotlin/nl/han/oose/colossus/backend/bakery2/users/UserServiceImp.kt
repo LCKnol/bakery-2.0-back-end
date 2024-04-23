@@ -12,10 +12,16 @@ class UserServiceImp : UserService {
     @Autowired
     private lateinit var userDao: UserDao
 
+    override fun setUserDao(dao: UserDao) {
+        userDao = dao
+    }
+
     override fun getUserInfo(token: String): UserInfoDto {
         val user = userDao.getUserInfo(token)
         return user
     }
+
+
 
     override fun getUserId(token: String): Int {
         val user: UserDto? = userDao.getUser(token)
