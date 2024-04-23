@@ -1,7 +1,8 @@
-package nl.han.oose.colossus.backend.bakery2.pi
+package nl.han.oose.colossus.backend.bakery2.Pi
 
-import nl.han.oose.colossus.backend.bakery2.dashboards.DashboardsDao
 import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDto
+import nl.han.oose.colossus.backend.bakery2.pi.PiDao
+import nl.han.oose.colossus.backend.bakery2.pi.PiService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Primary
 import org.springframework.stereotype.Component
@@ -19,5 +20,6 @@ class PiServiceImp : PiService {
         piDao = dao
     }
 }
+
 
 

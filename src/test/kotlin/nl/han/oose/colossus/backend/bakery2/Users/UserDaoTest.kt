@@ -29,6 +29,14 @@ class UserDaoTest {
         dbConnection = DatabaseConnection()
         val scriptRunner: ScriptRunner = ScriptRunner(dbConnection.getConnection(), true, true)
         scriptRunner.runScript(InputStreamReader(ClassLoader.getSystemResourceAsStream("BakeryDB_Create.sql")!!))
+        val insertStatement = dbConnection.getConnection().prepareStatement(
+                "INSERT INTO USERSESSION (USERID, TOKEN)" +
+                        "VALUES (?, ?);"
+        )
+        insertStatement.setInt(1, 1)
+        insertStatement.setString(2, "123")
+        insertStatement.executeUpdate()
+
         sut.setDatabaseConnection(dbConnection)
         sut.setUserMapper(userMapper)
     }
@@ -52,7 +60,9 @@ class UserDaoTest {
     fun testGetUser() {
         // Arrange
         val token: String = "123"
-        val user : UserDto = UserDto(1, "pieter", "post", "123", "123", true)
+        val user : UserDto = UserDto(1, "Arnoud", "Visi", "Avisi@outlook.com", "test password", false)
+        `when`(userMapper.mapUserId(MockitoHelper.anyObject())).thenReturn(user)
+
 
         // Act
         val result = sut.getUser(token)
