@@ -2,7 +2,7 @@ package nl.han.oose.colossus.backend.bakery2.Users
 
 import nl.han.oose.colossus.backend.bakery2.dto.UserDto
 import nl.han.oose.colossus.backend.bakery2.dto.UserInfoDto
-import nl.han.oose.colossus.backend.bakery2.token.HeaderService
+import nl.han.oose.colossus.backend.bakery2.header.HeaderService
 import nl.han.oose.colossus.backend.bakery2.users.UserController
 import nl.han.oose.colossus.backend.bakery2.users.UserService
 import org.junit.jupiter.api.BeforeEach

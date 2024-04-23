@@ -3,8 +3,8 @@ package nl.han.oose.colossus.backend.bakery2.dashboards
 import nl.han.oose.colossus.backend.bakery2.users.UserService
 import nl.han.oose.colossus.backend.bakery2.dto.DashboardCollectionDto
 import nl.han.oose.colossus.backend.bakery2.dto.DashboardDto
-import nl.han.oose.colossus.backend.bakery2.token.Authenticate
-import nl.han.oose.colossus.backend.bakery2.token.HeaderService
+import nl.han.oose.colossus.backend.bakery2.header.Authenticate
+import nl.han.oose.colossus.backend.bakery2.header.HeaderService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType

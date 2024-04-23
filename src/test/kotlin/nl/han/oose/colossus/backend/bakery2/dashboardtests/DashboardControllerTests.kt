@@ -6,13 +6,10 @@ import nl.han.oose.colossus.backend.bakery2.dashboards.DashboardsController
 import nl.han.oose.colossus.backend.bakery2.dashboards.DashboardsService
 import nl.han.oose.colossus.backend.bakery2.dto.DashboardCollectionDto
 import nl.han.oose.colossus.backend.bakery2.dto.DashboardDto
-import nl.han.oose.colossus.backend.bakery2.token.TokenService
 import nl.han.oose.colossus.backend.bakery2.util.MockitoHelper
-import org.junit.jupiter.api.Assertions
-import nl.han.oose.colossus.backend.bakery2.token.HeaderService
+import nl.han.oose.colossus.backend.bakery2.header.HeaderService
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito
 import org.mockito.Mockito.*
 
 

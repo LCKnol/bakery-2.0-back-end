@@ -5,8 +5,7 @@ import nl.han.oose.colossus.backend.bakery2.authentication.AuthenticationControl
 import nl.han.oose.colossus.backend.bakery2.authentication.AuthenticationService
 import nl.han.oose.colossus.backend.bakery2.dto.LoginRequestDto
 import nl.han.oose.colossus.backend.bakery2.dto.LoginResponseDto
-import nl.han.oose.colossus.backend.bakery2.dto.UserDto
-import nl.han.oose.colossus.backend.bakery2.token.HeaderService
+import nl.han.oose.colossus.backend.bakery2.header.HeaderService
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test

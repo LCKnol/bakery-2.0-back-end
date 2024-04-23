@@ -1,17 +1,13 @@
 import nl.han.oose.colossus.backend.bakery2.authentication.AuthenticationDao
 import nl.han.oose.colossus.backend.bakery2.authentication.AuthenticationServiceImp
-import nl.han.oose.colossus.backend.bakery2.dto.UserDto
 import nl.han.oose.colossus.backend.bakery2.exceptions.HttpUnauthorizedException
-import nl.han.oose.colossus.backend.bakery2.token.HeaderService
 import nl.han.oose.colossus.backend.bakery2.util.MockitoHelper
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import org.mockito.Mock
 import org.mockito.Mockito.*
 import org.springframework.security.crypto.bcrypt.BCrypt
-import java.util.*
 
 class AuthenticationServiceTests {
 
