@@ -46,7 +46,7 @@ class dashboardServiceTests {
     @Test
     fun TestAddDashboardsCallsNextDaoFunction() {
         // Arrange
-        val dashboard: DashboardDto = DashboardDto(1,"test","test","test",1)
+        val dashboard = DashboardDto(1,"test","test","test",1)
         // Act
         sut.addDashboard(dashboard)
 
