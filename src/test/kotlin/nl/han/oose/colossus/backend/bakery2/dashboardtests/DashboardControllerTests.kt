@@ -7,14 +7,13 @@ import nl.han.oose.colossus.backend.bakery2.dashboards.DashboardsService
 import nl.han.oose.colossus.backend.bakery2.dto.DashboardCollectionDto
 import nl.han.oose.colossus.backend.bakery2.dto.DashboardDto
 import nl.han.oose.colossus.backend.bakery2.token.TokenService
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.*
 
 
 
-class dashboardControllerTests {
+class DashboardControllerTests {
 
 
     private lateinit var sut: DashboardsController
