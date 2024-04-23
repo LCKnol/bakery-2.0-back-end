@@ -24,6 +24,15 @@ class PiController {
     @Autowired
     private lateinit var tokenService: TokenService
 
+    fun setUserService(service: UserService) {
+        userService = service
+    }
+    fun setTokenService(service: TokenService) {
+        tokenService = service
+    }
+    fun setPiService(service: PiService) {
+        piService = service
+    }
     @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
     @Authenticate
     fun getPis(): ResponseEntity<PiCollectionDto> {

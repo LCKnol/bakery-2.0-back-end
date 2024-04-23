@@ -20,6 +20,13 @@ class UserController {
     @Autowired
     private lateinit var tokenService: TokenService
 
+    fun setUserService(service: UserService) {
+        userService = service
+    }
+
+    fun setTokenService(service: TokenService) {
+        tokenService = service
+    }
     @GetMapping(produces =[MediaType.APPLICATION_JSON_VALUE])
     @Authenticate
     fun getUserInfo(): ResponseEntity<UserInfoDto> {
