@@ -4,7 +4,7 @@ class PiDto {
     private var id : Int = 0
     private var name: String = ""
     private var status: String = ""
-    private var display: String = ""
+    private var dashboardName: String = ""
 
     fun getId(): Int {
         return id
@@ -30,11 +30,11 @@ class PiDto {
     }
 
     fun getDisplay(): String {
-        return display
+        return dashboardName
     }
 
     fun setDisplay(display: String) {
-        this.display = display
+        this.dashboardName = display
     }
 }
 

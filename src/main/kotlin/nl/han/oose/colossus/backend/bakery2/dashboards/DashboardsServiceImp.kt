@@ -39,7 +39,7 @@ class DashboardsServiceImp : DashboardsService {
 
     override fun deleteDashboard(dashboardId: Int, userId: Int) {
         checkUserPerms(dashboardId, userId)
-        piDao.setDashboardsNull(dashboardId)
+        piDao.removeDashboardFromPis(dashboardId)
         dashboardDao.deleteDashboard(dashboardId)
     }
 

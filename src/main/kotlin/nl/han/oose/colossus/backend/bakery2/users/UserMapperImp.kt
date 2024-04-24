@@ -43,7 +43,7 @@ class UserMapperImp : UserMapper {
         return userInfoDTO
     }
 
-    override fun mapUserId(resultSet: ResultSet): UserDto? {
+    override fun mapUser(resultSet: ResultSet): UserDto? {
         var user: UserDto? = null
         while (resultSet.next()) {
             user = UserDto(

@@ -37,7 +37,7 @@ class PiDaoImp : PiDao {
         return pis
     }
 
-    override fun setDashboardsNull(dashboardId: Int) {
+    override fun removeDashboardFromPis(dashboardId: Int) {
         val query = "UPDATE PI SET DASHBOARDID = NULL WHERE DASHBOARDID = ?"
         try {
             val statement = dbConnection.prepareStatement(query)
