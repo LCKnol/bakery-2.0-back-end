@@ -7,5 +7,5 @@ interface PiDao {
     fun getPis(user: Int): PiCollectionDto
     fun setPiMapper(mapper: PiMapper)
     fun setDatabaseConnection(connection: DatabaseConnection)
-    fun setDashboardsNull(dashboardId: Int)
+    fun removeDashboardFromPis(dashboardId: Int)
 }

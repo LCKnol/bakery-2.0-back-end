@@ -68,7 +68,7 @@ class DashboardServiceTests {
         // Act & Assert
         assertDoesNotThrow { sut.deleteDashboard(mockDashboardId, mockUserId) }
 
-        verify(piDao).setDashboardsNull(mockDashboardId)
+        verify(piDao).removeDashboardFromPis(mockDashboardId)
         verify(dashboardsDao).deleteDashboard(mockDashboardId)
     }
 
