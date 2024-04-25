@@ -4,11 +4,11 @@ class PiRequestsCollectionDto {
 
     private var piRequests: ArrayList<PiRequestDto> = ArrayList()
 
-    fun setDashboards(newValue: ArrayList<PiRequestDto>) {
+    fun setPiRequests(newValue: ArrayList<PiRequestDto>) {
         this.piRequests = newValue
     }
 
-    fun getDashboards(): ArrayList<PiRequestDto> {
+    fun getPiRequests(): ArrayList<PiRequestDto> {
         return this.piRequests
     }
 }

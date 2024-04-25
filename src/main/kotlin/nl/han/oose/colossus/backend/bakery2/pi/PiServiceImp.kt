@@ -24,10 +24,10 @@ class PiServiceImp : PiService {
     }
 
     override fun getAllPis(): PiCollectionDto {
-        TODO("Not yet implemented")
+        return piDao.getAllPis()
     }
 
     override fun getAllPiRequests(): PiRequestsCollectionDto {
-        TODO("Not yet implemented")
+        return piDao.getAllPiRequests()
     }
 }
