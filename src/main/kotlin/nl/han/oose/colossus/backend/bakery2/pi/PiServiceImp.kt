@@ -1,6 +1,7 @@
 package nl.han.oose.colossus.backend.bakery2.pi
 
 import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDto
+import nl.han.oose.colossus.backend.bakery2.dto.PiRequestsCollectionDto
 import nl.han.oose.colossus.backend.bakery2.pi.PiDao
 import nl.han.oose.colossus.backend.bakery2.pi.PiService
 import org.springframework.beans.factory.annotation.Autowired
@@ -20,5 +21,13 @@ class PiServiceImp : PiService {
 
     override fun setPiDao(dao: PiDao) {
         piDao = dao
+    }
+
+    override fun getAllPis(): PiCollectionDto {
+        TODO("Not yet implemented")
+    }
+
+    override fun getAllPiRequests(): PiRequestsCollectionDto {
+        TODO("Not yet implemented")
     }
 }
