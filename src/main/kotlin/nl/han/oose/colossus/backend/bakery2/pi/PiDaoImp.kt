@@ -2,6 +2,7 @@ package nl.han.oose.colossus.backend.bakery2.pi
 
 import nl.han.oose.colossus.backend.bakery2.database.DatabaseConnection
 import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDto
+import nl.han.oose.colossus.backend.bakery2.dto.PiRequestsCollectionDto
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Primary
 import org.springframework.stereotype.Component
@@ -46,5 +47,27 @@ class PiDaoImp : PiDao {
         } catch (e: SQLException) {
             println(e.message)
         }
+    }
+
+    @Throws(ServerErrorException::class)
+    override fun getAllPis(): PiCollectionDto {
+        val connection = dbConnection.getConnection()
+        val statement = dbConnection.prepareStatement("SELECT p.*, d.NAME AS dashboardname FROM PI p LEFT JOIN DASHBOARD d ON p.DASHBOARDID = d.DASHBOARDID")
+        val result = statement.executeQuery()
+        val pis = piMapper.mapPis(result)
+        statement.close()
+        connection.close()
+        return pis
+    }
+
+    @Throws(ServerErrorException::class)
+    override fun getAllPiRequests(): PiRequestsCollectionDto {
+        val connection = dbConnection.getConnection()
+        val statement = dbConnection.prepareStatement("SELECT * FROM PIREQUEST")
+        val result = statement.executeQuery()
+        val piRequests = piMapper.mapPiRequests(result)
+        statement.close()
+        connection.close()
+        return piRequests
     }
 }

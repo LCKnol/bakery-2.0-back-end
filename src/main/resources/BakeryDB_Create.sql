@@ -81,6 +81,13 @@ create table USERSESSION
     primary key (SESSIONID)
 );
 
+create table PIREQUEST
+(
+    REQUESTID            int not null AUTO_INCREMENT,
+    MACADRESS            varchar(32) not null,
+    REQUESTEDON          datetime not null,
+    primary key (REQUESTID)
+);
 /*password: AvisiPassword*/
 INSERT INTO USERS (FIRSTNAME, LASTNAME, PASSWORD, EMAIL, ISADMIN)
 VALUES ('Arnoud', 'Visi', '$2a$10$piwNZPAOhMhdG7Xlm/3kkOs/hZeYlfyQPAY/z7SurggdiLxfzu.KC', 'Avisi@outlook.com', 0);
@@ -165,6 +172,11 @@ INSERT INTO USERINTEAM (USERID, TEAMID)
 VALUES (4, 4);
 INSERT INTO USERINTEAM (USERID, TEAMID)
 VALUES (4, 3);
+
+INSERT INTO PIREQUEST (MACADRESS, REQUESTEDON)
+VALUES('52:8D:4E:9A:2F:71', '2024-04-24 09:36:22');
+INSERT INTO PIREQUEST (MACADRESS, REQUESTEDON)
+VALUES('A7:B1:3E:6F:8C:D2', '2024-04-25 18:45:10');
 
 
 alter table DASHBOARD add constraint FK_DASHBOARDFROMUSER foreign key (USERID)

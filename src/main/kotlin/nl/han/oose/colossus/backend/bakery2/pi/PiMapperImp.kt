@@ -2,6 +2,8 @@ package nl.han.oose.colossus.backend.bakery2.pi
 
 import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiDto
+import nl.han.oose.colossus.backend.bakery2.dto.PiRequestDto
+import nl.han.oose.colossus.backend.bakery2.dto.PiRequestsCollectionDto
 import org.springframework.context.annotation.Primary
 import org.springframework.stereotype.Component
 import java.sql.ResultSet
@@ -27,5 +29,23 @@ class PiMapperImp : PiMapper {
         }
         piCollection.setPis(pis)
         return piCollection
+    }
+
+    override fun mapPiRequests(resultSet: ResultSet): PiRequestsCollectionDto {
+        val piRequestsCollection = PiRequestsCollectionDto()
+        val piRequests = arrayListOf<PiRequestDto>()
+        while (resultSet.next()) {
+            val id = resultSet.getInt("requestid")
+            val requestTime = resultSet.getString("requestedon")
+            val macAdress = resultSet.getString("macadress")
+            val piRequestDto = PiRequestDto()
+            piRequestDto.setId(id)
+            piRequestDto.setRequestTime(requestTime)
+            piRequestDto.setMacAdress(macAdress)
+            piRequests.add(piRequestDto)
+        }
+        piRequestsCollection.setPiRequests(piRequests)
+        return piRequestsCollection
+
     }
 }

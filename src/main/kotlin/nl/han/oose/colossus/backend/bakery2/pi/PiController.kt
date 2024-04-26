@@ -2,6 +2,7 @@ package nl.han.oose.colossus.backend.bakery2.pi
 
 import nl.han.oose.colossus.backend.bakery2.users.UserService
 import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDto
+import nl.han.oose.colossus.backend.bakery2.dto.PiRequestsCollectionDto
 import nl.han.oose.colossus.backend.bakery2.header.Authenticate
 import nl.han.oose.colossus.backend.bakery2.header.HeaderService
 import org.springframework.beans.factory.annotation.Autowired
@@ -42,6 +43,23 @@ class PiController {
         val token = headerService.getToken()
         val user = userService.getUserId(token)
         val pisResponse = piService.getPis(user)
+        return ResponseEntity(pisResponse, HttpStatus.OK)
+    }
+
+
+    @GetMapping(path = ["all"], produces = [MediaType.APPLICATION_JSON_VALUE])
+    @Authenticate
+    fun getAllPis(): ResponseEntity<PiCollectionDto> {
+        val token = headerService.getToken()
+        val pisResponse = piService.getAllPis()
+        return ResponseEntity(pisResponse, HttpStatus.OK)
+    }
+
+    @GetMapping(path = ["requests"], produces = [MediaType.APPLICATION_JSON_VALUE])
+    @Authenticate
+    fun getAllPiRequests(): ResponseEntity<PiRequestsCollectionDto> {
+        val token = headerService.getToken()
+        val pisResponse = piService.getAllPiRequests()
         return ResponseEntity(pisResponse, HttpStatus.OK)
     }
 }
