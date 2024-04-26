@@ -30,13 +30,13 @@ class PiMapperImp : PiMapper {
         piCollection.setPis(pis)
         return piCollection
     }
-    // TODO: Add correct columns to database and check if it matches the mapper function
+
     override fun mapPiRequests(resultSet: ResultSet): PiRequestsCollectionDto {
         val piRequestsCollection = PiRequestsCollectionDto()
         val piRequests = arrayListOf<PiRequestDto>()
         while (resultSet.next()) {
-            val id = resultSet.getInt("pirequestid")
-            val requestTime = resultSet.getString("requesttime")
+            val id = resultSet.getInt("requestid")
+            val requestTime = resultSet.getString("requestedon")
             val macAdress = resultSet.getString("macadress")
             val piRequestDto = PiRequestDto()
             piRequestDto.setId(id)

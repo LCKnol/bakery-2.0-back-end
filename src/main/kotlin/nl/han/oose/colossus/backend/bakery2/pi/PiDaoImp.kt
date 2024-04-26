@@ -52,7 +52,7 @@ class PiDaoImp : PiDao {
     @Throws(ServerErrorException::class)
     override fun getAllPis(): PiCollectionDto {
         val connection = dbConnection.getConnection()
-        val statement = dbConnection.prepareStatement("SELECT * FROM PI")
+        val statement = dbConnection.prepareStatement("SELECT p.*, d.NAME AS dashboardname FROM PI p LEFT JOIN DASHBOARD d ON p.DASHBOARDID = d.DASHBOARDID")
         val result = statement.executeQuery()
         val pis = piMapper.mapPis(result)
         statement.close()
@@ -63,7 +63,7 @@ class PiDaoImp : PiDao {
     @Throws(ServerErrorException::class)
     override fun getAllPiRequests(): PiRequestsCollectionDto {
         val connection = dbConnection.getConnection()
-        val statement = dbConnection.prepareStatement("SELECT * FROM PI")
+        val statement = dbConnection.prepareStatement("SELECT * FROM PIREQUEST")
         val result = statement.executeQuery()
         val piRequests = piMapper.mapPiRequests(result)
         statement.close()

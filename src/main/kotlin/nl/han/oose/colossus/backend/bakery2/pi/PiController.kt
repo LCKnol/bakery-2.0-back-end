@@ -47,7 +47,7 @@ class PiController {
     }
 
 
-    @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
+    @GetMapping(path = ["all"], produces = [MediaType.APPLICATION_JSON_VALUE])
     @Authenticate
     fun getAllPis(): ResponseEntity<PiCollectionDto> {
         val token = headerService.getToken()
@@ -55,6 +55,7 @@ class PiController {
         return ResponseEntity(pisResponse, HttpStatus.OK)
     }
 
+    @GetMapping(path = ["requests"], produces = [MediaType.APPLICATION_JSON_VALUE])
     @Authenticate
     fun getAllPiRequests(): ResponseEntity<PiRequestsCollectionDto> {
         val token = headerService.getToken()
