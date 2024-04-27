@@ -3,7 +3,7 @@ package nl.han.oose.colossus.backend.bakery2.dto
 class PiRequestDto {
 
     private var id : Int = 0
-    private var requestTime: String = ""
+    private var requestedOn: String = ""
     private var macAdress: String = ""
 
 
@@ -14,12 +14,12 @@ class PiRequestDto {
     fun setId(id: Int) {
         this.id = id
     }
-    fun getRequestTime(): String {
-        return this.requestTime
+    fun getRequestedOn(): String {
+        return this.requestedOn
     }
 
-    fun setRequestTime(requestTime: String) {
-        this.requestTime = requestTime
+    fun setRequestedOn(requestedOn: String) {
+        this.requestedOn = requestedOn
     }
 
     fun getMacAdress(): String {
