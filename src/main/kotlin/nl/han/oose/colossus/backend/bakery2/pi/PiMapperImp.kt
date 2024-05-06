@@ -9,7 +9,6 @@ import java.sql.ResultSet
 @Component
 class PiMapperImp : PiMapper {
     override fun mapPis(resultSet: ResultSet): PiCollectionDto {
-
         val piCollection = PiCollectionDto()
         val pis = arrayListOf<PiDto>()
         while (resultSet.next()) {
@@ -17,19 +16,22 @@ class PiMapperImp : PiMapper {
             val name = resultSet.getString("name")
             val dashboard = resultSet.getString("dashboardname")
             val status = resultSet.getString("status")
-            val roomNo = resultSet.getInt("roomNo")
-            val piDTO = PiDto(id,name,dashboard,status,roomNo)
-            piDTO.setId(id)
-            piDTO.setName(name)
-            piDTO.setDisplay(dashboard ?: "-")
-            piDTO.setStatus(status ?: "-")
-            piDTO.setRoomNo(roomNo ?: 0)
-            pis.add(piDTO)
+            val roomNo = resultSet.getString("roomNo")
 
+            // Check if any of the required fields are null
+            if (id == null || name == null || dashboard == null || status == null || roomNo == null) {
+                // Log or print a message to identify which Pi is missing required fields
+                println("Pi with ID $id is missing required fields.")
+                continue
+            }
+
+            val piDTO = PiDto(id, name,  status,dashboard, roomNo)
+            pis.add(piDTO)
         }
         piCollection.setPis(pis)
         return piCollection
     }
+
 
     override fun mapPiRequests(resultSet: ResultSet): PiRequestsCollectionDto {
         val piRequestsCollection = PiRequestsCollectionDto()
@@ -58,7 +60,7 @@ class PiMapperImp : PiMapper {
                 resultSet.getString("name"),
                 resultSet.getString("status"),
                 resultSet.getString("dashboardName"),
-                resultSet.getInt("roomNo")
+                resultSet.getString("roomNo")
             )
         }
         return pi

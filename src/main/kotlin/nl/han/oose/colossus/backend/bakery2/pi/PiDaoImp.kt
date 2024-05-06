@@ -81,7 +81,7 @@ class PiDaoImp : PiDao {
             connection.prepareStatement("UPDATE PI SET NAME = ?, ROOMNO = ?, WHERE PIID = ?")
         statement.setInt(1, piDto.getId())
         statement.setString(2, piDto.getName())
-        statement.setInt(3, piDto.getRoomNo())
+        statement.setString(3, piDto.getRoomNo())
         statement.executeUpdate()
         statement.close()
         connection.close()

@@ -9,6 +9,6 @@ interface PiService {
     fun setPiDao(dao: PiDao)
     fun getAllPis(): PiCollectionDto
     fun getAllPiRequests(): PiRequestsCollectionDto
-    fun editPi(piDto: PiDto, userId: Int)
-    fun getPi(piId: Int):PiDto?
+    fun editPi(piDto: PiDto,userId: Int)
+    fun getPi(piId: Int):PiDto
 }

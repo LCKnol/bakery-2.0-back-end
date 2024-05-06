@@ -72,7 +72,7 @@ class PiController {
     fun editPi(@RequestBody piDto: PiDto): ResponseEntity<HttpStatus> {
         val token = this.headerService.getToken()
         val userId = this.userService.getUserId(token)
-        this.piService.editPi(piDto, userId)
+        this.piService.editPi(piDto,userId)
         return ResponseEntity(HttpStatus.OK)
     }
 
