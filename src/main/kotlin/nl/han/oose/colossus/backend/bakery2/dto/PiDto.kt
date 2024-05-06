@@ -5,7 +5,7 @@ class PiDto {
     private var name: String = ""
     private var status: String = ""
     private var dashboardName: String = ""
-    private var macAdress: String = ""
+    private var macAddress: String = ""
 
     fun getId(): Int {
         return id
@@ -38,12 +38,12 @@ class PiDto {
         this.dashboardName = display
     }
 
-    fun getMacAdress(): String {
-        return this.macAdress
+    fun getMacAddress(): String {
+        return this.macAddress
     }
 
-    fun setMacAdress(macAdress: String) {
-        this.macAdress = macAdress
+    fun setMacAddress(macAdress: String) {
+        this.macAddress = macAdress
     }
 }
 

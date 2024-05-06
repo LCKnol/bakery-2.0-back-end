@@ -4,7 +4,7 @@ class PiRequestDto {
 
     private var id : Int = 0
     private var requestedOn: String = ""
-    private var macAdress: String = ""
+    private var macAddress: String = ""
 
 
     fun getId(): Int {
@@ -22,12 +22,12 @@ class PiRequestDto {
         this.requestedOn = requestedOn
     }
 
-    fun getMacAdress(): String {
-        return this.macAdress
+    fun getMacAddress(): String {
+        return this.macAddress
     }
 
-    fun setMacAdress(macAdress: String) {
-        this.macAdress = macAdress
+    fun setMacAddress(macAddress: String) {
+        this.macAddress = macAddress
     }
 
 }
