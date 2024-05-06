@@ -12,7 +12,6 @@ class DashboardMapperImp : DashboardsMapper {
 
     override fun getAllDashboardsMapper(resultSet: ResultSet): DashboardCollectionDto {
         val newDashboardCollectionDto = DashboardCollectionDto()
-
         while (resultSet.next()) {
             val newDashboardDto =
                 DashboardDto(
