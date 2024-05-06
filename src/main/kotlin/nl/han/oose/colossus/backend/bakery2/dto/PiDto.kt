@@ -14,7 +14,7 @@ class PiDto {
         this.name = name
         this.status = status
         this.dashboardName = dashboardName
-        this.roomNo = roomNo
+      this.roomNo = roomNo
     }
     fun getId(): Int {
         return id
