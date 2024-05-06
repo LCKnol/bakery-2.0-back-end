@@ -30,4 +30,9 @@ class PiServiceImp : PiService {
     override fun getAllPiRequests(): PiRequestsCollectionDto {
         return piDao.getAllPiRequests()
     }
+
+    override fun addPi(macAddress: String, name: String, roomno: String) {
+        piDao.insertPi(macAddress, name, roomno)
+
+    }
 }

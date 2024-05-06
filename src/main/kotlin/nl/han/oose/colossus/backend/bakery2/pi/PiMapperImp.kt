@@ -23,7 +23,7 @@ class PiMapperImp : PiMapper {
             val piDTO = PiDto()
             piDTO.setId(id)
             piDTO.setName(name)
-            piDTO.setDisplay(dashboard ?: "-")
+            piDTO.setDashboardName(dashboard ?: "-")
             piDTO.setStatus(status ?: "-")
             pis.add(piDTO)
         }

@@ -8,4 +8,5 @@ interface PiService {
     fun setPiDao(dao: PiDao)
     fun getAllPis(): PiCollectionDto
     fun getAllPiRequests(): PiRequestsCollectionDto
+    fun addPi(macAddress: String, name: String, roomno: String)
 }
