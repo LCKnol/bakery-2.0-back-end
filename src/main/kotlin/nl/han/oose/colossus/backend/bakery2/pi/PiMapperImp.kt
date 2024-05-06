@@ -1,9 +1,6 @@
 package nl.han.oose.colossus.backend.bakery2.pi
 
-import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDto
-import nl.han.oose.colossus.backend.bakery2.dto.PiDto
-import nl.han.oose.colossus.backend.bakery2.dto.PiRequestDto
-import nl.han.oose.colossus.backend.bakery2.dto.PiRequestsCollectionDto
+import nl.han.oose.colossus.backend.bakery2.dto.*
 import org.springframework.context.annotation.Primary
 import org.springframework.stereotype.Component
 import java.sql.ResultSet
@@ -20,12 +17,15 @@ class PiMapperImp : PiMapper {
             val name = resultSet.getString("name")
             val dashboard = resultSet.getString("dashboardname")
             val status = resultSet.getString("status")
-            val piDTO = PiDto()
+            val roomNo = resultSet.getInt("roomNo")
+            val piDTO = PiDto(id,name,dashboard,status,roomNo)
             piDTO.setId(id)
             piDTO.setName(name)
             piDTO.setDisplay(dashboard ?: "-")
             piDTO.setStatus(status ?: "-")
+            piDTO.setRoomNo(roomNo ?: 0)
             pis.add(piDTO)
+
         }
         piCollection.setPis(pis)
         return piCollection
@@ -47,5 +47,20 @@ class PiMapperImp : PiMapper {
         piRequestsCollection.setPiRequests(piRequests)
         return piRequestsCollection
 
+    }
+
+    override fun getPiMapper(resultSet: ResultSet): PiDto? {
+        var pi: PiDto? = null
+
+        while (resultSet.next()) {
+            pi = PiDto(
+                resultSet.getInt("piId"),
+                resultSet.getString("name"),
+                resultSet.getString("status"),
+                resultSet.getString("dashboardName"),
+                resultSet.getInt("roomNo")
+            )
+        }
+        return pi
     }
 }

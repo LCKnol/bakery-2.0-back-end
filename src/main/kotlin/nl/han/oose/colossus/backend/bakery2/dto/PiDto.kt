@@ -5,7 +5,16 @@ class PiDto {
     private var name: String = ""
     private var status: String = ""
     private var dashboardName: String = ""
+    private var roomNo: Int = 0
 
+
+
+    constructor(id: Int, name: String, status: String, dashboardName: String, roomNo: Int) {
+        this.id = id
+        this.status = status
+        this.dashboardName = dashboardName
+        this.roomNo = roomNo
+    }
     fun getId(): Int {
         return id
     }
@@ -36,6 +45,22 @@ class PiDto {
     fun setDisplay(display: String) {
         this.dashboardName = display
     }
+    fun getRoomNo(): Int {
+        return roomNo
+    }
+
+    fun setRoomNo(roomNo: Int) {
+        this.roomNo = roomNo
+    }
+
+    fun getDashboardName(): String {
+        return dashboardName
+    }
+
+    fun setDashboardName(dashboardName: String) {
+        this.dashboardName = dashboardName
+    }
+
 }
 
 

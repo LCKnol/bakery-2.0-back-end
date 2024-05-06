@@ -1,7 +1,9 @@
 package nl.han.oose.colossus.backend.bakery2.pi
 
 import nl.han.oose.colossus.backend.bakery2.database.DatabaseConnection
+import nl.han.oose.colossus.backend.bakery2.dto.DashboardDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDto
+import nl.han.oose.colossus.backend.bakery2.dto.PiDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiRequestsCollectionDto
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Primary
@@ -69,5 +71,32 @@ class PiDaoImp : PiDao {
         statement.close()
         connection.close()
         return piRequests
+    }
+
+
+    @Throws(ServerErrorException::class)
+    override fun editPi(piDto: PiDto)  {
+        val connection = dbConnection.getConnection()
+        val statement =
+            connection.prepareStatement("UPDATE PI SET NAME = ?, ROOMNO = ?, WHERE PIID = ?")
+        statement.setInt(1, piDto.getId())
+        statement.setString(2, piDto.getName())
+        statement.setInt(3, piDto.getRoomNo())
+        statement.executeUpdate()
+        statement.close()
+        connection.close()
+    }
+
+
+    override fun getPi(piId: Int): PiDto? {
+        val connection = dbConnection.getConnection()
+        val statement = dbConnection.prepareStatement("SELECT * FROM PI WHERE PIID = ?")
+        statement.setInt(1, piId)
+        val result = statement.executeQuery()
+        val pi= piMapper.getPiMapper(result)
+        statement.close()
+        connection.close()
+        return pi
+
     }
 }
