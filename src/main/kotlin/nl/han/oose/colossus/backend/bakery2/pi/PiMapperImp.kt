@@ -24,8 +24,8 @@ class PiMapperImp : PiMapper {
             val piDTO = PiDto()
             piDTO.setId(id)
             piDTO.setName(name)
+            piDTO.setDashboardName(dashboard ?: "-")
             piDTO.setMacAddress(macAddress)
-            piDTO.setDisplay(dashboard ?: "-")
             piDTO.setStatus(status ?: "-")
             pis.add(piDTO)
         }
