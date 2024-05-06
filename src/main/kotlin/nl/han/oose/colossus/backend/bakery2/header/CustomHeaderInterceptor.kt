@@ -13,13 +13,16 @@ class CustomHeaderInterceptor : HandlerInterceptor {
     @Autowired
     private lateinit var authenticationService: AuthenticationService
 
-    @Authenticate
     override fun preHandle(
             request: HttpServletRequest,
             response: HttpServletResponse,
             handler: Any
     ): Boolean {
-        response.addHeader("admin", authenticationService.isAdmin(request.getHeader("Authorization")).toString())
+        try {
+            response.addHeader("admin", authenticationService.isAdmin(request.getHeader("Authorization")).toString())
+        } catch (e: Exception) {
+            // Do nothing
+        }
         return true // make sure to return true to proceed with the request flow
     }
 }
