@@ -1,12 +1,11 @@
 package nl.han.oose.colossus.backend.bakery2.authentication
 
 import nl.han.oose.colossus.backend.bakery2.dto.LoginResponseDto
-import nl.han.oose.colossus.backend.bakery2.dto.UserDto
 import nl.han.oose.colossus.backend.bakery2.exceptions.HttpUnauthorizedException
 import nl.han.oose.colossus.backend.bakery2.users.UserDao
-import org.springframework.security.crypto.bcrypt.BCrypt
-import org.springframework.context.annotation.Primary
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.annotation.Primary
+import org.springframework.security.crypto.bcrypt.BCrypt
 import org.springframework.stereotype.Component
 import java.util.*
 
@@ -16,8 +15,16 @@ class AuthenticationServiceImp :AuthenticationService {
     @Autowired
     private lateinit var  authenticationDao: AuthenticationDao
 
+    @Autowired
+    private lateinit var userDao: UserDao
+
     override fun setAuthenticationDao(authenticationDao: AuthenticationDao) {
         this.authenticationDao = authenticationDao
+    }
+
+    override fun isAdmin(token: String) : Boolean {
+      val user = userDao.getUser(token)!!
+        return user.getIsAdmin()
     }
 
     override fun authenticate(email: String, password: String): LoginResponseDto {
