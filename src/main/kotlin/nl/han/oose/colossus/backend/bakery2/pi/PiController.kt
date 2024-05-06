@@ -59,6 +59,7 @@ class PiController {
     @Admin
     @Authenticate
     fun getAllPis(): ResponseEntity<PiCollectionDto> {
+        val token = headerService.getToken()
         val pisResponse = piService.getAllPis()
         return ResponseEntity(pisResponse, HttpStatus.OK)
     }
@@ -67,6 +68,7 @@ class PiController {
     @Admin
     @Authenticate
     fun getAllPiRequests(): ResponseEntity<PiRequestsCollectionDto> {
+        val token = headerService.getToken()
         val pisResponse = piService.getAllPiRequests()
         return ResponseEntity(pisResponse, HttpStatus.OK)
     }
@@ -77,8 +79,8 @@ class PiController {
     fun initPi(@RequestBody piDto: PiDto): ResponseEntity<HttpStatus> {
         val macAddress = piDto.getMacAddress()
         val name = piDto.getName()
-        val roomno = piDto.getRoomNo()
-        piService.addPi(macAddress, name, roomno)
+        val roomNo = piDto.getRoomNo()
+        piService.addPi(macAddress, name, roomNo)
         initPi(macAddress,true)
         return ResponseEntity(HttpStatus.CREATED)
     }
