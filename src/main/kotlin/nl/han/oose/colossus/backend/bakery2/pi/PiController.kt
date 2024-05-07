@@ -59,7 +59,6 @@ class PiController {
     @Admin
     @Authenticate
     fun getAllPis(): ResponseEntity<PiCollectionDto> {
-        val token = headerService.getToken()
         val pisResponse = piService.getAllPis()
         return ResponseEntity(pisResponse, HttpStatus.OK)
     }
@@ -68,7 +67,6 @@ class PiController {
     @Admin
     @Authenticate
     fun getAllPiRequests(): ResponseEntity<PiRequestsCollectionDto> {
-        val token = headerService.getToken()
         val pisResponse = piService.getAllPiRequests()
         return ResponseEntity(pisResponse, HttpStatus.OK)
     }
@@ -103,5 +101,4 @@ class PiController {
         socketResponseDto.setInstruction("init-pi")
         messagingTemplate.convertAndSend("/topic/init-pi/$macAddress", socketResponseDto)
     }
-
 }
