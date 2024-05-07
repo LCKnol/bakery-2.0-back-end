@@ -37,7 +37,7 @@ class AuthenticationServiceImp :AuthenticationService {
 
         val token = this.generateToken()
         authenticationDao.insertToken(email, token)
-        return LoginResponseDto(token)
+        return LoginResponseDto(token, userDao.getUser(token)!!.getIsAdmin())
     }
 
     override fun destroySession(token: String) {
