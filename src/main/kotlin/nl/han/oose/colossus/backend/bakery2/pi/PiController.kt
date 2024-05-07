@@ -88,6 +88,7 @@ class PiController {
     @Authenticate
     fun declinePiRequest(@PathVariable macAddress: String): ResponseEntity<HttpStatus> {
         piService.declinePiRequest(macAddress)
+        initPi(macAddress, false)
         return ResponseEntity(HttpStatus.NO_CONTENT)
     }
 
