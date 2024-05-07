@@ -22,6 +22,10 @@ class AuthenticationServiceImp :AuthenticationService {
         this.authenticationDao = authenticationDao
     }
 
+    override fun setUserDao(userDao: UserDao) {
+        this.userDao = userDao
+    }
+
     override fun isAdmin(token: String) : Boolean {
       val user = userDao.getUser(token)!!
         return user.getIsAdmin()

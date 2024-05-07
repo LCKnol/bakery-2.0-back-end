@@ -1,6 +1,9 @@
 import nl.han.oose.colossus.backend.bakery2.authentication.AuthenticationDao
+import nl.han.oose.colossus.backend.bakery2.authentication.AuthenticationService
 import nl.han.oose.colossus.backend.bakery2.authentication.AuthenticationServiceImp
+import nl.han.oose.colossus.backend.bakery2.dto.UserDto
 import nl.han.oose.colossus.backend.bakery2.exceptions.HttpUnauthorizedException
+import nl.han.oose.colossus.backend.bakery2.users.UserDao
 import nl.han.oose.colossus.backend.bakery2.util.MockitoHelper
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
@@ -11,15 +14,19 @@ import org.springframework.security.crypto.bcrypt.BCrypt
 
 class AuthenticationServiceTests {
 
-    private lateinit var sut: AuthenticationServiceImp  // System Under Test
+    private lateinit var sut: AuthenticationService  // System Under Test
     private lateinit var authenticationDao: AuthenticationDao
+    private lateinit var userDao: UserDao
+
 
     @BeforeEach
     fun setup() {
 
         sut = AuthenticationServiceImp()
         authenticationDao = mock(AuthenticationDao::class.java)
+        userDao = mock(UserDao::class.java)
         sut.setAuthenticationDao(authenticationDao)
+        sut.setUserDao(userDao)
         }
 
 
@@ -45,8 +52,11 @@ class AuthenticationServiceTests {
         val email = "user@example.com"
         val password = "correctPassword"
         val storedHash = BCrypt.hashpw(password, BCrypt.gensalt())
+        val mockUser : UserDto = UserDto(12, "e", "e", "d", "d", true)
 
         `when`(authenticationDao.findPassword(email)).thenReturn(storedHash)
+        `when`(mockUser.getIsAdmin()).thenReturn(true)
+        `when`(userDao.getUser(anyString())).thenReturn(mockUser)
         doNothing().`when`(authenticationDao).insertToken(MockitoHelper.anyObject(), MockitoHelper.anyObject())
 
         // Act
