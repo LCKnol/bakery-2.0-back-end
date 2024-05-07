@@ -9,4 +9,5 @@ interface PiService {
     fun getAllPis(): PiCollectionDto
     fun getAllPiRequests(): PiRequestsCollectionDto
     fun addPi(macAddress: String, name: String, roomno: String)
+    fun declinePiRequest(macAddress: String)
 }

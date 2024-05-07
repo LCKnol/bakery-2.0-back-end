@@ -75,10 +75,17 @@ class PiDaoImp : PiDao {
     @Throws(ServerErrorException::class)
     override fun insertPi(macAddress: String, name: String, roomno: String) {
         val statement = dbConnection.prepareStatement("INSERT INTO PI (macAddress, name, roomno) VALUES(?, ?, ?)")
-        println("message: $macAddress $name $roomno")
         statement.setString(1, macAddress)
         statement.setString(2, name)
         statement.setString(3, roomno)
+        statement.executeUpdate()
+        statement.close()
+    }
+
+    @Throws(ServerErrorException::class)
+    override fun deletePiRequest(macAddress: String) {
+        val statement = dbConnection.prepareStatement("DELETE FROM PIREQUEST WHERE macAddress = ?")
+        statement.setString(1, macAddress)
         statement.executeUpdate()
         statement.close()
     }

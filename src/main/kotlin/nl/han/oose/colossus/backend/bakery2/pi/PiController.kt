@@ -83,6 +83,14 @@ class PiController {
         return ResponseEntity(HttpStatus.CREATED)
     }
 
+    @DeleteMapping(path=["init/{macAddress}"])
+    @Admin
+    @Authenticate
+    fun declinePiRequest(@PathVariable macAddress: String): ResponseEntity<HttpStatus> {
+        piService.declinePiRequest(macAddress)
+        return ResponseEntity(HttpStatus.NO_CONTENT)
+    }
+
 
     private fun initPi(macAddress: String, isAccepted: Boolean) {
         val piAcceptDto = PiAcceptDto()
@@ -92,4 +100,5 @@ class PiController {
         socketResponseDto.setInstruction("init-pi")
         messagingTemplate.convertAndSend("/topic/init-pi/$macAddress", socketResponseDto)
     }
+
 }

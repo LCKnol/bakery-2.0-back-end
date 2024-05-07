@@ -12,4 +12,6 @@ interface PiDao {
     fun getAllPis(): PiCollectionDto
     fun getAllPiRequests(): PiRequestsCollectionDto
     fun insertPi(macAddress: String, name: String, roomno: String)
+
+    fun deletePiRequest(macAddress: String)
 }
