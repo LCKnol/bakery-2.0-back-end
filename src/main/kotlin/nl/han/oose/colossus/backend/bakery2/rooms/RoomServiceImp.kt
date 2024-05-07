@@ -12,6 +12,10 @@ class RoomServiceImp : RoomService {
     @Autowired
     private lateinit var roomDao: RoomDao
 
+   override fun setRoomDao(roomDao : RoomDao) {
+        this.roomDao = roomDao
+    }
+
 
     override fun getAllRooms(): RoomCollectionDto {
         return roomDao.getAllRooms()

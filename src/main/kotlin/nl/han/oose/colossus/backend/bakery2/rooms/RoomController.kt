@@ -17,6 +17,10 @@ class RoomController {
     @Autowired
     private lateinit var roomService: RoomService
 
+    fun setRoomService(roomService: RoomService) {
+        this.roomService = roomService
+    }
+
     @GetMapping(path = ["all"], produces = [MediaType.APPLICATION_JSON_VALUE])
     @Authenticate
     fun getAllRooms(): ResponseEntity<RoomCollectionDto> {
