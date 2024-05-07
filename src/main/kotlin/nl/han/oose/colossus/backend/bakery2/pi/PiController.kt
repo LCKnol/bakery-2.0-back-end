@@ -4,6 +4,7 @@ import nl.han.oose.colossus.backend.bakery2.users.UserService
 import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiRequestsCollectionDto
+import nl.han.oose.colossus.backend.bakery2.header.Admin
 import nl.han.oose.colossus.backend.bakery2.header.Authenticate
 import nl.han.oose.colossus.backend.bakery2.header.HeaderService
 import nl.han.oose.colossus.backend.bakery2.picommunicator.dto.PiAcceptDto
@@ -57,6 +58,7 @@ class PiController {
 
 
     @GetMapping(path = ["all"], produces = [MediaType.APPLICATION_JSON_VALUE])
+    @Admin
     @Authenticate
     fun getAllPis(): ResponseEntity<PiCollectionDto> {
         val token = headerService.getToken()
@@ -65,6 +67,7 @@ class PiController {
     }
 
     @GetMapping(path = ["requests"], produces = [MediaType.APPLICATION_JSON_VALUE])
+    @Admin
     @Authenticate
     fun getAllPiRequests(): ResponseEntity<PiRequestsCollectionDto> {
         val token = headerService.getToken()
@@ -73,6 +76,8 @@ class PiController {
     }
 
     @PostMapping(path = ["init"], consumes = [MediaType.APPLICATION_JSON_VALUE])
+    @Admin
+    @Authenticate
     fun initPi(@RequestBody piDto: PiDto): ResponseEntity<HttpStatus> {
         val macAddress = piDto.getMacAddress()
         val name = piDto.getName()
@@ -81,6 +86,7 @@ class PiController {
         initPi(macAddress,true)
         return ResponseEntity(HttpStatus.CREATED)
     }
+
 
     private fun initPi(macAddress: String, isAccepted: Boolean) {
         val piAcceptDto = PiAcceptDto()
