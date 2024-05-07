@@ -13,12 +13,12 @@ import org.springframework.web.context.request.ServletRequestAttributes
 
 @Aspect
 @Component
-class IsAdminAspect {
+class AdminAspect {
 
     @Autowired
     private lateinit var authenticationService: AuthenticationService
 
-    @Before("@annotation(IsAdmin)")
+    @Before("@annotation(Admin)")
     fun isAdmin() {
         val request = (RequestContextHolder.currentRequestAttributes() as ServletRequestAttributes).request
         val token = request.getHeader("Authorization") ?: throw HttpUnauthorizedException("No authorization token provided.")
