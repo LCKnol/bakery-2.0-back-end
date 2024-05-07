@@ -20,7 +20,7 @@ class PiMapperImp : PiMapper {
             val name = resultSet.getString("name")
             val dashboard = resultSet.getString("dashboardname")
             val status = resultSet.getString("status")
-            val macAddress = resultSet.getString("macaddress")
+            val macAddress = resultSet.getString("macAddress")
             val piDTO = PiDto()
             piDTO.setId(id)
             piDTO.setName(name)
