@@ -13,9 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
-import org.springframework.messaging.handler.annotation.SendTo
 import org.springframework.messaging.simp.SimpMessagingTemplate
-import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 
 
@@ -61,7 +59,6 @@ class PiController {
     @Admin
     @Authenticate
     fun getAllPis(): ResponseEntity<PiCollectionDto> {
-        val token = headerService.getToken()
         val pisResponse = piService.getAllPis()
         return ResponseEntity(pisResponse, HttpStatus.OK)
     }
@@ -70,7 +67,6 @@ class PiController {
     @Admin
     @Authenticate
     fun getAllPiRequests(): ResponseEntity<PiRequestsCollectionDto> {
-        val token = headerService.getToken()
         val pisResponse = piService.getAllPiRequests()
         return ResponseEntity(pisResponse, HttpStatus.OK)
     }
