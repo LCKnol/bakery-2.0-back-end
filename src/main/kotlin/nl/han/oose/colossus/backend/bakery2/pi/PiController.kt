@@ -90,7 +90,6 @@ class PiController {
 
     private fun initPi(macAddress: String, isAccepted: Boolean) {
         val piAcceptDto = PiAcceptDto()
-        piAcceptDto.setmacAddress(macAddress)
         piAcceptDto.setIsAccepted(isAccepted)
         val socketResponseDto = SocketResponseDto()
         socketResponseDto.setBody(piAcceptDto)
