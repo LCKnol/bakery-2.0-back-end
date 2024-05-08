@@ -21,7 +21,7 @@ class RoomController {
         this.roomService = roomService
     }
 
-    @GetMapping(path = ["all"], produces = [MediaType.APPLICATION_JSON_VALUE])
+    @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
     @Authenticate
     fun getAllRooms(): ResponseEntity<RoomCollectionDto> {
         return ResponseEntity(roomService.getAllRooms(), HttpStatus.OK)
