@@ -22,6 +22,10 @@ class AuthenticationServiceImp :AuthenticationService {
         this.authenticationDao = authenticationDao
     }
 
+    override fun setUserDao(userDao: UserDao) {
+        this.userDao = userDao
+    }
+
     override fun isAdmin(token: String) : Boolean {
       val user = userDao.getUser(token)!!
         return user.getIsAdmin()
@@ -37,7 +41,7 @@ class AuthenticationServiceImp :AuthenticationService {
 
         val token = this.generateToken()
         authenticationDao.insertToken(email, token)
-        return LoginResponseDto(token)
+        return LoginResponseDto(token, userDao.getUser(token)!!.getIsAdmin())
     }
 
     override fun destroySession(token: String) {
