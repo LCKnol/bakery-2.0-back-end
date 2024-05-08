@@ -27,8 +27,8 @@ class AuthenticationServiceImp :AuthenticationService {
     }
 
     override fun isAdmin(token: String) : Boolean {
-      val user = userDao.getUser(token)!!
-        return user.getIsAdmin()
+      val user = userDao.getUser(token)
+        return user?.getIsAdmin() ?: false
     }
 
     override fun authenticate(email: String, password: String): LoginResponseDto {
