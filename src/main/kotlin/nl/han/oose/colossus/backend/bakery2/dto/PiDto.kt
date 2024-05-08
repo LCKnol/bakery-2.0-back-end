@@ -31,20 +31,20 @@ class PiDto {
         this.status = status
     }
 
-    fun getDisplay(): String {
+    fun getDashboardName(): String {
         return dashboardName
     }
 
-    fun setDisplay(display: String) {
-        this.dashboardName = display
+    fun setDashboardName(dashboardName: String) {
+        this.dashboardName = dashboardName
     }
 
     fun getMacAddress(): String {
         return this.macAddress
     }
 
-    fun setMacAddress(macAdress: String) {
-        this.macAddress = macAdress
+    fun setMacAddress(macAddress: String) {
+        this.macAddress = macAddress
     }
 
     fun getRoomNo(): String {

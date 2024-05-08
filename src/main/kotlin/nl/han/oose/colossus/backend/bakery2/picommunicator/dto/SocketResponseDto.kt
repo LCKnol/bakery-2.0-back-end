@@ -1,8 +1,8 @@
-package nl.han.oose.colossus.backend.bakery2.picommunicator
+package nl.han.oose.colossus.backend.bakery2.picommunicator.dto
 
-class TestDto {
+class SocketResponseDto {
     private lateinit var instruction: String
-    private lateinit var body: List<String>
+    private lateinit var body: Any
 
     fun getInstruction(): String {
         return instruction
@@ -12,11 +12,11 @@ class TestDto {
         this.instruction = instruction
     }
 
-    fun setBody(body: List<String>) {
+    fun setBody(body: Any) {
         this.body = body
     }
 
-    fun getBody(): List<String> {
+    fun getBody(): Any {
         return body
     }
 }

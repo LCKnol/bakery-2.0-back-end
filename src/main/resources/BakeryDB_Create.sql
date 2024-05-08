@@ -16,6 +16,8 @@ DROP TABLE IF EXISTS PIREQUEST;
 
 DROP TABLE IF EXISTS USERS;
 
+DROP TABLE IF EXISTS PIREQUEST;
+
 create table DASHBOARD
 (
     DASHBOARDID          int not null AUTO_INCREMENT,
@@ -180,7 +182,6 @@ VALUES('52:8D:4E:9A:2F:71', '2024-04-24 09:36:22');
 INSERT INTO PIREQUEST (MACADDRESS, REQUESTEDON)
 VALUES('A7:B1:3E:6F:8C:D2', '2024-04-25 18:45:10');
 
-
 alter table DASHBOARD add constraint FK_DASHBOARDFROMUSER foreign key (USERID)
     references USERS (USERID) on delete restrict on update restrict;
 
@@ -204,6 +205,5 @@ alter table USERINTEAM add constraint FK_USERINTEAM2 foreign key (TEAMID)
 
 alter table USERSESSION add constraint FK_USERSESSION foreign key (USERID)
     references USERS (USERID) on delete restrict on update restrict;
-
 
 

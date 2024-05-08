@@ -2,20 +2,28 @@ package nl.han.oose.colossus.backend.bakery2.pi
 
 import nl.han.oose.colossus.backend.bakery2.users.UserService
 import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDto
+import nl.han.oose.colossus.backend.bakery2.dto.PiDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiRequestsCollectionDto
+import nl.han.oose.colossus.backend.bakery2.header.Admin
 import nl.han.oose.colossus.backend.bakery2.header.Authenticate
 import nl.han.oose.colossus.backend.bakery2.header.HeaderService
+import nl.han.oose.colossus.backend.bakery2.picommunicator.dto.PiAcceptDto
+import nl.han.oose.colossus.backend.bakery2.picommunicator.dto.SocketResponseDto
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.messaging.simp.SimpMessagingTemplate
+import org.springframework.web.bind.annotation.*
+
 
 @RestController
 @RequestMapping("/pis")
 class PiController {
+
+    @Autowired
+    private lateinit var messagingTemplate: SimpMessagingTemplate
+
     @Autowired
     private lateinit var piService: PiService
 
@@ -48,18 +56,49 @@ class PiController {
 
 
     @GetMapping(path = ["all"], produces = [MediaType.APPLICATION_JSON_VALUE])
+    @Admin
     @Authenticate
     fun getAllPis(): ResponseEntity<PiCollectionDto> {
-        val token = headerService.getToken()
         val pisResponse = piService.getAllPis()
         return ResponseEntity(pisResponse, HttpStatus.OK)
     }
 
     @GetMapping(path = ["requests"], produces = [MediaType.APPLICATION_JSON_VALUE])
+    @Admin
     @Authenticate
     fun getAllPiRequests(): ResponseEntity<PiRequestsCollectionDto> {
-        val token = headerService.getToken()
         val pisResponse = piService.getAllPiRequests()
         return ResponseEntity(pisResponse, HttpStatus.OK)
+    }
+
+    @PostMapping(path = ["init"], consumes = [MediaType.APPLICATION_JSON_VALUE])
+    @Admin
+    @Authenticate
+    fun initPi(@RequestBody piDto: PiDto): ResponseEntity<HttpStatus> {
+        val macAddress = piDto.getMacAddress()
+        val name = piDto.getName()
+        val roomNo = piDto.getRoomNo()
+        piService.addPi(macAddress, name, roomNo)
+        handlePiRequest(macAddress,true)
+        return ResponseEntity(HttpStatus.CREATED)
+    }
+
+    @DeleteMapping(path=["init/{macAddress}"])
+    @Admin
+    @Authenticate
+    fun declinePiRequest(@PathVariable macAddress: String): ResponseEntity<HttpStatus> {
+        piService.declinePiRequest(macAddress)
+        handlePiRequest(macAddress, false)
+        return ResponseEntity(HttpStatus.NO_CONTENT)
+    }
+
+
+    private fun handlePiRequest(macAddress: String, isAccepted: Boolean) {
+        val piAcceptDto = PiAcceptDto()
+        piAcceptDto.setIsAccepted(isAccepted)
+        val socketResponseDto = SocketResponseDto()
+        socketResponseDto.setBody(piAcceptDto)
+        socketResponseDto.setInstruction("init-pi")
+        messagingTemplate.convertAndSend("/topic/init-pi/$macAddress", socketResponseDto)
     }
 }
