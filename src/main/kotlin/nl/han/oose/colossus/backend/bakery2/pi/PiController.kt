@@ -77,7 +77,7 @@ class PiController {
     fun initPi(@RequestBody piDto: PiDto): ResponseEntity<HttpStatus> {
         val macAddress = piDto.getMacAddress()
         val name = piDto.getName()
-        val roomno = piDto.getRoomno()
+        val roomno = piDto.getRoomNo()
         piService.addPi(macAddress, name, roomno)
         initPi(macAddress,true)
         return ResponseEntity(HttpStatus.CREATED)
