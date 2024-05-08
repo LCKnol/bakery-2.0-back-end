@@ -79,7 +79,7 @@ class PiController {
         val name = piDto.getName()
         val roomNo = piDto.getRoomNo()
         piService.addPi(macAddress, name, roomNo)
-        initPi(macAddress,true)
+        handlePiRequest(macAddress,true)
         return ResponseEntity(HttpStatus.CREATED)
     }
 
@@ -88,12 +88,12 @@ class PiController {
     @Authenticate
     fun declinePiRequest(@PathVariable macAddress: String): ResponseEntity<HttpStatus> {
         piService.declinePiRequest(macAddress)
-        initPi(macAddress, false)
+        handlePiRequest(macAddress, false)
         return ResponseEntity(HttpStatus.NO_CONTENT)
     }
 
 
-    private fun initPi(macAddress: String, isAccepted: Boolean) {
+    private fun handlePiRequest(macAddress: String, isAccepted: Boolean) {
         val piAcceptDto = PiAcceptDto()
         piAcceptDto.setIsAccepted(isAccepted)
         val socketResponseDto = SocketResponseDto()
