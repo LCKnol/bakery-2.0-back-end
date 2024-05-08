@@ -55,7 +55,6 @@ class AuthenticationServiceTests {
         val mockUser : UserDto = UserDto(12, "e", "e", "d", "d", true)
 
         `when`(authenticationDao.findPassword(email)).thenReturn(storedHash)
-        `when`(mockUser.getIsAdmin()).thenReturn(true)
         `when`(userDao.getUser(anyString())).thenReturn(mockUser)
         doNothing().`when`(authenticationDao).insertToken(MockitoHelper.anyObject(), MockitoHelper.anyObject())
 
@@ -64,6 +63,7 @@ class AuthenticationServiceTests {
 
         // Assert
         Assertions.assertNotNull(result.token)
+        Assertions.assertTrue(result.isAdmin)
         verify(authenticationDao).findPassword(email)
         verify(authenticationDao).insertToken(MockitoHelper.anyObject(), MockitoHelper.anyObject())
     }
