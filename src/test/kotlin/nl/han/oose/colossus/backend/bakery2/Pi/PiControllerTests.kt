@@ -1,6 +1,8 @@
 package nl.han.oose.colossus.backend.bakery2.Pi
 
 import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDto
+import nl.han.oose.colossus.backend.bakery2.dto.PiRequestDto
+import nl.han.oose.colossus.backend.bakery2.dto.PiRequestsCollectionDto
 import nl.han.oose.colossus.backend.bakery2.pi.PiController
 import nl.han.oose.colossus.backend.bakery2.pi.PiService
 import nl.han.oose.colossus.backend.bakery2.header.HeaderService
@@ -51,5 +53,37 @@ class PiControllerTests {
         verify(tokenService).getToken()
         verify(userService).getUserId("fakeToken")
         verify(piService).getPis(1)
+    }
+
+    @Test
+    fun testgetAllPisWorksCorrectly() {
+        // Arrange
+        val pi: PiCollectionDto = PiCollectionDto()
+        `when`(tokenService.getToken()).thenReturn("fakeToken")
+        `when`(piService.getAllPis()).thenReturn(pi)
+
+        // Act
+        val response: ResponseEntity<PiCollectionDto> = sut.getAllPis()
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.statusCode)
+        assertEquals(pi, response.body)
+        verify(piService).getAllPis()
+    }
+
+    @Test
+    fun testgetAllPirequestsPisWorksCorrectly() {
+        // Arrange
+        val piRequest: PiRequestsCollectionDto = PiRequestsCollectionDto()
+        `when`(tokenService.getToken()).thenReturn("fakeToken")
+        `when`(piService.getAllPiRequests()).thenReturn(piRequest)
+
+        // Act
+        val response: ResponseEntity<PiRequestsCollectionDto> = sut.getAllPiRequests()
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.statusCode)
+        assertEquals(piRequest, response.body)
+        verify(piService).getAllPiRequests()
     }
 }

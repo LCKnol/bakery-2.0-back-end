@@ -54,6 +54,14 @@ class PiDto {
     fun setRoomNo(roomNo: String) {
         this.roomNo = roomNo
     }
+
+    fun getRoomNo(): String {
+        return this.roomNo
+    }
+
+    fun setRoomNo(roomNo: String) {
+        this.roomNo = roomNo
+    }
 }
 
 
