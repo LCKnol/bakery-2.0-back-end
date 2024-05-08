@@ -101,4 +101,5 @@ class PiController {
         socketResponseDto.setInstruction("init-pi")
         messagingTemplate.convertAndSend("/topic/init-pi/$macAddress", socketResponseDto)
     }
+
 }
