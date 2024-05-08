@@ -3,9 +3,9 @@ package nl.han.oose.colossus.backend.bakery2.dto
 class PiDto {
     private var id : Int = 0
     private var name: String = ""
-    private var macAddress: String = ""
     private var status: String = ""
     private var dashboardName: String = ""
+    private var macAddress: String = ""
     private var roomNo: String = ""
 
     fun getId(): Int {
