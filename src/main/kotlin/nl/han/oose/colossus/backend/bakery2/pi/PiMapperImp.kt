@@ -18,13 +18,6 @@ class PiMapperImp : PiMapper {
             val status = resultSet.getString("status")
             val roomNo = resultSet.getString("roomNo")
 
-            // Check if any of the required fields are null
-            if (id == null || name == null || dashboard == null || status == null || roomNo == null) {
-                // Log or print a message to identify which Pi is missing required fields
-                println("Pi with ID $id is missing required fields.")
-                continue
-            }
-
             val piDTO = PiDto(id, name,  status,dashboard, roomNo)
             pis.add(piDTO)
         }
@@ -52,17 +45,16 @@ class PiMapperImp : PiMapper {
     }
 
     override fun getPiMapper(resultSet: ResultSet): PiDto? {
-        var pi: PiDto? = null
-
-        while (resultSet.next()) {
-            pi = PiDto(
+        if (resultSet.next()) {
+            return PiDto(
                 resultSet.getInt("piId"),
                 resultSet.getString("name"),
                 resultSet.getString("status"),
-                resultSet.getString("dashboardName"),
+                resultSet.getString("dashboardname"),
                 resultSet.getString("roomNo")
             )
         }
-        return pi
+        return null
     }
+
 }

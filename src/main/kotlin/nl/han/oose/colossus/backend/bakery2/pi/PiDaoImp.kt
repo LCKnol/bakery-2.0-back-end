@@ -76,12 +76,13 @@ class PiDaoImp : PiDao {
 
     @Throws(ServerErrorException::class)
     override fun editPi(piDto: PiDto)  {
+        var pi = piDto
         val connection = dbConnection.getConnection()
         val statement =
-            connection.prepareStatement("UPDATE PI SET NAME = ?, ROOMNO = ?, WHERE PIID = ?")
-        statement.setInt(1, piDto.getId())
-        statement.setString(2, piDto.getName())
-        statement.setString(3, piDto.getRoomNo())
+            connection.prepareStatement("UPDATE PI SET NAME = ?, ROOMNO = ? WHERE PIID = ?")
+        statement.setString(1, piDto.getName())
+        statement.setString(2, piDto.getRoomNo())
+        statement.setInt(3, piDto.getId())
         statement.executeUpdate()
         statement.close()
         connection.close()
@@ -90,7 +91,7 @@ class PiDaoImp : PiDao {
 
     override fun getPi(piId: Int): PiDto? {
         val connection = dbConnection.getConnection()
-        val statement = dbConnection.prepareStatement("SELECT * FROM PI WHERE PIID = ?")
+        val statement = dbConnection.prepareStatement("SELECT p.*, d.NAME AS dashboardname FROM PI p LEFT JOIN DASHBOARD d ON p.DASHBOARDID = d.DASHBOARDID WHERE PIID =?")
         statement.setInt(1, piId)
         val result = statement.executeQuery()
         val pi= piMapper.getPiMapper(result)
