@@ -22,6 +22,10 @@ class PiSignUpController {
         this.piSignUpService = piSignUpService
     }
 
+    fun setPiService(piService: PiService) {
+        this.piService = piService
+    }
+
     @MessageMapping("/sign-up-pi")
     fun signUpPi(request: PiSignUpRequestDto) {
         if (piSignUpService.checkPiExists(request)){

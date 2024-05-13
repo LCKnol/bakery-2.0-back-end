@@ -30,11 +30,7 @@ class PiSignUpDaoImp : PiSignUpDao {
         val statement = databaseConnection.prepareStatement("SELECT macAddress FROM PI WHERE macAddress = ?")
         statement.setString(1, request.getMacAddress())
         val resultSet = statement.executeQuery()
-        while (resultSet.next()){
-            if (resultSet.getString("macAddress") == request.getMacAddress()){
-                return  true
-            }
-        }
+        return resultSet.next()
         statement.close()
         connection.close()
         return false
