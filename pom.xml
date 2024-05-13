@@ -56,9 +56,9 @@
             <version>3.11.0.3922</version>
         </dependency>
         <dependency>
-            <groupId>org.sonarsource.javascript</groupId>
-            <artifactId>sonar-javascript-plugin</artifactId>
-            <version>10.14.0.26080</version>
+            <groupId>org.sonarsource.api.plugin</groupId>
+            <artifactId>sonar-plugin-api</artifactId>
+            <version>10.7.0.2191</version>
         </dependency>
         <dependency>
             <groupId>com.mysql</groupId>
