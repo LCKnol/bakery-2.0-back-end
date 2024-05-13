@@ -16,20 +16,8 @@ class PiMapperImp : PiMapper {
         val piCollection = PiCollectionDto()
         val pis = arrayListOf<PiDto>()
         while (resultSet.next()) {
-            val id = resultSet.getInt("piid")
-            val name = resultSet.getString("name")
-            val dashboard = resultSet.getString("dashboardname")
-            val status = resultSet.getString("status")
-            val macAddress = resultSet.getString("macAddress")
-            val roomNo = resultSet.getString("roomNo")
-            val piDTO = PiDto()
-            piDTO.setId(id)
-            piDTO.setName(name)
-            piDTO.setDashboardName(dashboard ?: "-")
-            piDTO.setMacAddress(macAddress)
-            piDTO.setStatus(status ?: "-")
-            piDTO.setRoomNo(roomNo ?: "-")
-            pis.add(piDTO)
+            val pi = this.getPiMapper(resultSet)
+            pis.add(pi)
         }
         piCollection.setPis(pis)
         return piCollection
@@ -53,16 +41,20 @@ class PiMapperImp : PiMapper {
 
     }
 
-    override fun getPiMapper(resultSet: ResultSet): PiDto? {
-        if (resultSet.next()) {
-            return PiDto(
-                resultSet.getInt("piId"),
-                resultSet.getString("name"),
-                resultSet.getString("status"),
-                resultSet.getString("dashboardname"),
-                resultSet.getString("roomNo")
-            )
-        }
-        return null
+    override fun getPiMapper(resultSet: ResultSet): PiDto {
+        val id = resultSet.getInt("piid")
+        val name = resultSet.getString("name")
+        val dashboard = resultSet.getString("dashboardname")
+        val status = resultSet.getString("status")
+        val macAddress = resultSet.getString("macAddress")
+        val roomNo = resultSet.getString("roomNo")
+        val piDTO = PiDto()
+        piDTO.setId(id)
+        piDTO.setName(name)
+        piDTO.setDashboardName(dashboard ?: "-")
+        piDTO.setMacAddress(macAddress)
+        piDTO.setStatus(status ?: "-")
+        piDTO.setRoomNo(roomNo ?: "-")
+        return piDTO
     }
 }

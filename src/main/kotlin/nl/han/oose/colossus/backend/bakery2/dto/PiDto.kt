@@ -8,14 +8,6 @@ class PiDto {
     private var macAddress: String = ""
     private var roomNo: String = ""
 
-
-    constructor(id: Int, name: String, status: String, dashboardName: String, roomNo: String) {
-        this.id = id
-        this.name = name
-        this.status = status
-        this.dashboardName = dashboardName
-      this.roomNo = roomNo
-    }
     fun getId(): Int {
         return id
     }
