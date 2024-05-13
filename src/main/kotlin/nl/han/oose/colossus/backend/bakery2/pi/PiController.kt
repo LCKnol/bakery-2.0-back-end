@@ -41,9 +41,6 @@ class PiController {
         piService = service
     }
 
-    fun setMessagingTemplate(template: SimpMessagingTemplate){
-        messagingTemplate = template
-    }
 
     @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
     @Authenticate
