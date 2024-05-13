@@ -13,16 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
-import org.springframework.messaging.simp.SimpMessagingTemplate
 import org.springframework.web.bind.annotation.*
 
 
 @RestController
 @RequestMapping("/pis")
 class PiController {
-
-    @Autowired
-    private lateinit var messagingTemplate: SimpMessagingTemplate
 
     @Autowired
     private lateinit var piService: PiService
@@ -83,7 +79,7 @@ class PiController {
         val name = piDto.getName()
         val roomNo = piDto.getRoomNo()
         piService.addPi(macAddress, name, roomNo)
-        handlePiRequest(macAddress,true)
+        piService.handlePiRequest(macAddress,true)
         return ResponseEntity(HttpStatus.CREATED)
     }
 
@@ -92,17 +88,8 @@ class PiController {
     @Authenticate
     fun declinePiRequest(@PathVariable macAddress: String): ResponseEntity<HttpStatus> {
         piService.declinePiRequest(macAddress)
-        handlePiRequest(macAddress, false)
+        piService.handlePiRequest(macAddress, false)
         return ResponseEntity(HttpStatus.NO_CONTENT)
     }
 
-
-    private fun handlePiRequest(macAddress: String, isAccepted: Boolean) {
-        val piAcceptDto = PiAcceptDto()
-        piAcceptDto.setIsAccepted(isAccepted)
-        val socketResponseDto = SocketResponseDto()
-        socketResponseDto.setBody(piAcceptDto)
-        socketResponseDto.setInstruction("init-pi")
-        messagingTemplate.convertAndSend("/topic/init-pi/$macAddress", socketResponseDto)
-    }
 }

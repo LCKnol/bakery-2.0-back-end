@@ -17,7 +17,6 @@ class PiServiceTest {
 
     private lateinit var piDao: PiDao
 
-    @Test
     @BeforeEach
     fun setUp() {
         sut = PiServiceImp()

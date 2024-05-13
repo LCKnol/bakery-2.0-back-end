@@ -21,7 +21,6 @@ class PiControllerTests {
     private lateinit var piService: PiService
     private lateinit var userService: UserService
     private lateinit var tokenService: HeaderService
-    private lateinit var template: SimpMessagingTemplate
     @Test
     @BeforeEach
     fun setUp() {
@@ -29,14 +28,12 @@ class PiControllerTests {
         piService = mock(PiService::class.java)
         userService = mock(UserService::class.java)
         tokenService = mock(HeaderService::class.java)
-        template = mock(SimpMessagingTemplate::class.java)
 
 
         sut = PiController()
         sut.setPiService(piService)
         sut.setUserService(userService)
         sut.setTokenService(tokenService)
-        sut.setMessagingTemplate(template)
     }
 
     @Test
