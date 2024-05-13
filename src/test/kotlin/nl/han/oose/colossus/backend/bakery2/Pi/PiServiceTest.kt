@@ -67,4 +67,33 @@ class PiServiceTest {
         assertEquals(expectedPiRequests, actualPiRequests)
     }
 
+    @Test
+    fun testAddpi() {
+        // arrange
+        val macAddress = "00:11:22:33:44:55"
+        val name = "fake pi"
+        val roomNo = "fake room"
+
+        // act
+        sut.addPi(macAddress, name, roomNo)
+
+        // assert
+        verify(piDao).insertPi(macAddress, name, roomNo)
+        verify(piDao).deletePiRequest(macAddress)
+
+    }
+
+    @Test
+    fun testDeclinePiRequest() {
+        // arrange
+        val macAddress = "00:11:22:33:44:55"
+
+        // act
+        sut.declinePiRequest(macAddress)
+
+        // assert
+        verify(piDao).deletePiRequest(macAddress)
+
+    }
+
 }

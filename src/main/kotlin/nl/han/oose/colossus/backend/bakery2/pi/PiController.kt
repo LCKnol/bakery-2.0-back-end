@@ -1,6 +1,5 @@
 package nl.han.oose.colossus.backend.bakery2.pi
 
-import nl.han.oose.colossus.backend.bakery2.users.UserService
 import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiRequestsCollectionDto
@@ -9,6 +8,7 @@ import nl.han.oose.colossus.backend.bakery2.header.Authenticate
 import nl.han.oose.colossus.backend.bakery2.header.HeaderService
 import nl.han.oose.colossus.backend.bakery2.picommunicator.dto.PiAcceptDto
 import nl.han.oose.colossus.backend.bakery2.picommunicator.dto.SocketResponseDto
+import nl.han.oose.colossus.backend.bakery2.users.UserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
@@ -39,6 +39,10 @@ class PiController {
 
     fun setPiService(service: PiService) {
         piService = service
+    }
+
+    fun setMessagingTemplate(template: SimpMessagingTemplate){
+        messagingTemplate = template
     }
 
     @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
