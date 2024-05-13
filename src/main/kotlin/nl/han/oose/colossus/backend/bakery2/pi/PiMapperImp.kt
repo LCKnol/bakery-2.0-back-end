@@ -16,8 +16,20 @@ class PiMapperImp : PiMapper {
         val piCollection = PiCollectionDto()
         val pis = arrayListOf<PiDto>()
         while (resultSet.next()) {
-            val pi = this.getPiMapper(resultSet)
-            pis.add(pi)
+            val id = resultSet.getInt("piid")
+            val name = resultSet.getString("name")
+            val dashboard = resultSet.getString("dashboardname")
+            val status = resultSet.getString("status")
+            val macAddress = resultSet.getString("macAddress")
+            val roomNo = resultSet.getString("roomNo")
+            val piDTO = PiDto()
+            piDTO.setId(id)
+            piDTO.setName(name)
+            piDTO.setDashboardName(dashboard ?: "-")
+            piDTO.setMacAddress(macAddress)
+            piDTO.setStatus(status ?: "-")
+            piDTO.setRoomNo(roomNo ?: "-")
+            pis.add(piDTO)
         }
         piCollection.setPis(pis)
         return piCollection
@@ -42,19 +54,23 @@ class PiMapperImp : PiMapper {
     }
 
     override fun getPiMapper(resultSet: ResultSet): PiDto {
-        val id = resultSet.getInt("piid")
-        val name = resultSet.getString("name")
-        val dashboard = resultSet.getString("dashboardname")
-        val status = resultSet.getString("status")
-        val macAddress = resultSet.getString("macAddress")
-        val roomNo = resultSet.getString("roomNo")
-        val piDTO = PiDto()
-        piDTO.setId(id)
-        piDTO.setName(name)
-        piDTO.setDashboardName(dashboard ?: "-")
-        piDTO.setMacAddress(macAddress)
-        piDTO.setStatus(status ?: "-")
-        piDTO.setRoomNo(roomNo ?: "-")
-        return piDTO
+        val pi = PiDto()
+        while (resultSet.next()) {
+            val id = resultSet.getInt("piid")
+            val name = resultSet.getString("name")
+            val dashboard = resultSet.getString("dashboardname")
+            val status = resultSet.getString("status")
+            val macAddress = resultSet.getString("macAddress")
+            val roomNo = resultSet.getString("roomNo")
+            pi.setId(id)
+            pi.setName(name)
+            pi.setDashboardName(dashboard ?: "-")
+            pi.setMacAddress(macAddress)
+            pi.setStatus(status ?: "-")
+            pi.setRoomNo(roomNo ?: "-")
+
+        }
+
+        return pi
     }
 }
