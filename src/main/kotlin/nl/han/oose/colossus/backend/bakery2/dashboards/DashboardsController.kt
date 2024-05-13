@@ -40,7 +40,6 @@ class DashboardsController {
     @GetMapping(produces = ["application/json"])
     @Authenticate
     fun getAllDashboards(): ResponseEntity<DashboardCollectionDto> {
-
         val result: DashboardCollectionDto = this.dashboardsService.getAllDashboards()
         return ResponseEntity<DashboardCollectionDto>(result, HttpStatus.OK)
     }
@@ -60,6 +59,7 @@ class DashboardsController {
         this.dashboardsService.addDashboard(dashboardDto)
         return ResponseEntity(HttpStatus.CREATED)
     }
+
 
     @PutMapping(consumes = [MediaType.APPLICATION_JSON_VALUE])
     @Authenticate

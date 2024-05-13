@@ -1,8 +1,7 @@
 package nl.han.oose.colossus.backend.bakery2.authentication
 
-import nl.han.oose.colossus.backend.bakery2.dto.LoginRequestDto
 import nl.han.oose.colossus.backend.bakery2.dto.LoginResponseDto
-import nl.han.oose.colossus.backend.bakery2.dto.UserDto
+import nl.han.oose.colossus.backend.bakery2.users.UserDao
 
 
 interface AuthenticationService {
@@ -13,4 +12,9 @@ interface AuthenticationService {
     fun validateToken(token: String)
 
     fun setAuthenticationDao(authenticationDao: AuthenticationDao)
+
+    fun setUserDao(userDao: UserDao)
+
+
+    fun isAdmin(token : String) : Boolean
 }

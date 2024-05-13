@@ -41,7 +41,7 @@ class AuthenticationControllerTests {
         loginRequest.setEmail("reem@gmail.com")
         loginRequest.setPassword("mypassword")
 
-        val loginResponse = LoginResponseDto("validToken")
+        val loginResponse = LoginResponseDto("validToken", true)
         `when`(authenticationService.authenticate(loginRequest.getEmail(),loginRequest.getPassword())).thenReturn(loginResponse)
 
         // Act

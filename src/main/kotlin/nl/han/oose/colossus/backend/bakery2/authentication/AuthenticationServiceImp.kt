@@ -1,12 +1,11 @@
 package nl.han.oose.colossus.backend.bakery2.authentication
 
 import nl.han.oose.colossus.backend.bakery2.dto.LoginResponseDto
-import nl.han.oose.colossus.backend.bakery2.dto.UserDto
 import nl.han.oose.colossus.backend.bakery2.exceptions.HttpUnauthorizedException
 import nl.han.oose.colossus.backend.bakery2.users.UserDao
-import org.springframework.security.crypto.bcrypt.BCrypt
-import org.springframework.context.annotation.Primary
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.annotation.Primary
+import org.springframework.security.crypto.bcrypt.BCrypt
 import org.springframework.stereotype.Component
 import java.util.*
 
@@ -16,8 +15,20 @@ class AuthenticationServiceImp :AuthenticationService {
     @Autowired
     private lateinit var  authenticationDao: AuthenticationDao
 
+    @Autowired
+    private lateinit var userDao: UserDao
+
     override fun setAuthenticationDao(authenticationDao: AuthenticationDao) {
         this.authenticationDao = authenticationDao
+    }
+
+    override fun setUserDao(userDao: UserDao) {
+        this.userDao = userDao
+    }
+
+    override fun isAdmin(token: String) : Boolean {
+      val user = userDao.getUser(token)
+        return user?.getIsAdmin() ?: false
     }
 
     override fun authenticate(email: String, password: String): LoginResponseDto {
@@ -30,7 +41,7 @@ class AuthenticationServiceImp :AuthenticationService {
 
         val token = this.generateToken()
         authenticationDao.insertToken(email, token)
-        return LoginResponseDto(token)
+        return LoginResponseDto(token, userDao.getUser(token)!!.getIsAdmin())
     }
 
     override fun destroySession(token: String) {

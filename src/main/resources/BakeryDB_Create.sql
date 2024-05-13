@@ -1,8 +1,8 @@
 DROP TABLE IF EXISTS PI;
 
-DROP TABLE IF EXISTS DASHBOARD;
-
 DROP TABLE IF EXISTS TEAMINROOM;
+
+DROP TABLE IF EXISTS DASHBOARD;
 
 DROP TABLE IF EXISTS ROOM;
 
@@ -12,7 +12,11 @@ DROP TABLE IF EXISTS TEAM;
 
 DROP TABLE IF EXISTS USERSESSION;
 
+DROP TABLE IF EXISTS PIREQUEST;
+
 DROP TABLE IF EXISTS USERS;
+
+DROP TABLE IF EXISTS PIREQUEST;
 
 create table DASHBOARD
 (
@@ -30,7 +34,7 @@ create table PI
     ROOMNO               varchar(10),
     DASHBOARDID          int,
     NAME                 varchar(64) not null,
-    MACADRESS            varchar(32) not null,
+    MACADDRESS            varchar(32) not null,
     STATUS               varchar(32) null,
     primary key (PIID)
 );
@@ -84,7 +88,7 @@ create table USERSESSION
 create table PIREQUEST
 (
     REQUESTID            int not null AUTO_INCREMENT,
-    MACADRESS            varchar(32) not null,
+    MACADDRESS            varchar(32) not null,
     REQUESTEDON          datetime not null,
     primary key (REQUESTID)
 );
@@ -122,13 +126,13 @@ INSERT INTO DASHBOARD (USERID, NAME, DASHBOARDURL, IMAGEURL)
 VALUES (2, 'FancyDashboard', 'https://www.aldi.nl/',
         'https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fclipart-library.com%2Fnewhp%2F85-850924_alien-spaceship-ufo-future-fantasy-futuristic-alien-in.png&f=1&nofb=1&ipt=152625c66c7e671454fe7a31fec903a6adf7dad480b8a2e425678a491e130887&ipo=images');
 
-INSERT INTO PI (ROOMNO, DASHBOARDID, NAME, MACADRESS, STATUS)
+INSERT INTO PI (ROOMNO, DASHBOARDID, NAME, MACADDRESS, STATUS)
 VALUES ('14.02', null, '14.02:01', 'aa:41:16:f3:81:fc', 'offline');
 
-INSERT INTO PI (ROOMNO, DASHBOARDID, NAME, MACADRESS, STATUS)
+INSERT INTO PI (ROOMNO, DASHBOARDID, NAME, MACADDRESS, STATUS)
 VALUES ('14.02', 1, '14.02:02', 'bb:41:16:a3:81:fc', 'online');
 
-INSERT INTO PI (ROOMNO, DASHBOARDID, NAME, MACADRESS, STATUS)
+INSERT INTO PI (ROOMNO, DASHBOARDID, NAME, MACADDRESS, STATUS)
 VALUES ('15.05', null, '15.05:01', 'cc:41:00:f3:81:fc', null);
 
 INSERT INTO TEAM (TEAMNAME)
@@ -173,11 +177,10 @@ VALUES (4, 4);
 INSERT INTO USERINTEAM (USERID, TEAMID)
 VALUES (4, 3);
 
-INSERT INTO PIREQUEST (MACADRESS, REQUESTEDON)
+INSERT INTO PIREQUEST (MACADDRESS, REQUESTEDON)
 VALUES('52:8D:4E:9A:2F:71', '2024-04-24 09:36:22');
-INSERT INTO PIREQUEST (MACADRESS, REQUESTEDON)
+INSERT INTO PIREQUEST (MACADDRESS, REQUESTEDON)
 VALUES('A7:B1:3E:6F:8C:D2', '2024-04-25 18:45:10');
-
 
 alter table DASHBOARD add constraint FK_DASHBOARDFROMUSER foreign key (USERID)
     references USERS (USERID) on delete restrict on update restrict;
@@ -202,6 +205,5 @@ alter table USERINTEAM add constraint FK_USERINTEAM2 foreign key (TEAMID)
 
 alter table USERSESSION add constraint FK_USERSESSION foreign key (USERID)
     references USERS (USERID) on delete restrict on update restrict;
-
 
 
