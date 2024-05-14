@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
+import org.springframework.messaging.handler.annotation.MessageMapping
 import org.springframework.web.bind.annotation.*
 
 
@@ -87,6 +88,7 @@ class PiController {
         return ResponseEntity(HttpStatus.NO_CONTENT)
     }
 
+
     @GetMapping(path = ["/{piId}"], produces = ["application/json"])
     fun getPi(@PathVariable("piId") piId: Int): ResponseEntity<PiDto> {
         val result = this.piService.getPi(piId)
@@ -100,4 +102,19 @@ class PiController {
         this.piService.editPi(piDto,userId)
         return ResponseEntity(HttpStatus.OK)
     }
+
+    @DeleteMapping(path=["init/{macAddress}"])
+    @Authenticate
+    fun declinePiReques(@PathVariable macAddress: String): ResponseEntity<HttpStatus> {
+        piService.declinePiRequest(macAddress)
+        piService.handlePiRequest(macAddress, false)
+        return ResponseEntity(HttpStatus.NO_CONTENT)
+    }
+
+    @MessageMapping("setdashboard")
+    @Authenticate
+    fun assignDashboardToPi(request: PiDto) {
+       piService.assignDashboardToPi(request)
+    }
+
 }

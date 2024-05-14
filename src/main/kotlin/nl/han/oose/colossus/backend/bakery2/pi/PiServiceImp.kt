@@ -1,10 +1,12 @@
 package nl.han.oose.colossus.backend.bakery2.pi
 
+import nl.han.oose.colossus.backend.bakery2.dashboards.DashboardsDao
 import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiRequestsCollectionDto
 import nl.han.oose.colossus.backend.bakery2.exceptions.HttpNotFoundException
 import nl.han.oose.colossus.backend.bakery2.picommunicator.dto.PiAcceptDto
+import nl.han.oose.colossus.backend.bakery2.picommunicator.dto.PiSetDashboardDto
 import nl.han.oose.colossus.backend.bakery2.picommunicator.dto.SocketResponseDto
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Primary
@@ -18,6 +20,9 @@ class PiServiceImp : PiService {
     private lateinit var piDao: PiDao
 
     @Autowired
+    private lateinit var dashboardDao: DashboardsDao
+
+    @Autowired
     private lateinit var messagingTemplate: SimpMessagingTemplate
 
     override fun getPis(user: Int): PiCollectionDto {
@@ -28,6 +33,11 @@ class PiServiceImp : PiService {
     override fun setPiDao(dao: PiDao) {
         piDao = dao
     }
+
+    override fun setDashboardDao(dao: DashboardsDao) {
+        dashboardDao = dao
+    }
+
 
     override fun getAllPis(): PiCollectionDto {
         return piDao.getAllPis()
@@ -60,6 +70,7 @@ class PiServiceImp : PiService {
         messagingTemplate.convertAndSend("/topic/init-pi/$macAddress", socketResponseDto)
     }
 
+
     override fun editPi(piDto: PiDto, userId: Int) {
 
        piDao.editPi(piDto)
@@ -68,5 +79,17 @@ class PiServiceImp : PiService {
     override fun getPi(piId: Int): PiDto {
         val pi = piDao.getPi(piId) ?: throw HttpNotFoundException("pi does not exist")
         return pi
+    }
+
+    override fun assignDashboardToPi(request: PiDto) {
+        val assignedDashboard = PiSetDashboardDto()
+        val dashboardUrl = dashboardDao.getDashboard(request.getDashboardId())?.getDashboardUrl()
+        assignedDashboard.setUrl(dashboardUrl!!)
+
+        val socketResponseDto = SocketResponseDto()
+        socketResponseDto.setBody(assignedDashboard)
+        socketResponseDto.setInstruction("set-dashboard")
+        messagingTemplate.convertAndSend("/topic/pi-listener/${request.getMacAddress()}", socketResponseDto)
+
     }
 }

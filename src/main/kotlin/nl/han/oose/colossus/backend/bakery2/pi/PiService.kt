@@ -1,5 +1,6 @@
 package nl.han.oose.colossus.backend.bakery2.pi
 
+import nl.han.oose.colossus.backend.bakery2.dashboards.DashboardsDao
 import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiRequestsCollectionDto
@@ -14,4 +15,6 @@ interface PiService {
     fun addPi(macAddress: String, name: String, roomno: String)
     fun declinePiRequest(macAddress: String)
     fun handlePiRequest(macAddress: String, isAccepted: Boolean)
+    fun assignDashboardToPi(request: PiDto)
+    fun setDashboardDao(dao: DashboardsDao)
 }
