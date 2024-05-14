@@ -4,7 +4,9 @@ class PiDto {
     private var id : Int = 0
     private var name: String = ""
     private var status: String = ""
-    private var display: String = ""
+    private var dashboardName: String = ""
+    private var macAddress: String = ""
+    private var roomNo: String = ""
 
     fun getId(): Int {
         return id
@@ -29,12 +31,28 @@ class PiDto {
         this.status = status
     }
 
-    fun getDisplay(): String {
-        return display
+    fun getDashboardName(): String {
+        return dashboardName
     }
 
-    fun setDisplay(display: String) {
-        this.display = display
+    fun setDashboardName(dashboardName: String) {
+        this.dashboardName = dashboardName
+    }
+
+    fun getMacAddress(): String {
+        return this.macAddress
+    }
+
+    fun setMacAddress(macAddress: String) {
+        this.macAddress = macAddress
+    }
+
+    fun getRoomNo(): String {
+        return this.roomNo
+    }
+
+    fun setRoomNo(roomNo: String) {
+        this.roomNo = roomNo
     }
 }
 

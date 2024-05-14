@@ -3,6 +3,7 @@ package nl.han.oose.colossus.backend.bakery2.Pi
 
 import junit.framework.Assert.assertEquals
 import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDto
+import nl.han.oose.colossus.backend.bakery2.dto.PiRequestsCollectionDto
 import nl.han.oose.colossus.backend.bakery2.pi.PiDao
 import nl.han.oose.colossus.backend.bakery2.pi.PiService
 import nl.han.oose.colossus.backend.bakery2.pi.PiServiceImp
@@ -16,7 +17,6 @@ class PiServiceTest {
 
     private lateinit var piDao: PiDao
 
-    @Test
     @BeforeEach
     fun setUp() {
         sut = PiServiceImp()
@@ -38,4 +38,62 @@ class PiServiceTest {
         assertEquals(expectedPis, actualPis)
     }
 
+    @Test
+    fun testGetAllPis() {
+        // Arrange
+        val expectedPis: PiCollectionDto = PiCollectionDto()
+        `when`(piDao.getAllPis()).thenReturn(expectedPis)
+
+        // Act
+        val actualPis: PiCollectionDto = sut.getAllPis()
+
+        // Assert
+        verify(piDao).getAllPis()
+        assertEquals(expectedPis, actualPis)
     }
+
+
+    @Test
+    fun testGetAllPiRequests() {
+        // Arrange
+        val expectedPiRequests: PiRequestsCollectionDto = PiRequestsCollectionDto()
+        `when`(piDao.getAllPiRequests()).thenReturn(expectedPiRequests)
+
+        // Act
+        val actualPiRequests: PiRequestsCollectionDto = sut.getAllPiRequests()
+
+        // Assert
+        verify(piDao).getAllPiRequests()
+        assertEquals(expectedPiRequests, actualPiRequests)
+    }
+
+    @Test
+    fun testAddpi() {
+        // arrange
+        val macAddress = "00:11:22:33:44:55"
+        val name = "fake pi"
+        val roomNo = "fake room"
+
+        // act
+        sut.addPi(macAddress, name, roomNo)
+
+        // assert
+        verify(piDao).insertPi(macAddress, name, roomNo)
+        verify(piDao).deletePiRequest(macAddress)
+
+    }
+
+    @Test
+    fun testDeclinePiRequest() {
+        // arrange
+        val macAddress = "00:11:22:33:44:55"
+
+        // act
+        sut.declinePiRequest(macAddress)
+
+        // assert
+        verify(piDao).deletePiRequest(macAddress)
+
+    }
+
+}

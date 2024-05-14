@@ -1,20 +1,25 @@
 package nl.han.oose.colossus.backend.bakery2.pi
 
-import nl.han.oose.colossus.backend.bakery2.users.UserService
 import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDto
+import nl.han.oose.colossus.backend.bakery2.dto.PiDto
+import nl.han.oose.colossus.backend.bakery2.dto.PiRequestsCollectionDto
+import nl.han.oose.colossus.backend.bakery2.header.Admin
 import nl.han.oose.colossus.backend.bakery2.header.Authenticate
 import nl.han.oose.colossus.backend.bakery2.header.HeaderService
+import nl.han.oose.colossus.backend.bakery2.picommunicator.dto.PiAcceptDto
+import nl.han.oose.colossus.backend.bakery2.picommunicator.dto.SocketResponseDto
+import nl.han.oose.colossus.backend.bakery2.users.UserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
+
 
 @RestController
 @RequestMapping("/pis")
 class PiController {
+
     @Autowired
     private lateinit var piService: PiService
 
@@ -36,6 +41,7 @@ class PiController {
         piService = service
     }
 
+
     @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
     @Authenticate
     fun getPis(): ResponseEntity<PiCollectionDto> {
@@ -44,4 +50,43 @@ class PiController {
         val pisResponse = piService.getPis(user)
         return ResponseEntity(pisResponse, HttpStatus.OK)
     }
+
+
+    @GetMapping(path = ["all"], produces = [MediaType.APPLICATION_JSON_VALUE])
+    @Admin
+    @Authenticate
+    fun getAllPis(): ResponseEntity<PiCollectionDto> {
+        val pisResponse = piService.getAllPis()
+        return ResponseEntity(pisResponse, HttpStatus.OK)
+    }
+
+    @GetMapping(path = ["requests"], produces = [MediaType.APPLICATION_JSON_VALUE])
+    @Admin
+    @Authenticate
+    fun getAllPiRequests(): ResponseEntity<PiRequestsCollectionDto> {
+        val pisResponse = piService.getAllPiRequests()
+        return ResponseEntity(pisResponse, HttpStatus.OK)
+    }
+
+    @PostMapping(path = ["init"], consumes = [MediaType.APPLICATION_JSON_VALUE])
+    @Admin
+    @Authenticate
+    fun initPi(@RequestBody piDto: PiDto): ResponseEntity<HttpStatus> {
+        val macAddress = piDto.getMacAddress()
+        val name = piDto.getName()
+        val roomNo = piDto.getRoomNo()
+        piService.addPi(macAddress, name, roomNo)
+        piService.handlePiRequest(macAddress,true)
+        return ResponseEntity(HttpStatus.CREATED)
+    }
+
+    @DeleteMapping(path=["init/{macAddress}"])
+    @Admin
+    @Authenticate
+    fun declinePiRequest(@PathVariable macAddress: String): ResponseEntity<HttpStatus> {
+        piService.declinePiRequest(macAddress)
+        piService.handlePiRequest(macAddress, false)
+        return ResponseEntity(HttpStatus.NO_CONTENT)
+    }
+
 }

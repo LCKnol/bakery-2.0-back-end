@@ -7,11 +7,9 @@ import nl.han.oose.colossus.backend.bakery2.users.UserDaoImp
 import nl.han.oose.colossus.backend.bakery2.users.UserMapper
 import nl.han.oose.colossus.backend.bakery2.util.MockitoHelper
 import nl.han.oose.colossus.backend.bakery2.util.ScriptRunner
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
 import java.io.InputStreamReader
@@ -64,7 +62,7 @@ class UserDaoTest {
         insertStatement.executeUpdate()
         val token: String = "123"
         val user : UserDto = UserDto(1, "Arnoud", "Visi", "Avisi@outlook.com", "test password", false)
-        `when`(userMapper.mapUserId(MockitoHelper.anyObject())).thenReturn(user)
+        `when`(userMapper.mapUser(MockitoHelper.anyObject())).thenReturn(user)
 
 
         // Act

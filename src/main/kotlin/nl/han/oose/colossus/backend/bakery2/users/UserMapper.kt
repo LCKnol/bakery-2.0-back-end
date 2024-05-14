@@ -6,5 +6,5 @@ import java.sql.ResultSet
 
 interface UserMapper {
     fun mapUserInfo(resultSet : ResultSet) : UserInfoDto
-    fun mapUserId(resultSet : ResultSet) : UserDto?
+    fun mapUser(resultSet : ResultSet) : UserDto?
 }
