@@ -1,7 +1,9 @@
 package nl.han.oose.colossus.backend.bakery2.pi
 
 import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDto
+import nl.han.oose.colossus.backend.bakery2.dto.PiDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiRequestsCollectionDto
+import nl.han.oose.colossus.backend.bakery2.exceptions.HttpNotFoundException
 import nl.han.oose.colossus.backend.bakery2.picommunicator.dto.PiAcceptDto
 import nl.han.oose.colossus.backend.bakery2.picommunicator.dto.SocketResponseDto
 import org.springframework.beans.factory.annotation.Autowired
@@ -56,5 +58,15 @@ class PiServiceImp : PiService {
         socketResponseDto.setBody(piAcceptDto)
         socketResponseDto.setInstruction("init-pi")
         messagingTemplate.convertAndSend("/topic/init-pi/$macAddress", socketResponseDto)
+    }
+
+    override fun editPi(piDto: PiDto, userId: Int) {
+
+       piDao.editPi(piDto)
+    }
+
+    override fun getPi(piId: Int): PiDto {
+        val pi = piDao.getPi(piId) ?: throw HttpNotFoundException("pi does not exist")
+        return pi
     }
 }

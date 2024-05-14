@@ -21,7 +21,7 @@ class PiMapperImp : PiMapper {
             val dashboard = resultSet.getString("dashboardname")
             val status = resultSet.getString("status")
             val macAddress = resultSet.getString("macAddress")
-            val roomNo = resultSet.getString("roomno")
+            val roomNo = resultSet.getString("roomNo")
             val piDTO = PiDto()
             piDTO.setId(id)
             piDTO.setName(name)
@@ -51,5 +51,26 @@ class PiMapperImp : PiMapper {
         piRequestsCollection.setPiRequests(piRequests)
         return piRequestsCollection
 
+    }
+
+    override fun getPiMapper(resultSet: ResultSet): PiDto {
+        val pi = PiDto()
+        while (resultSet.next()) {
+            val id = resultSet.getInt("piid")
+            val name = resultSet.getString("name")
+            val dashboard = resultSet.getString("dashboardname")
+            val status = resultSet.getString("status")
+            val macAddress = resultSet.getString("macAddress")
+            val roomNo = resultSet.getString("roomNo")
+            pi.setId(id)
+            pi.setName(name)
+            pi.setDashboardName(dashboard ?: "-")
+            pi.setMacAddress(macAddress)
+            pi.setStatus(status ?: "-")
+            pi.setRoomNo(roomNo ?: "-")
+
+        }
+
+        return pi
     }
 }

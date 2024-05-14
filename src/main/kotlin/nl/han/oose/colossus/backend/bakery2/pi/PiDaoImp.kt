@@ -1,7 +1,9 @@
 package nl.han.oose.colossus.backend.bakery2.pi
 
 import nl.han.oose.colossus.backend.bakery2.database.DatabaseConnection
+import nl.han.oose.colossus.backend.bakery2.dto.DashboardDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDto
+import nl.han.oose.colossus.backend.bakery2.dto.PiDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiRequestsCollectionDto
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Primary
@@ -88,5 +90,32 @@ class PiDaoImp : PiDao {
         statement.setString(1, macAddress)
         statement.executeUpdate()
         statement.close()
+    }
+
+
+    @Throws(ServerErrorException::class)
+    override fun editPi(piDto: PiDto)  {
+        val connection = dbConnection.getConnection()
+        val statement =
+            connection.prepareStatement("UPDATE PI SET NAME = ?, ROOMNO = ? WHERE PIID = ?")
+        statement.setString(1, piDto.getName())
+        statement.setString(2, piDto.getRoomNo())
+        statement.setInt(3, piDto.getId())
+        statement.executeUpdate()
+        statement.close()
+        connection.close()
+    }
+
+
+    override fun getPi(piId: Int): PiDto? {
+        val connection = dbConnection.getConnection()
+        val statement = dbConnection.prepareStatement("SELECT p.*, d.NAME AS dashboardname FROM PI p LEFT JOIN DASHBOARD d ON p.DASHBOARDID = d.DASHBOARDID WHERE PIID =?")
+        statement.setInt(1, piId)
+        val result = statement.executeQuery()
+        val pi= piMapper.getPiMapper(result)
+        statement.close()
+        connection.close()
+        return pi
+
     }
 }
