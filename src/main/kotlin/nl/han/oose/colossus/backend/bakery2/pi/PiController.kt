@@ -7,9 +7,6 @@ import nl.han.oose.colossus.backend.bakery2.dto.PiRequestsCollectionDto
 import nl.han.oose.colossus.backend.bakery2.header.Admin
 import nl.han.oose.colossus.backend.bakery2.header.Authenticate
 import nl.han.oose.colossus.backend.bakery2.header.HeaderService
-import nl.han.oose.colossus.backend.bakery2.picommunicator.dto.PiAcceptDto
-import nl.han.oose.colossus.backend.bakery2.picommunicator.dto.SocketResponseDto
-import nl.han.oose.colossus.backend.bakery2.users.UserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
@@ -102,14 +99,5 @@ class PiController {
         val userId = this.userService.getUserId(token)
         this.piService.editPi(piDto,userId)
         return ResponseEntity(HttpStatus.OK)
-    }
-
-    private fun handlePiRequest(macAddress: String, isAccepted: Boolean) {
-        val piAcceptDto = PiAcceptDto()
-        piAcceptDto.setIsAccepted(isAccepted)
-        val socketResponseDto = SocketResponseDto()
-        socketResponseDto.setBody(piAcceptDto)
-        socketResponseDto.setInstruction("init-pi")
-        messagingTemplate.convertAndSend("/topic/init-pi/$macAddress", socketResponseDto)
     }
 }
