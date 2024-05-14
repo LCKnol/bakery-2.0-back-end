@@ -1,6 +1,5 @@
 package nl.han.oose.colossus.backend.bakery2.pi
 
-import nl.han.oose.colossus.backend.bakery2.dto.DashboardDto
 import nl.han.oose.colossus.backend.bakery2.users.UserService
 import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiDto
@@ -10,20 +9,17 @@ import nl.han.oose.colossus.backend.bakery2.header.Authenticate
 import nl.han.oose.colossus.backend.bakery2.header.HeaderService
 import nl.han.oose.colossus.backend.bakery2.picommunicator.dto.PiAcceptDto
 import nl.han.oose.colossus.backend.bakery2.picommunicator.dto.SocketResponseDto
+import nl.han.oose.colossus.backend.bakery2.users.UserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
-import org.springframework.messaging.simp.SimpMessagingTemplate
 import org.springframework.web.bind.annotation.*
 
 
 @RestController
 @RequestMapping("/pis")
 class PiController {
-
-    @Autowired
-    private lateinit var messagingTemplate: SimpMessagingTemplate
 
     @Autowired
     private lateinit var piService: PiService
@@ -46,6 +42,7 @@ class PiController {
         piService = service
     }
 
+
     @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
     @Authenticate
     fun getPis(): ResponseEntity<PiCollectionDto> {
@@ -54,6 +51,7 @@ class PiController {
         val pisResponse = piService.getPis(user)
         return ResponseEntity(pisResponse, HttpStatus.OK)
     }
+
 
     @GetMapping(path = ["all"], produces = [MediaType.APPLICATION_JSON_VALUE])
     @Admin
@@ -79,7 +77,7 @@ class PiController {
         val name = piDto.getName()
         val roomNo = piDto.getRoomNo()
         piService.addPi(macAddress, name, roomNo)
-        handlePiRequest(macAddress,true)
+        piService.handlePiRequest(macAddress,true)
         return ResponseEntity(HttpStatus.CREATED)
     }
 
@@ -88,7 +86,7 @@ class PiController {
     @Authenticate
     fun declinePiRequest(@PathVariable macAddress: String): ResponseEntity<HttpStatus> {
         piService.declinePiRequest(macAddress)
-        handlePiRequest(macAddress, false)
+        piService.handlePiRequest(macAddress, false)
         return ResponseEntity(HttpStatus.NO_CONTENT)
     }
 

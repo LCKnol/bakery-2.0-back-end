@@ -3,16 +3,21 @@ package nl.han.oose.colossus.backend.bakery2.pi
 import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiRequestsCollectionDto
-import nl.han.oose.colossus.backend.bakery2.exceptions.HttpNotFoundException
+import nl.han.oose.colossus.backend.bakery2.picommunicator.dto.PiAcceptDto
+import nl.han.oose.colossus.backend.bakery2.picommunicator.dto.SocketResponseDto
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Primary
 import org.springframework.stereotype.Component
+import org.springframework.messaging.simp.SimpMessagingTemplate
 
 @Primary
 @Component
 class PiServiceImp : PiService {
     @Autowired
     private lateinit var piDao: PiDao
+
+    @Autowired
+    private lateinit var messagingTemplate: SimpMessagingTemplate
 
     override fun getPis(user: Int): PiCollectionDto {
         val pis = piDao.getPis(user)
@@ -43,6 +48,15 @@ class PiServiceImp : PiService {
 
     private fun deletePiRequest(macAddress: String) {
         piDao.deletePiRequest(macAddress)
+    }
+
+    override fun handlePiRequest(macAddress: String, isAccepted: Boolean) {
+        val piAcceptDto = PiAcceptDto()
+        piAcceptDto.setIsAccepted(isAccepted)
+        val socketResponseDto = SocketResponseDto()
+        socketResponseDto.setBody(piAcceptDto)
+        socketResponseDto.setInstruction("init-pi")
+        messagingTemplate.convertAndSend("/topic/init-pi/$macAddress", socketResponseDto)
     }
 
     override fun editPi(piDto: PiDto, userId: Int) {

@@ -13,4 +13,5 @@ interface PiService {
     fun getPi(piId: Int):PiDto
     fun addPi(macAddress: String, name: String, roomno: String)
     fun declinePiRequest(macAddress: String)
+    fun handlePiRequest(macAddress: String, isAccepted: Boolean)
 }
