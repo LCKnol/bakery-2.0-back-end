@@ -1,6 +1,8 @@
 package nl.han.oose.colossus.backend.bakery2.users
 
 import nl.han.oose.colossus.backend.bakery2.database.DatabaseConnection
+import nl.han.oose.colossus.backend.bakery2.dto.RoomCollectionDto
+import nl.han.oose.colossus.backend.bakery2.dto.TeamCollectionDto
 import nl.han.oose.colossus.backend.bakery2.dto.UserDto
 import nl.han.oose.colossus.backend.bakery2.dto.UserInfoDto
 import org.springframework.beans.factory.annotation.Autowired

@@ -58,7 +58,7 @@ class AuthenticationControllerTests {
     fun testLogoutSuccess() {
         // Arrange
         val mockToken = "myToken"
-        Mockito.`when`(headerService.getToken()).thenReturn(mockToken)
+        `when`(headerService.getToken()).thenReturn(mockToken)
         Mockito.doNothing().`when`(authenticationService).destroySession(mockToken)
 
         // Act
