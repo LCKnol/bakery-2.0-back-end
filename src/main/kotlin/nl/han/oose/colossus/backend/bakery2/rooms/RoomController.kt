@@ -6,9 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/rooms")
@@ -25,5 +23,12 @@ class RoomController {
     @Authenticate
     fun getAllRooms(): ResponseEntity<RoomCollectionDto> {
         return ResponseEntity(roomService.getAllRooms(), HttpStatus.OK)
+    }
+
+    @DeleteMapping(path = ["/{roomNo}"])
+    @Authenticate
+    fun deleteRoom(@PathVariable roomNo: String): ResponseEntity<HttpStatus> {
+        roomService.deleteRoom(roomNo)
+        return ResponseEntity(HttpStatus.OK)
     }
 }
