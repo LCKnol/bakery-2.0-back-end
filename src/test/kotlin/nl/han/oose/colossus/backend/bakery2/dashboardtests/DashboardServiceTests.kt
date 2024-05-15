@@ -4,10 +4,9 @@ import junit.framework.Assert.assertEquals
 import nl.han.oose.colossus.backend.bakery2.dashboards.*
 import nl.han.oose.colossus.backend.bakery2.dto.DashboardCollectionDto
 import nl.han.oose.colossus.backend.bakery2.dto.DashboardDto
+import nl.han.oose.colossus.backend.bakery2.dto.TeamDto
 import nl.han.oose.colossus.backend.bakery2.pi.PiDao
-import nl.han.oose.colossus.backend.bakery2.exceptions.HttpForbiddenException
 import nl.han.oose.colossus.backend.bakery2.exceptions.HttpNotFoundException
-import nl.han.oose.colossus.backend.bakery2.util.MockitoHelper
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -35,20 +34,20 @@ class DashboardServiceTests {
     fun testGetAllDashboardsCallsNextDaoFunction() {
         // Arrange
         val expectedDashboards = DashboardCollectionDto()
-        `when`(dashboardsDao.getAllDashboards()).thenReturn(expectedDashboards)
+        `when`(dashboardsDao.getAllDashboards(1)).thenReturn(expectedDashboards)
 
         // Act
-        val result = sut.getAllDashboards()
+        val result = sut.getAllDashboards(1)
 
         // Assert
         assertEquals(expectedDashboards, result)
-        verify(dashboardsDao).getAllDashboards()
+        verify(dashboardsDao).getAllDashboards(1)
     }
 
     @Test
     fun testAddDashboardsCallsNextDaoFunction() {
         // Arrange
-        val dashboard = DashboardDto(1, "test", "test", "test", 1)
+        val dashboard = DashboardDto(1, "test", "test", "test", TeamDto(), true)
 
         // Act
         sut.addDashboard(dashboard)
@@ -63,10 +62,8 @@ class DashboardServiceTests {
         val mockDashboardId = 1
         val mockUserId = 2
 
-        `when`(dashboardsDao.getUserIdFromDashboard(mockDashboardId)).thenReturn(mockUserId)
-
         // Act & Assert
-        assertDoesNotThrow { sut.deleteDashboard(mockDashboardId, mockUserId) }
+        assertDoesNotThrow { sut.deleteDashboard(mockDashboardId) }
 
         verify(piDao).removeDashboardFromPis(mockDashboardId)
         verify(dashboardsDao).deleteDashboard(mockDashboardId)
@@ -75,44 +72,27 @@ class DashboardServiceTests {
     @Test
     fun testEditDashboardCallsNextDaoFunction() {
         // Arrange
+        val teamId = 1
+        val teamName = "testTeam"
+        val team = TeamDto()
+        team.setName(teamName)
+        team.setId(teamId)
+
         val dashboardId = 1
-        val userId = 1
         val dashboard = DashboardDto(
             dashboardId,
             "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
             "meme",
             "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.vecteezy.com%2Fsystem%2Fresources%2Fpreviews%2F013%2F480%2F841%2Foriginal%2Fcartoon-illustration-of-mother-and-baby-ducks-vector.jpg&f=1&nofb=1&ipt=44a60e01529dd6fb9a7ee5510fd043aa451bbf13599518a5ae912f2499fd38a8&ipo=images",
-            userId
+            team,
+            true
         )
-        `when`(dashboardsDao.getUserIdFromDashboard(dashboardId)).thenReturn(userId)
 
         // Act
-        sut.editDashboard(dashboard, userId)
+        sut.editDashboard(dashboard)
 
         // Assert
         verify(dashboardsDao).editDashboard(dashboard)
-    }
-
-    @Test
-    fun testEditDashboardThrowsForbiddenExceptionWhenUserDoesNotHavePermission() {
-        // Arrange
-        val dashboardId = 1
-        val userId = 1
-        val dashboard = DashboardDto(
-            dashboardId,
-            "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-            "meme",
-            "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.vecteezy.com%2Fsystem%2Fresources%2Fpreviews%2F013%2F480%2F841%2Foriginal%2Fcartoon-illustration-of-mother-and-baby-ducks-vector.jpg&f=1&nofb=1&ipt=44a60e01529dd6fb9a7ee5510fd043aa451bbf13599518a5ae912f2499fd38a8&ipo=images",
-            userId
-        )
-
-        `when`(dashboardsDao.getUserIdFromDashboard(dashboardId)).thenReturn(userId + 1)
-
-        // Act & Assert
-        assertThrows(HttpForbiddenException::class.java) {
-            sut.editDashboard(dashboard, userId)
-        }
-        verify(dashboardsDao, never()).editDashboard(MockitoHelper.anyObject())
     }
 
     @Test
@@ -124,12 +104,13 @@ class DashboardServiceTests {
             "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
             "Dashboard",
             "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.vecteezy.com%2Fsystem%2Fresources%2Fpreviews%2F013%2F480%2F841%2Foriginal%2Fcartoon-illustration-of-mother-and-baby-ducks-vector.jpg&f=1&nofb=1&ipt=44a60e01529dd6fb9a7ee5510fd043aa451bbf13599518a5ae912f2499fd38a8&ipo=images",
-            1
+            TeamDto(),
+            true
         )
-        `when`(dashboardsDao.getDashboard(dashboardId)).thenReturn(expectedDashboard)
+        `when`(dashboardsDao.getDashboard(dashboardId, 1)).thenReturn(expectedDashboard)
 
         // Act
-        val result = sut.getDashboard(dashboardId)
+        val result = sut.getDashboard(dashboardId, 1)
 
         // Assert
         assertEquals(expectedDashboard, result)
@@ -139,11 +120,11 @@ class DashboardServiceTests {
     fun testGetDashboardThrowsNotFoundExceptionWhenDashboardDoesNotExist() {
         // Arrange
         val dashboardId = 1
-        `when`(dashboardsDao.getDashboard(dashboardId)).thenReturn(null)
+        `when`(dashboardsDao.getDashboard(dashboardId, 1)).thenReturn(null)
 
         // Act & Assert
         assertThrows(HttpNotFoundException::class.java) {
-            sut.getDashboard(dashboardId)
+            sut.getDashboard(dashboardId, 1)
         }
     }
 }

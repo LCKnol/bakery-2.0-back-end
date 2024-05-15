@@ -30,9 +30,9 @@ class DashboardsDaoImp : DashboardsDao {
     @Throws(ServerErrorException::class)
     override fun addDashboard(dashboardDto: DashboardDto) {
         val statement =
-            databaseConnection.prepareStatement("INSERT INTO DASHBOARD (USERID,NAME,DASHBOARDURL,IMAGEURL) VALUES(?,?,?,?)")
-        statement.setInt(1, dashboardDto.getUserId())
-        statement.setString(2, dashboardDto.getName())
+            databaseConnection.prepareStatement("INSERT INTO DASHBOARD (TEAMID,NAME,DASHBOARDURL,IMAGEURL) VALUES(?,?,?,?)")
+        statement.setInt(1, dashboardDto.getTeam().getId())
+        statement.setString(2, dashboardDto.getDashboardName())
         statement.setString(3, dashboardDto.getDashboardUrl())
         statement.setString(4, dashboardDto.getImageUrl())
         statement.executeUpdate()
@@ -40,19 +40,21 @@ class DashboardsDaoImp : DashboardsDao {
     }
 
     @Throws(ServerErrorException::class)
-    override fun getAllDashboards(): DashboardCollectionDto {
+    override fun getAllDashboards(userId: Int): DashboardCollectionDto {
         val newDashboardCollectionDto: DashboardCollectionDto
-        val statement = databaseConnection.prepareStatement("SELECT * FROM DASHBOARD ")
+        val statement = databaseConnection.prepareStatement("SELECT d.*, t.TEAMNAME, (exists(select * from userinteam where userid = ? and teamid = t.TEAMID)) as hasAccess FROM DASHBOARD d left join team t on d.TEAMID = t.TEAMID ")
+        statement.setInt(1, userId)
         val resultSet = statement.executeQuery()
         newDashboardCollectionDto = dashboardsMapper.getAllDashboardsMapper(resultSet)
         statement.close()
         return newDashboardCollectionDto
     }
 
-    override fun getDashboard(dashboardId: Int): DashboardDto? {
+    override fun getDashboard(dashboardId: Int, userId: Int): DashboardDto? {
         val connection = databaseConnection.getConnection()
-        val statement = databaseConnection.prepareStatement("SELECT * FROM DASHBOARD WHERE DASHBOARDID = ?")
-        statement.setInt(1, dashboardId)
+        val statement = databaseConnection.prepareStatement("SELECT d.*, t.TEAMNAME, (exists(select * from userinteam where userid = ? and teamid = t.TEAMID)) as hasAccess FROM DASHBOARD d left join team t on d.TEAMID = t.TEAMID WHERE DASHBOARDID = ?")
+        statement.setInt(1, userId)
+        statement.setInt(2, dashboardId)
         val result = statement.executeQuery()
         val dashboard = dashboardsMapper.getDashboardMapper(result)
         statement.close()
@@ -64,9 +66,9 @@ class DashboardsDaoImp : DashboardsDao {
     override fun editDashboard(dashboardDto: DashboardDto) {
         val connection = databaseConnection.getConnection()
         val statement =
-            connection.prepareStatement("UPDATE DASHBOARD SET USERID = ?, NAME = ?, DASHBOARDURL = ?, IMAGEURL = ? WHERE DASHBOARDID = ?")
-        statement.setInt(1, dashboardDto.getUserId())
-        statement.setString(2, dashboardDto.getName())
+            connection.prepareStatement("UPDATE DASHBOARD SET TEAMID = ?, NAME = ?, DASHBOARDURL = ?, IMAGEURL = ? WHERE DASHBOARDID = ?")
+        statement.setInt(1, dashboardDto.getTeam().getId())
+        statement.setString(2, dashboardDto.getDashboardName())
         statement.setString(3, dashboardDto.getDashboardUrl())
         statement.setString(4, dashboardDto.getImageUrl())
         statement.setInt(5, dashboardDto.getId())
@@ -84,21 +86,6 @@ class DashboardsDaoImp : DashboardsDao {
             statement.close()
         } catch (e: SQLException) {
             println(e.message)
-        }
-    }
-
-    override fun getUserIdFromDashboard(dashboardId: Int): Int? {
-        val query = "SELECT USERID FROM DASHBOARD WHERE DASHBOARDID = ?"
-        try {
-            val statement = databaseConnection.prepareStatement(query)
-            statement.setInt(1, dashboardId)
-            val resultSet = statement.executeQuery()
-            val result = dashboardsMapper.getUserIdMapper(resultSet)
-            statement.close()
-            return result
-        } catch (e: SQLException) {
-            println(e.message)
-            return null
         }
     }
 

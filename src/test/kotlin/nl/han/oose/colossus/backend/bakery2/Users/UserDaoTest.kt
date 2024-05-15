@@ -21,7 +21,6 @@ class UserDaoTest {
     private lateinit var userMapper: UserMapper
     private lateinit var dbConnection: DatabaseConnection
 
-    @Test
     @BeforeEach
     fun setUp() {
         sut = UserDaoImp()

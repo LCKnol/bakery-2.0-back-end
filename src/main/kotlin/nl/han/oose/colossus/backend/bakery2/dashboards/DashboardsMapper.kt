@@ -8,5 +8,5 @@ interface DashboardsMapper {
 
     fun getAllDashboardsMapper(resultSet: ResultSet): DashboardCollectionDto
     fun getDashboardMapper(resultSet: ResultSet): DashboardDto?
-    fun getUserIdMapper(resultSet: ResultSet): Int?
+    fun getTeamIdMapper(resultSet: ResultSet): Int?
 }

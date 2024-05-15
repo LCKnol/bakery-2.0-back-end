@@ -21,7 +21,7 @@ DROP TABLE IF EXISTS PIREQUEST;
 create table DASHBOARD
 (
     DASHBOARDID          int not null AUTO_INCREMENT,
-    USERID               int,
+    TEAMID               int,
     NAME                 varchar(64) not null,
     DASHBOARDURL         varchar(1024) not null,
     IMAGEURL             varchar(1024),
@@ -118,23 +118,6 @@ VALUES ('15.05');
 INSERT INTO ROOM (ROOMNO)
 VALUES ('13.01');
 
-INSERT INTO DASHBOARD (USERID, NAME, DASHBOARDURL, IMAGEURL)
-VALUES (1, 'MEMES', 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-        'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.vecteezy.com%2Fsystem%2Fresources%2Fpreviews%2F013%2F480%2F841%2Foriginal%2Fcartoon-illustration-of-mother-and-baby-ducks-vector.jpg&f=1&nofb=1&ipt=44a60e01529dd6fb9a7ee5510fd043aa451bbf13599518a5ae912f2499fd38a8&ipo=images');
-
-INSERT INTO DASHBOARD (USERID, NAME, DASHBOARDURL, IMAGEURL)
-VALUES (2, 'FancyDashboard', 'https://www.aldi.nl/',
-        'https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fclipart-library.com%2Fnewhp%2F85-850924_alien-spaceship-ufo-future-fantasy-futuristic-alien-in.png&f=1&nofb=1&ipt=152625c66c7e671454fe7a31fec903a6adf7dad480b8a2e425678a491e130887&ipo=images');
-
-INSERT INTO PI (ROOMNO, DASHBOARDID, NAME, MACADDRESS, STATUS)
-VALUES ('14.02', null, '14.02:01', 'aa:41:16:f3:81:fc', 'offline');
-
-INSERT INTO PI (ROOMNO, DASHBOARDID, NAME, MACADDRESS, STATUS)
-VALUES ('14.02', 1, '14.02:02', 'bb:41:16:a3:81:fc', 'online');
-
-INSERT INTO PI (ROOMNO, DASHBOARDID, NAME, MACADDRESS, STATUS)
-VALUES ('15.05', null, '15.05:01', 'cc:41:00:f3:81:fc', null);
-
 INSERT INTO TEAM (TEAMNAME)
 VALUES ('Colossus');
 
@@ -146,6 +129,23 @@ VALUES ('TheBestTeamingTeamEverToHaveTeamed');
 
 INSERT INTO TEAM (TEAMNAME)
 VALUES ('MediocreTeam');
+
+INSERT INTO DASHBOARD (TEAMID, NAME, DASHBOARDURL, IMAGEURL)
+VALUES (1, 'MEMES', 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+        'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.vecteezy.com%2Fsystem%2Fresources%2Fpreviews%2F013%2F480%2F841%2Foriginal%2Fcartoon-illustration-of-mother-and-baby-ducks-vector.jpg&f=1&nofb=1&ipt=44a60e01529dd6fb9a7ee5510fd043aa451bbf13599518a5ae912f2499fd38a8&ipo=images');
+
+INSERT INTO DASHBOARD (TEAMID, NAME, DASHBOARDURL, IMAGEURL)
+VALUES (2, 'FancyDashboard', 'https://www.aldi.nl/',
+        'https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fclipart-library.com%2Fnewhp%2F85-850924_alien-spaceship-ufo-future-fantasy-futuristic-alien-in.png&f=1&nofb=1&ipt=152625c66c7e671454fe7a31fec903a6adf7dad480b8a2e425678a491e130887&ipo=images');
+
+INSERT INTO PI (ROOMNO, DASHBOARDID, NAME, MACADDRESS, STATUS)
+VALUES ('14.02', null, '14.02:01', 'aa:41:16:f3:81:fc', 'offline');
+
+INSERT INTO PI (ROOMNO, DASHBOARDID, NAME, MACADDRESS, STATUS)
+VALUES ('14.02', 1, '14.02:02', 'bb:41:16:a3:81:fc', 'online');
+
+INSERT INTO PI (ROOMNO, DASHBOARDID, NAME, MACADDRESS, STATUS)
+VALUES ('15.05', null, '15.05:01', 'cc:41:00:f3:81:fc', null);
 
 INSERT INTO TEAMINROOM (TEAMID, ROOMNO)
 VALUES (1, '13.01');
@@ -182,8 +182,8 @@ VALUES('52:8D:4E:9A:2F:71', '2024-04-24 09:36:22');
 INSERT INTO PIREQUEST (MACADDRESS, REQUESTEDON)
 VALUES('A7:B1:3E:6F:8C:D2', '2024-04-25 18:45:10');
 
-alter table DASHBOARD add constraint FK_DASHBOARDFROMUSER foreign key (USERID)
-    references USERS (USERID) on delete restrict on update restrict;
+alter table DASHBOARD add constraint FK_DASHBOARDFROMTEAM foreign key (TEAMID)
+    references TEAM (TEAMID) on delete restrict on update restrict;
 
 alter table PI add constraint FK_DASHBOARDONPI foreign key (DASHBOARDID)
     references DASHBOARD (DASHBOARDID) on delete restrict on update restrict;
