@@ -20,8 +20,8 @@ class UserDaoImp : UserDao {
     @Autowired
     private lateinit var databaseConnection: DatabaseConnection
 
-    override fun setDatabaseConnection(databaseConnection: DatabaseConnection) {
-        this.databaseConnection = databaseConnection
+    override fun setDatabaseConnection(connection: DatabaseConnection) {
+        this.databaseConnection = connection
     }
 
     override fun setUserMapper(mapper: UserMapper) {
