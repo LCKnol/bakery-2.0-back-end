@@ -1,11 +1,12 @@
 package nl.han.oose.colossus.backend.bakery2.dto
 
 class PiDto {
-    private var id : Int = 0
+    private var id: Int = 0
     private var name: String = ""
     private var status: String = ""
     private var dashboardName: String = ""
     private var macAddress: String = ""
+    private var ipAddress: String = ""
     private var roomNo: String = ""
 
     fun getId(): Int {
@@ -15,6 +16,7 @@ class PiDto {
     fun setId(id: Int) {
         this.id = id
     }
+
     fun getName(): String {
         return name
     }
@@ -45,6 +47,14 @@ class PiDto {
 
     fun setMacAddress(macAddress: String) {
         this.macAddress = macAddress
+    }
+
+    fun getIpAddress(): String {
+        return this.ipAddress
+    }
+
+    fun setIpAddress(ipAddress: String) {
+        this.ipAddress = ipAddress
     }
 
     fun getRoomNo(): String {

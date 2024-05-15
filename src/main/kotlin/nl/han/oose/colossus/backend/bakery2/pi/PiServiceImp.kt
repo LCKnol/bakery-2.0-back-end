@@ -37,10 +37,9 @@ class PiServiceImp : PiService {
         return piDao.getAllPiRequests()
     }
 
-    override fun addPi(macAddress: String, name: String, roomno: String) {
-        piDao.insertPi(macAddress, name, roomno)
+    override fun addPi(macAddress: String, ipAddress: String, name: String, roomno: String) {
+        piDao.insertPi(macAddress, ipAddress, name, roomno)
         deletePiRequest(macAddress)
-
     }
 
     override fun declinePiRequest(macAddress: String) {
@@ -61,8 +60,7 @@ class PiServiceImp : PiService {
     }
 
     override fun editPi(piDto: PiDto, userId: Int) {
-
-       piDao.editPi(piDto)
+        piDao.editPi(piDto)
     }
 
     override fun getPi(piId: Int): PiDto {

@@ -75,11 +75,13 @@ class PiDaoImp : PiDao {
     }
 
     @Throws(ServerErrorException::class)
-    override fun insertPi(macAddress: String, name: String, roomno: String) {
-        val statement = dbConnection.prepareStatement("INSERT INTO PI (macAddress, name, roomno) VALUES(?, ?, ?)")
+    override fun insertPi(macAddress: String, ipAddress: String, name: String, roomno: String) {
+        val statement =
+            dbConnection.prepareStatement("INSERT INTO PI (macAddress, ipAddress, name, roomno) VALUES(?, ?, ?, ?)")
         statement.setString(1, macAddress)
-        statement.setString(2, name)
-        statement.setString(3, roomno)
+        statement.setString(2, ipAddress)
+        statement.setString(3, name)
+        statement.setString(4, roomno)
         statement.executeUpdate()
         statement.close()
     }
@@ -94,7 +96,7 @@ class PiDaoImp : PiDao {
 
 
     @Throws(ServerErrorException::class)
-    override fun editPi(piDto: PiDto)  {
+    override fun editPi(piDto: PiDto) {
         val connection = dbConnection.getConnection()
         val statement =
             connection.prepareStatement("UPDATE PI SET NAME = ?, ROOMNO = ? WHERE PIID = ?")
@@ -109,10 +111,11 @@ class PiDaoImp : PiDao {
 
     override fun getPi(piId: Int): PiDto? {
         val connection = dbConnection.getConnection()
-        val statement = dbConnection.prepareStatement("SELECT p.*, d.NAME AS dashboardname FROM PI p LEFT JOIN DASHBOARD d ON p.DASHBOARDID = d.DASHBOARDID WHERE PIID =?")
+        val statement =
+            dbConnection.prepareStatement("SELECT p.*, d.NAME AS dashboardname FROM PI p LEFT JOIN DASHBOARD d ON p.DASHBOARDID = d.DASHBOARDID WHERE PIID =?")
         statement.setInt(1, piId)
         val result = statement.executeQuery()
-        val pi= piMapper.getPiMapper(result)
+        val pi = piMapper.getPiMapper(result)
         statement.close()
         connection.close()
         return pi

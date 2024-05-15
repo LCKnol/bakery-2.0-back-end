@@ -71,14 +71,15 @@ class PiController {
     @Authenticate
     fun initPi(@RequestBody piDto: PiDto): ResponseEntity<HttpStatus> {
         val macAddress = piDto.getMacAddress()
+        val ipAddress = piDto.getIpAddress()
         val name = piDto.getName()
         val roomNo = piDto.getRoomNo()
-        piService.addPi(macAddress, name, roomNo)
-        piService.handlePiRequest(macAddress,true)
+        piService.addPi(macAddress, ipAddress, name, roomNo)
+        piService.handlePiRequest(macAddress, true)
         return ResponseEntity(HttpStatus.CREATED)
     }
 
-    @DeleteMapping(path=["init/{macAddress}"])
+    @DeleteMapping(path = ["init/{macAddress}"])
     @Admin
     @Authenticate
     fun declinePiRequest(@PathVariable macAddress: String): ResponseEntity<HttpStatus> {
@@ -92,12 +93,13 @@ class PiController {
         val result = this.piService.getPi(piId)
         return ResponseEntity(result, HttpStatus.OK)
     }
+
     @PutMapping(consumes = [MediaType.APPLICATION_JSON_VALUE])
     @Authenticate
     fun editPi(@RequestBody piDto: PiDto): ResponseEntity<HttpStatus> {
         val token = this.headerService.getToken()
         val userId = this.userService.getUserId(token)
-        this.piService.editPi(piDto,userId)
+        this.piService.editPi(piDto, userId)
         return ResponseEntity(HttpStatus.OK)
     }
 }

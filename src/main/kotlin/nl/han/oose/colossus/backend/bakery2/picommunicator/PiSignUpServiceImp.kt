@@ -12,8 +12,8 @@ class PiSignUpServiceImp : PiSignUpService {
     @Autowired
     private lateinit var piSignUpDao: PiSignUpDao
 
-    override fun createSignUpRequest(macAddress: String) {
-        piSignUpDao.insertSignUpRequest(macAddress)
+    override fun createSignUpRequest(macAddress: String, ipAddress: String) {
+        piSignUpDao.insertSignUpRequest(macAddress, ipAddress)
     }
 
     override fun setPiSignUpDao(piSignUpDao: PiSignUpDao) {
@@ -21,7 +21,7 @@ class PiSignUpServiceImp : PiSignUpService {
     }
 
     override fun checkPiExists(request: PiSignUpRequestDto): Boolean {
-       return this.piSignUpDao.checkPiExists(request)
+        return this.piSignUpDao.checkPiExists(request)
     }
 
 

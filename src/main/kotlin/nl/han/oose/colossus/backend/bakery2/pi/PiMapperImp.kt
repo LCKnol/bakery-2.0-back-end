@@ -40,12 +40,14 @@ class PiMapperImp : PiMapper {
         val piRequests = arrayListOf<PiRequestDto>()
         while (resultSet.next()) {
             val id = resultSet.getInt("requestid")
-            val requestedOn= resultSet.getString("requestedon")
+            val requestedOn = resultSet.getString("requestedon")
             val macAddress = resultSet.getString("macaddress")
+            val ipAddress = resultSet.getString("ipaddress")
             val piRequestDto = PiRequestDto()
             piRequestDto.setId(id)
             piRequestDto.setRequestedOn(requestedOn)
             piRequestDto.setMacAddress(macAddress)
+            piRequestDto.setIpAddress(ipAddress)
             piRequests.add(piRequestDto)
         }
         piRequestsCollection.setPiRequests(piRequests)

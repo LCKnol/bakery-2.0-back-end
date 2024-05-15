@@ -18,9 +18,11 @@ class PiSignUpDaoImp : PiSignUpDao {
     }
 
     @Throws(ServerErrorException::class)
-    override fun insertSignUpRequest(macAddress: String) {
-        val statement = databaseConnection.prepareStatement("INSERT INTO PiRequest (macAddress, requestedOn) VALUES(?, NOW())")
+    override fun insertSignUpRequest(macAddress: String, ipAddress: String) {
+        val statement =
+            databaseConnection.prepareStatement("INSERT INTO PIREQUEST (macAddress, ipAddress, requestedOn) VALUES(?, ?, NOW())")
         statement.setString(1, macAddress)
+        statement.setString(2, ipAddress)
         statement.executeUpdate()
         statement.close()
     }
