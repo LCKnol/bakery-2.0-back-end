@@ -21,6 +21,14 @@ class TeamController {
     @Autowired
     private lateinit var headerService: HeaderService
 
+    fun setTeamService(teamService: TeamService) {
+        this.teamService = teamService
+    }
+
+    fun setHeaderService(headerService: HeaderService) {
+        this.headerService = headerService
+    }
+
     @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
     @Authenticate
     fun getTeamsFromUser(): ResponseEntity<TeamCollectionDto> {

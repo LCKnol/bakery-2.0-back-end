@@ -1,4 +1,4 @@
-package nl.han.oose.colossus.backend.bakery2.Pi
+package nl.han.oose.colossus.backend.bakery2.pi
 
 
 import junit.framework.Assert.assertEquals

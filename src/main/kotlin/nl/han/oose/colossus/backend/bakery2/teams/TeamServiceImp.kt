@@ -11,6 +11,10 @@ class TeamServiceImp: TeamService {
     @Autowired
     private lateinit var teamDao: TeamDao
 
+    override fun setTeamDao(teamDao: TeamDao) {
+        this.teamDao = teamDao
+    }
+
     override fun getTeamsFromUser(userId: Int): TeamCollectionDto {
         return teamDao.getTeams(userId)
     }
