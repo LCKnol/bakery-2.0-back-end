@@ -26,11 +26,13 @@ class TeamDaoImp: TeamDao {
 
     override fun getTeams(userId: Int): TeamCollectionDto {
         val query = "SELECT * FROM TEAM WHERE TEAMID IN (SELECT TEAMID FROM USERINTEAM WHERE USERID = ?)"
-        val preparedStatement = dbConnection.prepareStatement(query)
+        val conn = dbConnection.getConnection()
+        val preparedStatement = conn.prepareStatement(query)
         preparedStatement.setInt(1, userId)
         val resultSet = preparedStatement.executeQuery()
         val teams = teamMapper.mapUserTeams(resultSet)
         preparedStatement.close()
+        conn.close()
         return teams
     }
 }
