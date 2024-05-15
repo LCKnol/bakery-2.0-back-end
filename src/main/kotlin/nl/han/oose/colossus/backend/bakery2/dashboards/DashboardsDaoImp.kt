@@ -50,7 +50,7 @@ class DashboardsDaoImp : DashboardsDao {
         return newDashboardCollectionDto
     }
 
-    override fun getDashboard(dashboardId: Int, userId: Int): DashboardDto? {
+    override fun getDashboardForUser(dashboardId: Int, userId: Int): DashboardDto? {
         val connection = databaseConnection.getConnection()
         val statement = databaseConnection.prepareStatement("SELECT d.*, t.TEAMNAME, (exists(select * from userinteam where userid = ? and teamid = t.TEAMID)) as hasAccess FROM DASHBOARD d left join team t on d.TEAMID = t.TEAMID WHERE DASHBOARDID = ?")
         statement.setInt(1, userId)
@@ -75,6 +75,20 @@ class DashboardsDaoImp : DashboardsDao {
         statement.executeUpdate()
         statement.close()
         connection.close()
+    }
+
+    override fun getDashboardUrl(dashboardId: Int): String {
+        var url = ""
+        val connection = databaseConnection.getConnection()
+        val statement = databaseConnection.prepareStatement("SELECT DASHBOARDURL FROM DASHBOARD WHERE DASHBOARDID = ?")
+        statement.setInt(1, dashboardId)
+        val result = statement.executeQuery()
+        while (result.next()){
+            url = result.getString("DASHBOARDURL")
+        }
+        statement.close()
+        connection.close()
+        return url
     }
 
     override fun deleteDashboard(dashboardId: Int) {
