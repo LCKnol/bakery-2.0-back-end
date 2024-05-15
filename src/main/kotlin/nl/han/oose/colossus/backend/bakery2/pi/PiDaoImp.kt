@@ -106,7 +106,7 @@ class PiDaoImp : PiDao {
         connection.close()
     }
 
-
+    @Throws(ServerErrorException::class)
     override fun getPi(piId: Int): PiDto? {
         val connection = dbConnection.getConnection()
         val statement = dbConnection.prepareStatement("SELECT p.*, d.NAME AS dashboardname FROM PI p LEFT JOIN DASHBOARD d ON p.DASHBOARDID = d.DASHBOARDID WHERE PIID =?")
@@ -118,4 +118,17 @@ class PiDaoImp : PiDao {
         return pi
 
     }
+
+    @Throws(ServerErrorException::class)
+    override fun assignDashboard(piDto: PiDto)  {
+        val connection = dbConnection.getConnection()
+        val statement =
+            connection.prepareStatement("UPDATE PI SET DASHBOARDID = ? WHERE PIID = ?");
+        statement.setInt(1, piDto.getDashboardId())
+        statement.setInt(2,piDto.getId())
+        statement.executeUpdate()
+        statement.close()
+        connection.close()
+    }
+
 }

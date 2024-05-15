@@ -15,7 +15,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.mockito.Mockito.*
 import java.io.InputStreamReader
-import java.sql.ResultSet
 
 class DashboardDaoTests {
 
@@ -110,7 +109,7 @@ class DashboardDaoTests {
         `when`(dashboardsMapper.getDashboardMapper(MockitoHelper.anyObject())).thenReturn(expectedDashboard)
 
         //Act
-        val result = sut.getDashboard(1, 1)
+        val result = sut.getDashboardForUser(1, 1)
 
         //Assert
         verify(dashboardsMapper).getDashboardMapper(MockitoHelper.anyObject())
