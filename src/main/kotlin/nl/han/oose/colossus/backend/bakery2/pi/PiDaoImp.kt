@@ -18,10 +18,10 @@ class PiDaoImp : PiDao {
     private lateinit var piMapper: PiMapper
 
     @Autowired
-    private lateinit var dbConnection: DatabaseConnection
+    private lateinit var databaseConnection: DatabaseConnection
 
     override fun setDatabaseConnection(connection: DatabaseConnection) {
-        dbConnection = connection
+        databaseConnection = connection
     }
 
     override fun setPiMapper(mapper: PiMapper) {
@@ -30,32 +30,34 @@ class PiDaoImp : PiDao {
 
     @Throws(ServerErrorException::class)
     override fun getPis(user: Int): PiCollectionDto {
+        val connection = databaseConnection.getConnection()
         val preparedStatement =
-            dbConnection.prepareStatement("SELECT p.*, d.NAME AS dashboardname FROM PI p LEFT JOIN DASHBOARD d ON p.DASHBOARDID = d.DASHBOARDID WHERE p.roomno IN (SELECT roomno FROM TEAMINROOM WHERE teamid IN (SELECT teamid FROM USERINTEAM WHERE userid = ?))")
+            connection.prepareStatement("SELECT p.*, d.NAME AS dashboardname FROM PI p LEFT JOIN DASHBOARD d ON p.DASHBOARDID = d.DASHBOARDID WHERE p.roomno IN (SELECT roomno FROM TEAMINROOM WHERE teamid IN (SELECT teamid FROM USERINTEAM WHERE userid = ?))")
         preparedStatement.setInt(1, user)
         val resultSet = preparedStatement.executeQuery()
         val pis = piMapper.mapPis(resultSet)
         resultSet.close()
         preparedStatement.close()
+        connection.close()
         return pis
     }
 
+    @Throws(ServerErrorException::class)
     override fun removeDashboardFromPis(dashboardId: Int) {
+        val connection = databaseConnection.getConnection()
         val query = "UPDATE PI SET DASHBOARDID = NULL WHERE DASHBOARDID = ?"
-        try {
-            val statement = dbConnection.prepareStatement(query)
-            statement.setInt(1, dashboardId)
-            statement.executeUpdate()
-        } catch (e: SQLException) {
-            println(e.message)
-        }
+        val statement = connection.prepareStatement(query)
+        statement.setInt(1, dashboardId)
+        statement.executeUpdate()
+        statement.close()
+        connection.close()
     }
 
     @Throws(ServerErrorException::class)
     override fun getAllPis(): PiCollectionDto {
-        val connection = dbConnection.getConnection()
+        val connection = databaseConnection.getConnection()
         val statement =
-            dbConnection.prepareStatement("SELECT p.*, d.NAME AS dashboardname FROM PI p LEFT JOIN DASHBOARD d ON p.DASHBOARDID = d.DASHBOARDID")
+            connection.prepareStatement("SELECT p.*, d.NAME AS dashboardname FROM PI p LEFT JOIN DASHBOARD d ON p.DASHBOARDID = d.DASHBOARDID")
         val result = statement.executeQuery()
         val pis = piMapper.mapPis(result)
         statement.close()
@@ -65,8 +67,8 @@ class PiDaoImp : PiDao {
 
     @Throws(ServerErrorException::class)
     override fun getAllPiRequests(): PiRequestsCollectionDto {
-        val connection = dbConnection.getConnection()
-        val statement = dbConnection.prepareStatement("SELECT * FROM PIREQUEST")
+        val connection = databaseConnection.getConnection()
+        val statement = connection.prepareStatement("SELECT * FROM PIREQUEST")
         val result = statement.executeQuery()
         val piRequests = piMapper.mapPiRequests(result)
         statement.close()
@@ -76,28 +78,31 @@ class PiDaoImp : PiDao {
 
     @Throws(ServerErrorException::class)
     override fun insertPi(macAddress: String, name: String, roomno: String) {
-        val statement = dbConnection.prepareStatement("INSERT INTO PI (macAddress, name, roomno) VALUES(?, ?, ?)")
+        val connection = databaseConnection.getConnection()
+        val statement = connection.prepareStatement("INSERT INTO PI (macAddress, name, roomno) VALUES(?, ?, ?)")
         statement.setString(1, macAddress)
         statement.setString(2, name)
         statement.setString(3, roomno)
         statement.executeUpdate()
         statement.close()
+        connection.close()
     }
 
     @Throws(ServerErrorException::class)
     override fun deletePiRequest(macAddress: String) {
-        val statement = dbConnection.prepareStatement("DELETE FROM PIREQUEST WHERE macAddress = ?")
+        val connection = databaseConnection.getConnection()
+        val statement = connection.prepareStatement("DELETE FROM PIREQUEST WHERE macAddress = ?")
         statement.setString(1, macAddress)
         statement.executeUpdate()
         statement.close()
+        connection.close()
     }
 
 
     @Throws(ServerErrorException::class)
-    override fun editPi(piDto: PiDto)  {
-        val connection = dbConnection.getConnection()
-        val statement =
-            connection.prepareStatement("UPDATE PI SET NAME = ?, ROOMNO = ? WHERE PIID = ?")
+    override fun editPi(piDto: PiDto) {
+        val connection = databaseConnection.getConnection()
+        val statement = connection.prepareStatement("UPDATE PI SET NAME = ?, ROOMNO = ? WHERE PIID = ?")
         statement.setString(1, piDto.getName())
         statement.setString(2, piDto.getRoomNo())
         statement.setInt(3, piDto.getId())
@@ -108,24 +113,23 @@ class PiDaoImp : PiDao {
 
     @Throws(ServerErrorException::class)
     override fun getPi(piId: Int): PiDto? {
-        val connection = dbConnection.getConnection()
-        val statement = dbConnection.prepareStatement("SELECT p.*, d.NAME AS dashboardname FROM PI p LEFT JOIN DASHBOARD d ON p.DASHBOARDID = d.DASHBOARDID WHERE PIID =?")
+        val connection = databaseConnection.getConnection()
+        val statement =
+            connection.prepareStatement("SELECT p.*, d.NAME AS dashboardname FROM PI p LEFT JOIN DASHBOARD d ON p.DASHBOARDID = d.DASHBOARDID WHERE PIID =?")
         statement.setInt(1, piId)
         val result = statement.executeQuery()
-        val pi= piMapper.getPiMapper(result)
+        val pi = piMapper.getPiMapper(result)
         statement.close()
         connection.close()
         return pi
-
     }
 
     @Throws(ServerErrorException::class)
-    override fun assignDashboard(piDto: PiDto)  {
-        val connection = dbConnection.getConnection()
-        val statement =
-            connection.prepareStatement("UPDATE PI SET DASHBOARDID = ? WHERE PIID = ?");
+    override fun assignDashboard(piDto: PiDto) {
+        val connection = databaseConnection.getConnection()
+        val statement = connection.prepareStatement("UPDATE PI SET DASHBOARDID = ? WHERE PIID = ?");
         statement.setInt(1, piDto.getDashboardId())
-        statement.setInt(2,piDto.getId())
+        statement.setInt(2, piDto.getId())
         statement.executeUpdate()
         statement.close()
         connection.close()

@@ -15,6 +15,5 @@ interface AuthenticationService {
 
     fun setUserDao(userDao: UserDao)
 
-
-    fun isAdmin(token : String) : Boolean
+    fun isAdmin(token: String): Boolean
 }

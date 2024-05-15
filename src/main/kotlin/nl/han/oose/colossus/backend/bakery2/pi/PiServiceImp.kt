@@ -72,8 +72,7 @@ class PiServiceImp : PiService {
 
 
     override fun editPi(piDto: PiDto, userId: Int) {
-
-       piDao.editPi(piDto)
+        piDao.editPi(piDto)
     }
 
     override fun getPi(piId: Int): PiDto {

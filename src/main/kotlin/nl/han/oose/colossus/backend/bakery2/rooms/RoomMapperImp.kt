@@ -10,7 +10,7 @@ import java.sql.ResultSet
 @Component
 class RoomMapperImp : RoomMapper {
 
-     override fun mapRooms(resultSet: ResultSet): RoomCollectionDto {
+    override fun mapRooms(resultSet: ResultSet): RoomCollectionDto {
 
         val roomCollection = RoomCollectionDto()
         val rooms = arrayListOf<RoomDto>()
