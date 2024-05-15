@@ -103,18 +103,11 @@ class PiController {
         return ResponseEntity(HttpStatus.OK)
     }
 
-    @DeleteMapping(path=["init/{macAddress}"])
+    @PostMapping("setdashboard",consumes = [MediaType.APPLICATION_JSON_VALUE])
     @Authenticate
-    fun declinePiReques(@PathVariable macAddress: String): ResponseEntity<HttpStatus> {
-        piService.declinePiRequest(macAddress)
-        piService.handlePiRequest(macAddress, false)
-        return ResponseEntity(HttpStatus.NO_CONTENT)
-    }
-
-    @MessageMapping("setdashboard")
-    @Authenticate
-    fun assignDashboardToPi(request: PiDto) {
+    fun assignDashboardToPi(@RequestBody request: PiDto): ResponseEntity<HttpStatus> {
        piService.assignDashboardToPi(request)
+        return ResponseEntity(HttpStatus.OK)
     }
 
 }

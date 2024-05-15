@@ -82,6 +82,7 @@ class PiServiceImp : PiService {
     }
 
     override fun assignDashboardToPi(request: PiDto) {
+        piDao.assignDashboard(request)
         val assignedDashboard = PiSetDashboardDto()
         val dashboardUrl = dashboardDao.getDashboard(request.getDashboardId())?.getDashboardUrl()
         assignedDashboard.setUrl(dashboardUrl!!)
