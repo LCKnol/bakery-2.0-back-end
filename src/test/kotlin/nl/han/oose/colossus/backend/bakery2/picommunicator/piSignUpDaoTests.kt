@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.io.InputStreamReader
 import org.junit.jupiter.api.Assertions
+import org.mockito.Mockito
 
 class piSignUpDaoTests {
 
@@ -47,9 +48,40 @@ class piSignUpDaoTests {
         piSignUpRequestDto.setMacAddress("cc:41:00:f3:81:fc")
 
         //Act
-        val result = sut.checkPiExists(piSignUpRequestDto)
+        val result = sut.checkPiExists(piSignUpRequestDto.getMacAddress())
 
         //Assert
         Assertions.assertEquals(result,true)
+    }
+
+    @Test
+    fun checkPiSignUpExistsReturnsTrue() {
+        // Arrange
+        val macAddress = "mac address"
+        val connection = dbconnection.getConnection()
+        val statement = connection.prepareStatement("insert into pirequest (macaddress, requestedon) values (?, NOW())")
+        statement.setString(1, macAddress)
+        statement.executeUpdate()
+
+        // Act
+        val result = sut.checkPiSignUpExists(macAddress)
+
+        // Assert
+        Assertions.assertTrue(result)
+    }
+
+    @Test
+    fun checkPiSignUpExistsReturnsFalse() {
+        // Arrange
+        val macAddress = "non existant"
+        val connection = dbconnection.getConnection()
+        val statement = connection.prepareStatement("delete from pirequest")
+        statement.executeUpdate()
+
+        // Act
+        val result = sut.checkPiSignUpExists(macAddress)
+
+        // Assert
+        Assertions.assertFalse(result)
     }
 }
