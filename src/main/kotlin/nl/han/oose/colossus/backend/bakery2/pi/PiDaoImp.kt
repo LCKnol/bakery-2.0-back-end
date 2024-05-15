@@ -5,6 +5,7 @@ import nl.han.oose.colossus.backend.bakery2.dto.DashboardDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiRequestsCollectionDto
+import nl.han.oose.colossus.backend.bakery2.picommunicator.dto.PiSignUpRequestDto
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Primary
 import org.springframework.stereotype.Component
@@ -94,7 +95,6 @@ class PiDaoImp : PiDao {
         statement.close()
     }
 
-
     @Throws(ServerErrorException::class)
     override fun editPi(piDto: PiDto) {
         val connection = dbConnection.getConnection()
@@ -108,6 +108,17 @@ class PiDaoImp : PiDao {
         connection.close()
     }
 
+    @Throws(ServerErrorException::class)
+    override fun updatePiIp(piSignUpRequestDto: PiSignUpRequestDto) {
+        val connection = dbConnection.getConnection()
+        val statement =
+            connection.prepareStatement("UPDATE PI SET IPADDRESS = ? WHERE MACADDRESS = ?")
+        statement.setString(1, piSignUpRequestDto.getIpAddress())
+        statement.setString(2, piSignUpRequestDto.getMacAddress())
+        statement.executeUpdate()
+        statement.close()
+        connection.close()
+    }
 
     override fun getPi(piId: Int): PiDto? {
         val connection = dbConnection.getConnection()
@@ -119,6 +130,5 @@ class PiDaoImp : PiDao {
         statement.close()
         connection.close()
         return pi
-
     }
 }

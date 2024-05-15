@@ -30,6 +30,7 @@ class PiSignUpController {
     fun signUpPi(request: PiSignUpRequestDto) {
         if (piSignUpService.checkPiExists(request)) {
             piService.handlePiRequest(request.getMacAddress(), true)
+            piService.updatePiIp(request)
             //todo handle further pi setup like showdashboard
         } else {
             piSignUpService.createSignUpRequest(request.getMacAddress(), request.getIpAddress())

@@ -5,6 +5,7 @@ import nl.han.oose.colossus.backend.bakery2.dto.PiDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiRequestsCollectionDto
 import nl.han.oose.colossus.backend.bakery2.exceptions.HttpNotFoundException
 import nl.han.oose.colossus.backend.bakery2.picommunicator.dto.PiAcceptDto
+import nl.han.oose.colossus.backend.bakery2.picommunicator.dto.PiSignUpRequestDto
 import nl.han.oose.colossus.backend.bakery2.picommunicator.dto.SocketResponseDto
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Primary
@@ -14,6 +15,9 @@ import org.springframework.messaging.simp.SimpMessagingTemplate
 @Primary
 @Component
 class PiServiceImp : PiService {
+    @Autowired
+    private lateinit var piDaoImp: PiDaoImp
+
     @Autowired
     private lateinit var piDao: PiDao
 
@@ -61,6 +65,10 @@ class PiServiceImp : PiService {
 
     override fun editPi(piDto: PiDto, userId: Int) {
         piDao.editPi(piDto)
+    }
+
+    override fun updatePiIp(piSignUpRequestDto: PiSignUpRequestDto) {
+        piDaoImp.updatePiIp(piSignUpRequestDto)
     }
 
     override fun getPi(piId: Int): PiDto {
