@@ -32,6 +32,6 @@ class TeamServiceTests {
 
         // Assert
         verify(teamDao).getTeams(1)
-        
+
     }
 }
