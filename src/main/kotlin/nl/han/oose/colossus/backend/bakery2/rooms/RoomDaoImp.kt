@@ -29,10 +29,8 @@ class RoomDaoImp : RoomDao {
 
     @Throws(ServerErrorException::class)
     override fun getAllRooms(): RoomCollectionDto {
-
         val connection = dbConnection.getConnection()
-        val statement =
-            dbConnection.prepareStatement("SELECT roomNo FROM ROOM")
+        val statement = connection.prepareStatement("SELECT roomNo FROM ROOM")
         val result = statement.executeQuery()
         val rooms = roomMapper.mapRooms(result)
         statement.close()

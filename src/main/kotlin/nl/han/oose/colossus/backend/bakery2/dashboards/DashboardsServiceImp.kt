@@ -27,7 +27,8 @@ class DashboardsServiceImp : DashboardsService {
     }
 
     override fun getDashboard(dashboardId: Int, userId: Int): DashboardDto {
-        val dashboard = dashboardDao.getDashboardForUser(dashboardId, userId) ?: throw HttpNotFoundException("Dashboard does not exist")
+        val dashboard = dashboardDao.getDashboardForUser(dashboardId, userId)
+            ?: throw HttpNotFoundException("Dashboard does not exist")
         return dashboard
     }
 
