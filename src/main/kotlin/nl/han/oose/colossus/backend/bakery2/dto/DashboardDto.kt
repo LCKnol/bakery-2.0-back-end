@@ -6,18 +6,21 @@ class DashboardDto {
 
     private var dashboardUrl: String
 
-    private var name: String
+    private var dashboardName: String
 
     private var imageUrl: String
 
-    private var userId: Int
+    private var team: TeamDto
 
-    constructor(id: Int, dashboardUrl: String, name: String, imageUrl: String, userId: Int) {
+    private var hasAccess: Boolean
+
+    constructor(id: Int, dashboardUrl: String, dashboardName: String, imageUrl: String, team: TeamDto, hasAccess: Boolean) {
         this.id = id
         this.dashboardUrl = dashboardUrl
-        this.name = name
+        this.dashboardName = dashboardName
         this.imageUrl = imageUrl
-        this.userId = userId
+        this.team = team
+        this.hasAccess = hasAccess
     }
 
     fun setId(newValue: Int) {
@@ -28,12 +31,12 @@ class DashboardDto {
         return this.id // You can still access it within the class
     }
 
-    fun getUserId(): Int {
-        return this.userId // You can still access it within the class
+    fun getTeam(): TeamDto {
+        return this.team // You can still access it within the class
     }
 
-    fun setUserId(newValue: Int) {
-        this.userId = newValue // You can still access it within the class
+    fun setTeam(newValue: TeamDto) {
+        this.team = newValue // You can still access it within the class
     }
 
     fun setDashboardUrl(newValue: String) {
@@ -52,11 +55,19 @@ class DashboardDto {
         return this.imageUrl // You can still access it within the class
     }
 
-    fun setName(newValue: String) {
-        this.name = newValue // You can still access it within the class
+    fun setDashboardName(newValue: String) {
+        this.dashboardName = newValue // You can still access it within the class
     }
 
-    fun getName(): String {
-        return this.name // You can still access it within the class
+    fun getDashboardName(): String {
+        return this.dashboardName // You can still access it within the class
+    }
+
+    fun setHasAccess(newValue: Boolean) {
+        this.hasAccess = newValue
+    }
+
+    fun getHasAccess(): Boolean {
+        return this.hasAccess
     }
 }

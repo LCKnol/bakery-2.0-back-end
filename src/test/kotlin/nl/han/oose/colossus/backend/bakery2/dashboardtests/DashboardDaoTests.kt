@@ -6,6 +6,7 @@ import nl.han.oose.colossus.backend.bakery2.dashboards.DashboardsMapper
 import nl.han.oose.colossus.backend.bakery2.database.DatabaseConnection
 import nl.han.oose.colossus.backend.bakery2.dto.DashboardCollectionDto
 import nl.han.oose.colossus.backend.bakery2.dto.DashboardDto
+import nl.han.oose.colossus.backend.bakery2.dto.TeamDto
 import nl.han.oose.colossus.backend.bakery2.util.MockitoHelper
 import nl.han.oose.colossus.backend.bakery2.util.ScriptRunner
 import org.junit.jupiter.api.Assertions.*
@@ -22,7 +23,7 @@ class DashboardDaoTests {
 
     private lateinit var dashboardsMapper: DashboardsMapper
 
-    private lateinit var resultSet: ResultSet
+    private var team: TeamDto = TeamDto()
 
     private lateinit var dbconnection: DatabaseConnection
 
@@ -35,6 +36,8 @@ class DashboardDaoTests {
         scriptRunner.runScript(InputStreamReader(ClassLoader.getSystemResourceAsStream("BakeryDB_Create.sql")!!))
         sut.setDatabaseConnection(dbconnection)
         sut.setDashboardsMapper(dashboardsMapper)
+        team.setId(1)
+        team.setName("testTeam")
     }
 
     @Test
@@ -44,7 +47,7 @@ class DashboardDaoTests {
         `when`(dashboardsMapper.getAllDashboardsMapper(MockitoHelper.anyObject())).thenReturn(dashboards)
 
         //Act
-        val result = sut.getAllDashboards()
+        val result = sut.getAllDashboards(1)
 
         //Assert
         verify(dashboardsMapper).getAllDashboardsMapper(MockitoHelper.anyObject())
@@ -54,7 +57,7 @@ class DashboardDaoTests {
     @Test
     fun testAddDashboardWorksCorrectly() {
         // Arrange
-        val dashboard = DashboardDto(12, "test", "uniek", "test", 1)
+        val dashboard = DashboardDto(12, "test", "uniek", "test", team, true)
 
         // Act
         sut.addDashboard(dashboard)
@@ -66,7 +69,7 @@ class DashboardDaoTests {
         val finalResult = resultSet.getString(1)
 
         // Assert
-        assertEquals(dashboard.getName(), finalResult)
+        assertEquals(dashboard.getDashboardName(), finalResult)
     }
 
     @Test
@@ -77,7 +80,8 @@ class DashboardDaoTests {
             "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
             "meme update",
             "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.vecteezy.com%2Fsystem%2Fresources%2Fpreviews%2F013%2F480%2F841%2Foriginal%2Fcartoon-illustration-of-mother-and-baby-ducks-vector.jpg&f=1&nofb=1&ipt=44a60e01529dd6fb9a7ee5510fd043aa451bbf13599518a5ae912f2499fd38a8&ipo=images",
-            1
+            team,
+            true
         )
         val statement =
             dbconnection.getConnection().prepareStatement("SELECT NAME FROM DASHBOARD WHERE DASHBOARDID = 1")
@@ -100,12 +104,13 @@ class DashboardDaoTests {
             "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
             "meme update",
             "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.vecteezy.com%2Fsystem%2Fresources%2Fpreviews%2F013%2F480%2F841%2Foriginal%2Fcartoon-illustration-of-mother-and-baby-ducks-vector.jpg&f=1&nofb=1&ipt=44a60e01529dd6fb9a7ee5510fd043aa451bbf13599518a5ae912f2499fd38a8&ipo=images",
-            1
+            TeamDto(),
+            true
         )
         `when`(dashboardsMapper.getDashboardMapper(MockitoHelper.anyObject())).thenReturn(expectedDashboard)
 
         //Act
-        val result = sut.getDashboard(1)
+        val result = sut.getDashboard(1, 1)
 
         //Assert
         verify(dashboardsMapper).getDashboardMapper(MockitoHelper.anyObject())
@@ -120,23 +125,29 @@ class DashboardDaoTests {
         val statement0 =
             dbconnection.getConnection().prepareStatement("UPDATE PI SET DASHBOARDID = NULL WHERE DASHBOARDID = ?")
         statement0.setInt(1, sampleDashboardId)
-        statement0.executeUpdate()
 
-        // Act & Assert
-        // Dashboard with id sampleDashboardId should already be in the database
         val statement1 =
             dbconnection.getConnection().prepareStatement("SELECT DASHBOARDID FROM DASHBOARD WHERE DASHBOARDID = ?")
         statement1.setInt(1, sampleDashboardId)
-        val resultSet1 = statement1.executeQuery()
-        assertTrue(resultSet1.next())
 
-        assertDoesNotThrow { sut.deleteDashboard(sampleDashboardId) }
-
-        // Dashboard with id sampleDashboardId should now be deleted
         val statement2 =
             dbconnection.getConnection().prepareStatement("SELECT DASHBOARDID FROM DASHBOARD WHERE DASHBOARDID = ?")
         statement2.setInt(1, sampleDashboardId)
+
+        // Act & Assert
+        statement0.executeUpdate()
+
+
+        // Dashboard with id sampleDashboardId should already be in the database
+        val resultSet1 = statement1.executeQuery()
+
+        assertDoesNotThrow { sut.deleteDashboard(sampleDashboardId) }
+
         val resultSet2 = statement2.executeQuery()
+
+        assertTrue(resultSet1.next())
+
+        // Dashboard with id sampleDashboardId should now be deleted
         assertFalse(resultSet2.next())
     }
 }

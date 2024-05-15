@@ -27,9 +27,8 @@ class DashboardsServiceImp : DashboardsService {
         piDao = dao
     }
 
-    override fun getDashboard(dashboardId: Int): DashboardDto {
-        val dashboard =
-            dashboardDao.getDashboard(dashboardId) ?: throw HttpNotFoundException("Dashboard does not exist")
+    override fun getDashboard(dashboardId: Int, userId: Int): DashboardDto {
+        val dashboard = dashboardDao.getDashboard(dashboardId, userId) ?: throw HttpNotFoundException("Dashboard does not exist")
         return dashboard
     }
 
@@ -37,26 +36,17 @@ class DashboardsServiceImp : DashboardsService {
         dashboardDao.addDashboard(dashboardDto)
     }
 
-    override fun deleteDashboard(dashboardId: Int, userId: Int) {
-        checkUserPerms(dashboardId, userId)
+    override fun deleteDashboard(dashboardId: Int) {
         piDao.removeDashboardFromPis(dashboardId)
         dashboardDao.deleteDashboard(dashboardId)
     }
 
-    override fun getAllDashboards(): DashboardCollectionDto {
-        return dashboardDao.getAllDashboards()
+    override fun getAllDashboards(userId: Int): DashboardCollectionDto {
+        return dashboardDao.getAllDashboards(userId)
     }
 
-    override fun editDashboard(dashboardDto: DashboardDto, userId: Int) {
-        checkUserPerms(dashboardDto.getId(), userId)
-        dashboardDto.setUserId(userId)
+    override fun editDashboard(dashboardDto: DashboardDto) {
         dashboardDao.editDashboard(dashboardDto)
-    }
-
-    private fun checkUserPerms(dashboardId: Int, userId: Int) {
-        if (dashboardDao.getUserIdFromDashboard(dashboardId) != userId) {
-            throw HttpForbiddenException("Dashboard belongs to different user")
-        }
     }
 
 
