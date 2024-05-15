@@ -60,7 +60,6 @@ class DashboardServiceTests {
     fun testDeleteDashboardCallsNextDaoFunction() {
         // Arrange
         val mockDashboardId = 1
-        val mockUserId = 2
 
         // Act & Assert
         assertDoesNotThrow { sut.deleteDashboard(mockDashboardId) }
