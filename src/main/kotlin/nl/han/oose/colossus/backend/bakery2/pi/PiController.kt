@@ -106,7 +106,7 @@ class PiController {
     @PostMapping("setdashboard",consumes = [MediaType.APPLICATION_JSON_VALUE])
     @Authenticate
     fun assignDashboardToPi(@RequestBody request: PiDto): ResponseEntity<HttpStatus> {
-       piService.assignDashboardToPi(request)
+        piService.assignDashboardToPi(request)
         return ResponseEntity(HttpStatus.OK)
     }
 
