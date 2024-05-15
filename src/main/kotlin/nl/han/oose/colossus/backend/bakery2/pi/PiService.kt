@@ -1,6 +1,7 @@
 package nl.han.oose.colossus.backend.bakery2.pi
 
 import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDto
+import nl.han.oose.colossus.backend.bakery2.dto.PiDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiRequestsCollectionDto
 
 interface PiService {
@@ -8,6 +9,8 @@ interface PiService {
     fun setPiDao(dao: PiDao)
     fun getAllPis(): PiCollectionDto
     fun getAllPiRequests(): PiRequestsCollectionDto
+    fun editPi(piDto: PiDto,userId: Int)
+    fun getPi(piId: Int):PiDto
     fun addPi(macAddress: String, name: String, roomno: String)
     fun declinePiRequest(macAddress: String)
     fun handlePiRequest(macAddress: String, isAccepted: Boolean)
