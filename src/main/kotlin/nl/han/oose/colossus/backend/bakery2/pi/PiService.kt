@@ -11,7 +11,7 @@ interface PiService {
     fun getAllPis(): PiCollectionDto
     fun getAllPiRequests(): PiRequestsCollectionDto
     fun editPi(piDto: PiDto,userId: Int)
-    fun getPi(piId: Int):PiDto
+    fun getPi(piId: Int?, macAddress: String?): PiDto
     fun addPi(macAddress: String, name: String, roomno: String)
     fun declinePiRequest(macAddress: String)
     fun handlePiRequest(macAddress: String, isAccepted: Boolean)
