@@ -21,8 +21,11 @@ class PiSignUpServiceImp : PiSignUpService {
     }
 
     override fun checkPiExists(request: PiSignUpRequestDto): Boolean {
-        return this.piSignUpDao.checkPiExists(request)
+        return this.piSignUpDao.checkPiExists(request.getMacAddress())
     }
 
+    override fun checkPiSignUpExists(request: PiSignUpRequestDto) : Boolean {
+        return this.piSignUpDao.checkPiSignUpExists(request.getMacAddress())
+    }
 
 }

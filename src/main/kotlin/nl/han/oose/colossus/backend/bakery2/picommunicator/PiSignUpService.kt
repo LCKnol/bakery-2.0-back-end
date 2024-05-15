@@ -8,5 +8,7 @@ interface PiSignUpService {
 
     fun setPiSignUpDao(piSignUpDao: PiSignUpDao)
     fun checkPiExists(request: PiSignUpRequestDto) :Boolean
+
+    fun checkPiSignUpExists(request: PiSignUpRequestDto) : Boolean
 }
 

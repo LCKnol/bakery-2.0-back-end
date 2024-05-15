@@ -32,7 +32,9 @@ class PiSignUpController {
             piService.handlePiRequest(request.getMacAddress(), true)
             val pi = piService.getPi(null, request.getMacAddress())
             piService.assignDashboardToPi(pi)
-        } else {
+        }
+        // check if pi already signed up
+        else if (!piSignUpService.checkPiSignUpExists(request)){
             piSignUpService.createSignUpRequest(request.getMacAddress())
         }
     }
