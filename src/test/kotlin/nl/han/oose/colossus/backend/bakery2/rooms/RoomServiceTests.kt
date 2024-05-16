@@ -4,6 +4,7 @@ import junit.framework.Assert.assertEquals
 import nl.han.oose.colossus.backend.bakery2.dto.RoomCollectionDto
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertDoesNotThrow
 import org.mockito.Mockito.*
 
 class RoomServiceTests {
@@ -29,5 +30,15 @@ class RoomServiceTests {
         //Assert
         assertEquals(expectedRooms, result)
         verify(roomDao).getAllRooms()
+    }
+    @Test
+    fun testDeleteRoomCallsNextDaoFunction() {
+        // Arrange
+        val roomNo = "13.01"
+
+        // Act & Assert
+        assertDoesNotThrow { sut.deleteRoom(roomNo) }
+
+        verify(roomDao).deleteRoom(roomNo)
     }
 }
