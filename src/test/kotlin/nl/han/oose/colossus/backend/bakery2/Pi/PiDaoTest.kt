@@ -144,10 +144,7 @@ class PiDaoTest {
         val updatedPi: PiDto = PiDto()
         updatedPi.setId(1)
         updatedPi.setDashboardId(2)
-        updatedPi.setName("14.02")
         updatedPi.setMacAddress("aa:41:16:f3:81:fc")
-        updatedPi.setStatus("offline")
-        updatedPi.setRoomNo("14.02:01")
         // act
         sut.assignDashboard(updatedPi)
         val statement = dbconnection.getConnection().prepareStatement("SELECT DASHBOARDID FROM PI WHERE MACADDRESS = ?")
