@@ -116,7 +116,7 @@ class PiControllerTests {
         val token = "validToken"
         val userId = 1
 
-        `when`(tokenService.getToken()).thenReturn(token)
+        `when`(headerService.getToken()).thenReturn(token)
         `when`(userService.getUserId(token)).thenReturn(userId)
 
         // Act
@@ -124,7 +124,7 @@ class PiControllerTests {
 
         // Assert
         assertEquals(HttpStatus.OK, response.statusCode)
-        verify(tokenService).getToken()
+        verify(headerService).getToken()
         verify(userService).getUserId(token)
         verify(piService).editPi(piDto, userId)
     }
