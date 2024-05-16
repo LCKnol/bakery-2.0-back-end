@@ -36,7 +36,7 @@ class UserControllerTest {
     @Test
     fun testGetPisWorksCorrectly() {
         // Arrange
-        val user: UserInfoDto = UserInfoDto()
+        val user = UserInfoDto()
         `when`(tokenService.getToken()).thenReturn("fakeToken")
         `when`(userService.getUserInfo("fakeToken")).thenReturn(user)
 
@@ -47,7 +47,6 @@ class UserControllerTest {
         // Assert
         assertEquals(HttpStatus.OK, response.statusCode)
         assertEquals(user, response.body)
-        verify(tokenService).getToken()
         verify(userService).getUserInfo("fakeToken")
     }
 

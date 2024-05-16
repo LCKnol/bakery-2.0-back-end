@@ -19,15 +19,17 @@ class PiSignUpDaoImp : PiSignUpDao {
 
     @Throws(ServerErrorException::class)
     override fun insertSignUpRequest(macAddress: String) {
-        val statement = databaseConnection.prepareStatement("INSERT INTO PiRequest (macAddress, requestedOn) VALUES(?, NOW())")
+        val connection = databaseConnection.getConnection()
+        val statement = connection.prepareStatement("INSERT INTO PiRequest (macAddress, requestedOn) VALUES(?, NOW())")
         statement.setString(1, macAddress)
         statement.executeUpdate()
         statement.close()
+        connection.close()
     }
-
+    @Throws(ServerErrorException::class)
     override fun checkPiExists(request: PiSignUpRequestDto): Boolean {
         val connection = databaseConnection.getConnection()
-        val statement = databaseConnection.prepareStatement("SELECT macAddress FROM PI WHERE macAddress = ?")
+        val statement = connection.prepareStatement("SELECT macAddress FROM PI WHERE macAddress = ?")
         statement.setString(1, request.getMacAddress())
         val resultSet = statement.executeQuery()
         val result = resultSet.next()
