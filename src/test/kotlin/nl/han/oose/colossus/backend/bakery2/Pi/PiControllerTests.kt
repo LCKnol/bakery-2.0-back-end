@@ -3,17 +3,18 @@ package nl.han.oose.colossus.backend.bakery2.Pi
 import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiRequestsCollectionDto
+import nl.han.oose.colossus.backend.bakery2.exceptions.HttpUnauthorizedException
 import nl.han.oose.colossus.backend.bakery2.header.HeaderService
 import nl.han.oose.colossus.backend.bakery2.pi.PiController
 import nl.han.oose.colossus.backend.bakery2.pi.PiService
 import nl.han.oose.colossus.backend.bakery2.users.UserService
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.*
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.messaging.simp.SimpMessagingTemplate
 
 class PiControllerTests {
 
@@ -110,6 +111,25 @@ class PiControllerTests {
         verify(piService).declinePiRequest(fakeAdress)
     }
 
+    @Test
+    fun testEditPi() {
+        // Arrange
+        val piDto = PiDto()
+        val token = "validToken"
+        val userId = 1
+
+        `when`(tokenService.getToken()).thenReturn(token)
+        `when`(userService.getUserId(token)).thenReturn(userId)
+
+        // Act
+        val response: ResponseEntity<HttpStatus> = sut.editPi(piDto)
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.statusCode)
+        verify(tokenService).getToken()
+        verify(userService).getUserId(token)
+        verify(piService).editPi(piDto, userId)
+    }
 
 
 }

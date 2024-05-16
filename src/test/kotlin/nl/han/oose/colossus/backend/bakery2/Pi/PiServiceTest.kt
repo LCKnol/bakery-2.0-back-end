@@ -2,11 +2,15 @@ package nl.han.oose.colossus.backend.bakery2.Pi
 
 
 import junit.framework.Assert.assertEquals
+import junit.framework.Assert.assertNotNull
 import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDto
+import nl.han.oose.colossus.backend.bakery2.dto.PiDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiRequestsCollectionDto
+import nl.han.oose.colossus.backend.bakery2.exceptions.HttpNotFoundException
 import nl.han.oose.colossus.backend.bakery2.pi.PiDao
 import nl.han.oose.colossus.backend.bakery2.pi.PiService
 import nl.han.oose.colossus.backend.bakery2.pi.PiServiceImp
+import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.*
@@ -94,6 +98,62 @@ class PiServiceTest {
         // assert
         verify(piDao).deletePiRequest(macAddress)
 
+    }
+    @Test
+    fun testEditPiCallsDaoWithCorrectParameters() {
+        // Arrange
+        val piDto = PiDto().apply {
+            setId(1)
+            setName("Pi Device")
+            setStatus("Active")
+            setDashboardName("Main Dashboard")
+            setMacAddress("00:1A:22:33:44:55")
+            setRoomNo("101B")
+        }
+        val userId = 1234  // Currently not used
+
+        // Act
+        sut.editPi(piDto, userId)
+
+        // Assert
+        verify(piDao).editPi(piDto)
+        verifyNoMoreInteractions(piDao)
+    }
+    @Test
+    fun testGetPiSuccessfully() {
+        // Arrange
+        val piId = 1
+        val expectedPi = PiDto().apply {
+
+            setName("Pi Name")
+            setRoomNo("Room 101")
+            setMacAddress("00:11:22:33:44:55")
+            setStatus("Active")
+        }
+        `when`(piDao.getPi(piId)).thenReturn(expectedPi)
+
+        // Act
+        val resultPi = sut.getPi(piId)
+
+        // Assert
+        assertNotNull(resultPi)
+        assertEquals(expectedPi, resultPi)
+        verify(piDao).getPi(piId)
+    }
+
+    @Test
+    fun testGetPiThrowsNotFoundException() {
+        // Arrange
+        val piId = 1
+        `when`(piDao.getPi(piId)).thenReturn(null)
+
+        // Act & Assert
+        val exception = assertThrows(HttpNotFoundException::class.java) {
+            sut.getPi(piId)
+        }
+
+        assertEquals("pi does not exist", exception.message)
+        verify(piDao).getPi(piId)
     }
 
 }

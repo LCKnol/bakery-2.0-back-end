@@ -1,7 +1,11 @@
 package nl.han.oose.colossus.backend.bakery2.Pi
 
+import junit.framework.Assert.assertEquals
+import junit.framework.Assert.assertTrue
 import nl.han.oose.colossus.backend.bakery2.database.DatabaseConnection
+import nl.han.oose.colossus.backend.bakery2.dto.DashboardDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDto
+import nl.han.oose.colossus.backend.bakery2.dto.PiDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiRequestsCollectionDto
 import nl.han.oose.colossus.backend.bakery2.pi.PiDao
 import nl.han.oose.colossus.backend.bakery2.pi.PiDaoImp
@@ -14,6 +18,9 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.mockito.Mockito.*
 import java.io.InputStreamReader
+import java.sql.Connection
+import java.sql.PreparedStatement
+import java.sql.ResultSet
 
 
 class PiDaoTest {
@@ -136,4 +143,6 @@ class PiDaoTest {
         val resultSet2 = statement3.executeQuery()
         Assertions.assertFalse(resultSet2.next())
     }
+
+
 }
