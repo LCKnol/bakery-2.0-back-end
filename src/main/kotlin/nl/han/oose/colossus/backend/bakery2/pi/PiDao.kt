@@ -16,5 +16,5 @@ interface PiDao {
     fun deletePiRequest(macAddress: String)
     fun editPi(piDto: PiDto)
     fun getPi(piId: Int): PiDto?
-    fun assignDashboard(piDto: PiDto)
+    fun assignDashboard(dashboardId: Int, piId: Int)
 }

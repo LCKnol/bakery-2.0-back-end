@@ -141,14 +141,14 @@ class PiDaoTest {
     @Test
     fun testAssignDashboardWorksCorrectly(){
         // arrange
-        val updatedPi: PiDto = PiDto()
-        updatedPi.setId(1)
-        updatedPi.setDashboardId(2)
-        updatedPi.setMacAddress("aa:41:16:f3:81:fc")
+        val dashboardId = 2
+        val piID = 1
+        val macAddress = "aa:41:16:f3:81:fc"
+
         // act
-        sut.assignDashboard(updatedPi)
+        sut.assignDashboard(dashboardId,piID)
         val statement = dbconnection.getConnection().prepareStatement("SELECT DASHBOARDID FROM PI WHERE MACADDRESS = ?")
-        statement.setString(1,updatedPi.getMacAddress())
+        statement.setString(1,macAddress)
         val result = statement.executeQuery()
         //assert
         Assertions.assertTrue(result.next())

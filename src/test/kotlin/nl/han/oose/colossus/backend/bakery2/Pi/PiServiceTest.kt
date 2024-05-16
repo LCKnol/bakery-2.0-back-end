@@ -119,6 +119,6 @@ class PiServiceTest {
         sut.assignDashboardToPi(piDto)
         // Assert
         verify(dashboardsDao).getDashboardUrl(1)
-        verify(piDao).assignDashboard(piDto)
+        verify(piDao).assignDashboard(piDto.getId(),piDto.getDashboardId())
     }
 }

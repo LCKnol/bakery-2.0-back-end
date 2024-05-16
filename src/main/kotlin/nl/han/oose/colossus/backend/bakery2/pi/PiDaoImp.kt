@@ -125,11 +125,11 @@ class PiDaoImp : PiDao {
     }
 
     @Throws(ServerErrorException::class)
-    override fun assignDashboard(piDto: PiDto) {
+    override fun assignDashboard(piId: Int,dashboardId: Int,) {
         val connection = databaseConnection.getConnection()
         val statement = connection.prepareStatement("UPDATE PI SET DASHBOARDID = ? WHERE PIID = ?");
-        statement.setInt(1, piDto.getDashboardId())
-        statement.setInt(2, piDto.getId())
+        statement.setInt(1, dashboardId)
+        statement.setInt(2, piId)
         statement.executeUpdate()
         statement.close()
         connection.close()
