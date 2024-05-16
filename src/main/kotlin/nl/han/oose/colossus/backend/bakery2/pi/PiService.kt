@@ -4,6 +4,7 @@ import nl.han.oose.colossus.backend.bakery2.dashboards.DashboardsDao
 import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiRequestsCollectionDto
+import org.springframework.messaging.simp.SimpMessagingTemplate
 
 interface PiService {
     fun getPis(user: Int): PiCollectionDto
@@ -17,4 +18,5 @@ interface PiService {
     fun handlePiRequest(macAddress: String, isAccepted: Boolean)
     fun assignDashboardToPi(request: PiDto)
     fun setDashboardDao(dao: DashboardsDao)
+    fun setMessagingTemplate(messagingTemplate: SimpMessagingTemplate)
 }
