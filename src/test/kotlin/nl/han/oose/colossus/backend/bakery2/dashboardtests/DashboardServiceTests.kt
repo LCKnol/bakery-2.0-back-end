@@ -60,7 +60,6 @@ class DashboardServiceTests {
     fun testDeleteDashboardCallsNextDaoFunction() {
         // Arrange
         val mockDashboardId = 1
-        val mockUserId = 2
 
         // Act & Assert
         assertDoesNotThrow { sut.deleteDashboard(mockDashboardId) }
@@ -107,7 +106,7 @@ class DashboardServiceTests {
             TeamDto(),
             true
         )
-        `when`(dashboardsDao.getDashboard(dashboardId, 1)).thenReturn(expectedDashboard)
+        `when`(dashboardsDao.getDashboardForUser(dashboardId, 1)).thenReturn(expectedDashboard)
 
         // Act
         val result = sut.getDashboard(dashboardId, 1)
@@ -120,7 +119,7 @@ class DashboardServiceTests {
     fun testGetDashboardThrowsNotFoundExceptionWhenDashboardDoesNotExist() {
         // Arrange
         val dashboardId = 1
-        `when`(dashboardsDao.getDashboard(dashboardId, 1)).thenReturn(null)
+        `when`(dashboardsDao.getDashboardForUser(dashboardId, 1)).thenReturn(null)
 
         // Act & Assert
         assertThrows(HttpNotFoundException::class.java) {

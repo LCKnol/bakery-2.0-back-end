@@ -8,6 +8,7 @@ import nl.han.oose.colossus.backend.bakery2.dto.UserInfoDto
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Primary
 import org.springframework.stereotype.Component
+import org.springframework.web.server.ServerErrorException
 import java.sql.SQLException
 
 @Primary
@@ -17,41 +18,47 @@ class UserDaoImp : UserDao {
     private lateinit var userMapper: UserMapper
 
     @Autowired
-    private lateinit var dbConnection: DatabaseConnection
+    private lateinit var databaseConnection: DatabaseConnection
 
     override fun setDatabaseConnection(connection: DatabaseConnection) {
-        dbConnection = connection
+        this.databaseConnection = connection
     }
 
     override fun setUserMapper(mapper: UserMapper) {
         userMapper = mapper
     }
 
+    @Throws(ServerErrorException::class)
     override fun getUserInfo(token: String): UserInfoDto {
-        val preparedStatement =
-            dbConnection.prepareStatement("select u.firstname, u.lastname, t.teamname, tr.roomno from USERS u left join USERINTEAM ut on u.userid = ut.userid left join TEAMINROOM tr on ut.teamid = tr.teamid left join TEAM t on t.TEAMID = ut.TEAMID where u.userid = (select userid from USERSESSION where token = ?)")
+        val connection = databaseConnection.getConnection()
+        val preparedStatement = connection.prepareStatement("select u.firstname, u.lastname, t.teamname, tr.roomno from USERS u left join USERINTEAM ut on u.userid = ut.userid left join TEAMINROOM tr on ut.teamid = tr.teamid left join TEAM t on t.TEAMID = ut.TEAMID where u.userid = (select userid from USERSESSION where token = ?)")
         preparedStatement.setString(1, token)
         val resultSet = preparedStatement.executeQuery()
         val user = userMapper.mapUserInfo(resultSet)
         resultSet.close()
         preparedStatement.close()
+        connection.close()
         return user
     }
 
+    @Throws(ServerErrorException::class)
     override fun getUser(token: String): UserDto? {
-        val preparedStatement =
-            dbConnection.prepareStatement("SELECT userid, firstname, lastname, password, email, isadmin FROM USERS WHERE userid = (SELECT userid FROM USERSESSION WHERE token = ?)")
+        val connection = databaseConnection.getConnection()
+        val preparedStatement = connection.prepareStatement("SELECT userid, firstname, lastname, password, email, isadmin FROM USERS WHERE userid = (SELECT userid FROM USERSESSION WHERE token = ?)")
         preparedStatement.setString(1, token)
         val resultSet = preparedStatement.executeQuery()
         val user = userMapper.mapUser(resultSet)
         preparedStatement.close()
+        connection.close()
         return user
     }
 
+    @Throws(ServerErrorException::class)
     override fun insertUser(userDto: UserDto) {
+        val connection = databaseConnection.getConnection()
         val query = "INSERT INTO USERS(firstName, lastName, email, password, isAdmin) VALUES (?, ?, ?, ?, ?)"
         try {
-            val preparedStatement = dbConnection.prepareStatement(query)
+            val preparedStatement = connection.prepareStatement(query)
             preparedStatement.setString(1, userDto.getFirstName())
             preparedStatement.setString(2, userDto.getLastName())
             preparedStatement.setString(3, userDto.getEmail())
@@ -59,6 +66,7 @@ class UserDaoImp : UserDao {
             preparedStatement.setBoolean(5, userDto.getIsAdmin())
             preparedStatement.executeUpdate()
             preparedStatement.close()
+            connection.close()
         } catch (e: SQLException) {
             println(e.message)
         }

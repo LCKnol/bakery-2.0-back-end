@@ -21,7 +21,7 @@ class AuthenticationController {
     @Autowired
     private lateinit var headerService: HeaderService
 
-    fun setAuthenticationService(service : AuthenticationService) {
+    fun setAuthenticationService(service: AuthenticationService) {
         this.authenticationService = service
     }
 
@@ -29,7 +29,7 @@ class AuthenticationController {
         this.headerService = headerService
     }
 
-    @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE], produces =[MediaType.APPLICATION_JSON_VALUE])
+    @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE], produces = [MediaType.APPLICATION_JSON_VALUE])
     fun login(@RequestBody loginRequest: LoginRequestDto): ResponseEntity<LoginResponseDto> {
 
         val loginResponse = authenticationService.authenticate(loginRequest.getEmail(), loginRequest.getPassword())

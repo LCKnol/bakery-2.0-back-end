@@ -3,7 +3,6 @@ package nl.han.oose.colossus.backend.bakery2.dashboards
 import nl.han.oose.colossus.backend.bakery2.pi.PiDao
 import nl.han.oose.colossus.backend.bakery2.dto.DashboardCollectionDto
 import nl.han.oose.colossus.backend.bakery2.dto.DashboardDto
-import nl.han.oose.colossus.backend.bakery2.exceptions.HttpForbiddenException
 import nl.han.oose.colossus.backend.bakery2.exceptions.HttpNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Primary
@@ -28,7 +27,8 @@ class DashboardsServiceImp : DashboardsService {
     }
 
     override fun getDashboard(dashboardId: Int, userId: Int): DashboardDto {
-        val dashboard = dashboardDao.getDashboard(dashboardId, userId) ?: throw HttpNotFoundException("Dashboard does not exist")
+        val dashboard = dashboardDao.getDashboardForUser(dashboardId, userId)
+            ?: throw HttpNotFoundException("Dashboard does not exist")
         return dashboard
     }
 

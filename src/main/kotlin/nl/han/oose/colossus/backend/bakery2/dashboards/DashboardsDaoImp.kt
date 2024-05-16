@@ -29,30 +29,37 @@ class DashboardsDaoImp : DashboardsDao {
 
     @Throws(ServerErrorException::class)
     override fun addDashboard(dashboardDto: DashboardDto) {
+        val connection = databaseConnection.getConnection()
         val statement =
-            databaseConnection.prepareStatement("INSERT INTO DASHBOARD (TEAMID,NAME,DASHBOARDURL,IMAGEURL) VALUES(?,?,?,?)")
+            connection.prepareStatement("INSERT INTO DASHBOARD (TEAMID,NAME,DASHBOARDURL,IMAGEURL) VALUES(?,?,?,?)")
         statement.setInt(1, dashboardDto.getTeam().getId())
         statement.setString(2, dashboardDto.getDashboardName())
         statement.setString(3, dashboardDto.getDashboardUrl())
         statement.setString(4, dashboardDto.getImageUrl())
         statement.executeUpdate()
         statement.close()
+        connection.close()
     }
 
     @Throws(ServerErrorException::class)
     override fun getAllDashboards(userId: Int): DashboardCollectionDto {
         val newDashboardCollectionDto: DashboardCollectionDto
-        val statement = databaseConnection.prepareStatement("SELECT d.*, t.TEAMNAME, (exists(select * from userinteam where userid = ? and teamid = t.TEAMID)) as hasAccess FROM DASHBOARD d left join team t on d.TEAMID = t.TEAMID ")
+        val connection = databaseConnection.getConnection()
+        val statement =
+            connection.prepareStatement("SELECT d.*, t.TEAMNAME, (exists(select * from userinteam where userid = ? and teamid = t.TEAMID)) as hasAccess FROM DASHBOARD d left join team t on d.TEAMID = t.TEAMID ")
         statement.setInt(1, userId)
         val resultSet = statement.executeQuery()
         newDashboardCollectionDto = dashboardsMapper.getAllDashboardsMapper(resultSet)
         statement.close()
+        connection.close()
         return newDashboardCollectionDto
     }
 
-    override fun getDashboard(dashboardId: Int, userId: Int): DashboardDto? {
+    @Throws(ServerErrorException::class)
+    override fun getDashboardForUser(dashboardId: Int, userId: Int): DashboardDto? {
         val connection = databaseConnection.getConnection()
-        val statement = databaseConnection.prepareStatement("SELECT d.*, t.TEAMNAME, (exists(select * from userinteam where userid = ? and teamid = t.TEAMID)) as hasAccess FROM DASHBOARD d left join team t on d.TEAMID = t.TEAMID WHERE DASHBOARDID = ?")
+        val statement =
+            connection.prepareStatement("SELECT d.*, t.TEAMNAME, (exists(select * from userinteam where userid = ? and teamid = t.TEAMID)) as hasAccess FROM DASHBOARD d left join team t on d.TEAMID = t.TEAMID WHERE DASHBOARDID = ?")
         statement.setInt(1, userId)
         statement.setInt(2, dashboardId)
         val result = statement.executeQuery()
@@ -77,10 +84,27 @@ class DashboardsDaoImp : DashboardsDao {
         connection.close()
     }
 
+    @Throws(ServerErrorException::class)
+    override fun getDashboardUrl(dashboardId: Int): String {
+        var url = ""
+        val connection = databaseConnection.getConnection()
+        val statement = connection.prepareStatement("SELECT DASHBOARDURL FROM DASHBOARD WHERE DASHBOARDID = ?")
+        statement.setInt(1, dashboardId)
+        val result = statement.executeQuery()
+        while (result.next()) {
+            url = result.getString("DASHBOARDURL")
+        }
+        statement.close()
+        connection.close()
+        return url
+    }
+
+    @Throws(ServerErrorException::class)
     override fun deleteDashboard(dashboardId: Int) {
         val query = "DELETE FROM DASHBOARD WHERE DASHBOARDID = ?"
         try {
-            val statement = databaseConnection.prepareStatement(query)
+            val connection = databaseConnection.getConnection()
+            val statement = connection.prepareStatement(query)
             statement.setInt(1, dashboardId)
             statement.executeUpdate()
             statement.close()

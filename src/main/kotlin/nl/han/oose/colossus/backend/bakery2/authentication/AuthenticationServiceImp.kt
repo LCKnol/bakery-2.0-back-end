@@ -11,9 +11,9 @@ import java.util.*
 
 @Primary
 @Component
-class AuthenticationServiceImp :AuthenticationService {
+class AuthenticationServiceImp : AuthenticationService {
     @Autowired
-    private lateinit var  authenticationDao: AuthenticationDao
+    private lateinit var authenticationDao: AuthenticationDao
 
     @Autowired
     private lateinit var userDao: UserDao
@@ -26,8 +26,8 @@ class AuthenticationServiceImp :AuthenticationService {
         this.userDao = userDao
     }
 
-    override fun isAdmin(token: String) : Boolean {
-      val user = userDao.getUser(token)
+    override fun isAdmin(token: String): Boolean {
+        val user = userDao.getUser(token)
         return user?.getIsAdmin() ?: false
     }
 
@@ -58,7 +58,7 @@ class AuthenticationServiceImp :AuthenticationService {
         var token: String
         do {
             token = UUID.randomUUID().toString()
-        } while(authenticationDao.tokenExists(token))
+        } while (authenticationDao.tokenExists(token))
         return token
     }
 }
