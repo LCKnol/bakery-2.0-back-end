@@ -75,12 +75,13 @@ class PiServiceImp : PiService {
         piDao.editPi(piDto)
     }
 
-    override fun getPi(piId: Int): PiDto {
-        val pi = piDao.getPi(piId) ?: throw HttpNotFoundException("pi does not exist")
+    override fun getPi(piId: Int?, macAddress: String?): PiDto {
+        val pi = piDao.getPi(piId, macAddress) ?: throw HttpNotFoundException("pi does not exist")
         return pi
     }
 
     override fun assignDashboardToPi(request: PiDto) {
+
         piDao.assignDashboard(request)
         val assignedDashboard = PiSetDashboardDto()
         val dashboardUrl = dashboardDao.getDashboardUrl(request.getDashboardId())

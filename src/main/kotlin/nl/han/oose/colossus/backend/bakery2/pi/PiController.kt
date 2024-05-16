@@ -90,7 +90,7 @@ class PiController {
 
     @GetMapping(path = ["/{piId}"], produces = ["application/json"])
     fun getPi(@PathVariable("piId") piId: Int): ResponseEntity<PiDto> {
-        val result = this.piService.getPi(piId)
+        val result = this.piService.getPi(piId, null)
         return ResponseEntity(result, HttpStatus.OK)
     }
     @PutMapping(consumes = [MediaType.APPLICATION_JSON_VALUE])
