@@ -2,6 +2,7 @@ package nl.han.oose.colossus.backend.bakery2.Pi
 
 import nl.han.oose.colossus.backend.bakery2.database.DatabaseConnection
 import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDto
+import nl.han.oose.colossus.backend.bakery2.dto.PiDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiRequestsCollectionDto
 import nl.han.oose.colossus.backend.bakery2.pi.PiDao
 import nl.han.oose.colossus.backend.bakery2.pi.PiDaoImp
@@ -135,5 +136,24 @@ class PiDaoTest {
         statement3.setString(1, adress)
         val resultSet2 = statement3.executeQuery()
         Assertions.assertFalse(resultSet2.next())
+    }
+
+    @Test
+    fun testAssignDashboardWorksCorrectly(){
+        // arrange
+        val updatedPi: PiDto = PiDto()
+        updatedPi.setId(1)
+        updatedPi.setDashboardId(2)
+        updatedPi.setName("14.02")
+        updatedPi.setMacAddress("aa:41:16:f3:81:fc")
+        updatedPi.setStatus("offline")
+        updatedPi.setRoomNo("14.02:01")
+        // act
+        sut.assignDashboard(updatedPi)
+        val statement = dbconnection.getConnection().prepareStatement("SELECT DASHBOARDID FROM PI WHERE MACADDRESS = ?")
+        statement.setString(1,updatedPi.getMacAddress())
+        val result = statement.executeQuery()
+        //assert
+        Assertions.assertTrue(result.next())
     }
 }
