@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Primary
 import org.springframework.stereotype.Component
 import org.springframework.web.server.ServerErrorException
-import java.sql.SQLException
 
 
 @Primary
@@ -31,7 +30,7 @@ class RoomDaoImp : RoomDao {
     override fun deleteRoom(roomNo: String) {
             val query = "DELETE FROM TEAMINROOM WHERE ROOMNO = ?"
             val query2 = "DELETE FROM ROOM WHERE ROOMNO = ?"
-        try{
+
             val connection = dbConnection.getConnection()
             val statement = connection.prepareStatement(query)
                 statement.setString(1, roomNo)
@@ -41,9 +40,6 @@ class RoomDaoImp : RoomDao {
                 statement2.setString(1, roomNo)
                 statement2.executeUpdate()
                 statement2.close()
-            } catch (e: SQLException) {
-                println(e.message)
-            }
         }
 
     @Throws(ServerErrorException::class)
