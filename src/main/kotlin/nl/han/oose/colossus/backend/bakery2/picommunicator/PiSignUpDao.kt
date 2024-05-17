@@ -7,5 +7,6 @@ interface PiSignUpDao {
     fun insertSignUpRequest(macAddress: String)
 
     fun setDatabaseConnection(connection: DatabaseConnection)
-    fun checkPiExists(request: PiSignUpRequestDto) : Boolean
+    fun checkPiExists(macAddress: String) : Boolean
+    fun checkPiSignUpExists(macAddress: String) : Boolean
 }

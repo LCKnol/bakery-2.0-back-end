@@ -5,6 +5,7 @@ import nl.han.oose.colossus.backend.bakery2.dto.DashboardDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiRequestsCollectionDto
+import nl.han.oose.colossus.backend.bakery2.exceptions.HttpNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Primary
 import org.springframework.stereotype.Component
@@ -112,11 +113,18 @@ class PiDaoImp : PiDao {
     }
 
     @Throws(ServerErrorException::class)
-    override fun getPi(piId: Int): PiDto? {
+    override fun getPi(piId: Int?, macAddress: String?): PiDto? {
         val connection = databaseConnection.getConnection()
+        val query = if (piId != null) {
+            "SELECT p.*, d.NAME AS dashboardname, d.dashboardId FROM PI p LEFT JOIN DASHBOARD d ON p.DASHBOARDID = d.DASHBOARDID WHERE PIID = ?"
+        } else if (macAddress != null) {
+            "SELECT p.*, d.NAME AS dashboardname, d.dashboardId FROM PI p LEFT JOIN DASHBOARD d ON p.DASHBOARDID = d.DASHBOARDID WHERE MACADDRESS = ?"
+        } else {
+            return null
+        }
         val statement =
-            connection.prepareStatement("SELECT p.*, d.NAME AS dashboardname FROM PI p LEFT JOIN DASHBOARD d ON p.DASHBOARDID = d.DASHBOARDID WHERE PIID =?")
-        statement.setInt(1, piId)
+            connection.prepareStatement(query)
+        if (piId != null) statement.setInt(1, piId) else statement.setString(1, macAddress)
         val result = statement.executeQuery()
         val pi = piMapper.getPiMapper(result)
         statement.close()
@@ -125,11 +133,11 @@ class PiDaoImp : PiDao {
     }
 
     @Throws(ServerErrorException::class)
-    override fun assignDashboard(piDto: PiDto) {
+    override fun assignDashboard(piId: Int,dashboardId: Int,) {
         val connection = databaseConnection.getConnection()
         val statement = connection.prepareStatement("UPDATE PI SET DASHBOARDID = ? WHERE PIID = ?");
-        statement.setInt(1, piDto.getDashboardId())
-        statement.setInt(2, piDto.getId())
+        statement.setInt(1, dashboardId)
+        statement.setInt(2, piId)
         statement.executeUpdate()
         statement.close()
         connection.close()

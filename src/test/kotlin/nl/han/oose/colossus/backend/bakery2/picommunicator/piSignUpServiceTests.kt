@@ -37,12 +37,27 @@ class piSignUpServiceTests {
     fun checkPiExistsCallsDaoCheckPiExists() {
         // Arrange
         val piSignUpRequestDto = PiSignUpRequestDto()
+        piSignUpRequestDto.setMacAddress("mac address")
 
         // Act
-        sut.checkPiExists(piSignUpRequestDto)
+        sut.checkPiExists(piSignUpRequestDto.getMacAddress())
 
         // Assert
-        Mockito.verify(piSignUpDao).checkPiExists(piSignUpRequestDto)
+        Mockito.verify(piSignUpDao).checkPiExists(piSignUpRequestDto.getMacAddress())
+    }
+
+    @Test
+    fun checkIfCheckPiSignUpExistsPassesToDao() {
+        // Arrange
+        val macAddress = "mac address"
+        Mockito.`when`(piSignUpDao.checkPiSignUpExists(macAddress)).thenReturn(true)
+
+        // Act
+        val result = sut.checkPiSignUpExists(macAddress)
+
+        // Assert
+        Mockito.verify(piSignUpDao).checkPiSignUpExists(macAddress)
+        Assertions.assertTrue(result)
     }
 
 }

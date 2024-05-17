@@ -136,4 +136,28 @@ class PiDaoTest {
         val resultSet2 = statement3.executeQuery()
         Assertions.assertFalse(resultSet2.next())
     }
+
+    @Test
+    fun testAssignDashboardWorksCorrectly(){
+        // arrange
+        val dashboardId = 2
+        val piID = 1
+        val macAddress = "macAddress"
+
+        val statement1 = dbconnection.getConnection().prepareStatement("insert into pi (roomno, dashboardId, name, macaddress) values (15.05, ?, 'testpi', ?)")
+        statement1.setInt(1, dashboardId)
+        statement1.setString(2, macAddress)
+
+        val statement2 = dbconnection.getConnection().prepareStatement("SELECT DASHBOARDID FROM PI WHERE MACADDRESS = ?")
+        statement2.setString(1,macAddress)
+
+        // act
+        statement1.executeUpdate()
+        sut.assignDashboard(dashboardId,piID)
+        val resultSet = statement2.executeQuery()
+        resultSet.next()
+        val result = resultSet.getInt(1)
+        //assert
+        Assertions.assertEquals(dashboardId, result)
+    }
 }

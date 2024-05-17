@@ -28,10 +28,13 @@ class PiSignUpController {
 
     @MessageMapping("/sign-up-pi")
     fun signUpPi(request: PiSignUpRequestDto) {
-        if (piSignUpService.checkPiExists(request)) {
+        if (piSignUpService.checkPiExists(request.getMacAddress())) {
             piService.handlePiRequest(request.getMacAddress(), true)
-            //todo handle further pi setup like showdashboard
-        } else {
+            val pi = piService.getPi(null, request.getMacAddress())
+            piService.assignDashboardToPi(pi)
+        }
+        // check if pi already signed up
+        else if (!piSignUpService.checkPiSignUpExists(request.getMacAddress())){
             piSignUpService.createSignUpRequest(request.getMacAddress())
         }
     }
