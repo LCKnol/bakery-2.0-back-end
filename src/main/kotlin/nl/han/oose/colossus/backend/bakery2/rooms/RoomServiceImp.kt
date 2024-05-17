@@ -16,6 +16,10 @@ class RoomServiceImp : RoomService {
         this.roomDao = roomDao
     }
 
+    override fun deleteRoom(roomNo: String) {
+        roomDao.deleteRoom(roomNo)
+    }
+
 
     override fun getAllRooms(): RoomCollectionDto {
         return roomDao.getAllRooms()

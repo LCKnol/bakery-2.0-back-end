@@ -8,4 +8,5 @@ interface RoomDao {
     fun getAllRooms(): RoomCollectionDto
     fun setDatabaseConnection(connection: DatabaseConnection)
     fun setRoomMapper(mapper: RoomMapper)
+    fun deleteRoom(roomNo: String)
 }

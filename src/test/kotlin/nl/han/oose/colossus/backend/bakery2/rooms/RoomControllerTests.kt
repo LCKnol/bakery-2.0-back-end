@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
+import org.springframework.http.HttpStatus
 
 class RoomControllerTests {
 
@@ -32,5 +33,18 @@ class RoomControllerTests {
         //Assert
         assertEquals(200, response)
         verify(roomService).getAllRooms()
+    }
+    @Test
+    fun testDeleteRoomWorksCorrectly() {
+        // Arrange
+        val roomNo = "13.01"
+
+        // Act
+        val response = sut.deleteRoom(roomNo).statusCode
+
+        // Assert
+        assertEquals(HttpStatus.OK, response)
+
+        verify(roomService).deleteRoom(roomNo)
     }
 }
