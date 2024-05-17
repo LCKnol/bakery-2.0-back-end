@@ -1,11 +1,13 @@
 package nl.han.oose.colossus.backend.bakery2.pi
 
+import nl.han.oose.colossus.backend.bakery2.dashboards.DashboardsDao
 import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiRequestsCollectionDto
 import nl.han.oose.colossus.backend.bakery2.exceptions.HttpNotFoundException
 import nl.han.oose.colossus.backend.bakery2.picommunicator.dto.PiAcceptDto
 import nl.han.oose.colossus.backend.bakery2.picommunicator.dto.PiSignUpRequestDto
+import nl.han.oose.colossus.backend.bakery2.picommunicator.dto.PiSetDashboardDto
 import nl.han.oose.colossus.backend.bakery2.picommunicator.dto.SocketResponseDto
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Primary
@@ -22,15 +24,26 @@ class PiServiceImp : PiService {
     private lateinit var piDao: PiDao
 
     @Autowired
+    private lateinit var dashboardDao: DashboardsDao
+
+    @Autowired
     private lateinit var messagingTemplate: SimpMessagingTemplate
+
+    override fun setPiDao(dao: PiDao) {
+        piDao = dao
+    }
+
+    override fun setDashboardDao(dao: DashboardsDao) {
+        dashboardDao = dao
+    }
+
+    override fun setMessagingTemplate(messagingTemplate: SimpMessagingTemplate) {
+        this.messagingTemplate = messagingTemplate
+    }
 
     override fun getPis(user: Int): PiCollectionDto {
         val pis = piDao.getPis(user)
         return pis
-    }
-
-    override fun setPiDao(dao: PiDao) {
-        piDao = dao
     }
 
     override fun getAllPis(): PiCollectionDto {
@@ -71,8 +84,21 @@ class PiServiceImp : PiService {
         piDaoImp.updatePiIp(piSignUpRequestDto)
     }
 
-    override fun getPi(piId: Int): PiDto {
-        val pi = piDao.getPi(piId) ?: throw HttpNotFoundException("pi does not exist")
+    override fun getPi(piId: Int?, macAddress: String?): PiDto {
+        val pi = piDao.getPi(piId, macAddress) ?: throw HttpNotFoundException("pi does not exist")
         return pi
+    }
+
+    override fun assignDashboardToPi(request: PiDto) {
+        piDao.assignDashboard(request.getId(), request.getDashboardId())
+
+        val assignedDashboard = PiSetDashboardDto()
+        val dashboardUrl = dashboardDao.getDashboardUrl(request.getDashboardId())
+        assignedDashboard.setUrl(dashboardUrl)
+
+        val socketResponseDto = SocketResponseDto()
+        socketResponseDto.setBody(assignedDashboard)
+        socketResponseDto.setInstruction("set-dashboard")
+        messagingTemplate.convertAndSend("/topic/pi-listener/${request.getMacAddress()}", socketResponseDto)
     }
 }

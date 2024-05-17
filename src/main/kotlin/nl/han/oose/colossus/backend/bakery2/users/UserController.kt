@@ -2,6 +2,7 @@ package nl.han.oose.colossus.backend.bakery2.users
 
 import nl.han.oose.colossus.backend.bakery2.dto.UserDto
 import nl.han.oose.colossus.backend.bakery2.dto.UserInfoDto
+import nl.han.oose.colossus.backend.bakery2.header.Admin
 import nl.han.oose.colossus.backend.bakery2.header.Authenticate
 import nl.han.oose.colossus.backend.bakery2.header.HeaderService
 import org.springframework.beans.factory.annotation.Autowired
@@ -35,8 +36,9 @@ class UserController {
     }
 
     @PostMapping(path = ["/register"], consumes = [MediaType.APPLICATION_JSON_VALUE])
+    @Authenticate
+    @Admin
     fun registerUser(@RequestBody userDto: UserDto): ResponseEntity<HttpStatus> {
-        //TODO: Only allow with admin privileges
         userService.registerUser(userDto)
         return ResponseEntity(HttpStatus.CREATED)
     }

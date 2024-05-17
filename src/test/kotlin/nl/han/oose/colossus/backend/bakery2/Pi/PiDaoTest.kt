@@ -85,6 +85,7 @@ class PiDaoTest {
         fun insertUser() {
             // Arrange
             val macAddress = "00:11:22:33:44:55"
+            val ipAddress = "123.123.123.123"
             val name = "fake pi"
             val roomNo = "fake room"
 
@@ -95,7 +96,7 @@ class PiDaoTest {
             selectStatement.setString(1, macAddress)
 
             // Act
-            sut.insertPi(macAddress, name, roomNo)
+            sut.insertPi(macAddress, ipAddress, name, roomNo)
 
             // Assert
             val resultSet = selectStatement.executeQuery()
@@ -114,9 +115,10 @@ class PiDaoTest {
         val adress = "fake adress"
 
         val statement1 =
-                dbconnection.getConnection().prepareStatement("INSERT INTO PIREQUEST (MACADDRESS, REQUESTEDON) VALUES (?, ?)")
+                dbconnection.getConnection().prepareStatement("INSERT INTO PIREQUEST (MACADDRESS, IPADDRESS, REQUESTEDON) VALUES (?, ?, ?)")
         statement1.setString(1, adress)
-        statement1.setString(2, "2024-04-24 09:36:22")
+        statement1.setString(2, adress)
+        statement1.setString(3, "2024-04-24 09:36:22")
 
         statement1.execute()
 
@@ -135,5 +137,31 @@ class PiDaoTest {
         statement3.setString(1, adress)
         val resultSet2 = statement3.executeQuery()
         Assertions.assertFalse(resultSet2.next())
+    }
+
+    @Test
+    fun testAssignDashboardWorksCorrectly(){
+        // arrange
+        val dashboardId = 2
+        val piID = 1
+        val macAddress = "macAddress"
+        val ipAddress = "ipAddress"
+
+        val statement1 = dbconnection.getConnection().prepareStatement("insert into pi (roomno, dashboardId, name, macaddress, ipaddress) values (15.05, ?, 'testpi', ?, ?)")
+        statement1.setInt(1, dashboardId)
+        statement1.setString(2, macAddress)
+        statement1.setString(3, ipAddress)
+
+        val statement2 = dbconnection.getConnection().prepareStatement("SELECT DASHBOARDID FROM PI WHERE MACADDRESS = ?")
+        statement2.setString(1,macAddress)
+
+        // act
+        statement1.executeUpdate()
+        sut.assignDashboard(dashboardId,piID)
+        val resultSet = statement2.executeQuery()
+        resultSet.next()
+        val result = resultSet.getInt(1)
+        //assert
+        Assertions.assertEquals(dashboardId, result)
     }
 }

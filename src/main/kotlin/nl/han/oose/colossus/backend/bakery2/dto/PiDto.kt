@@ -5,9 +5,18 @@ class PiDto {
     private var name: String = ""
     private var status: String = ""
     private var dashboardName: String = ""
+    private var dashboardId: Int = 0
     private var macAddress: String = ""
     private var ipAddress: String = ""
     private var roomNo: String = ""
+
+    fun getDashboardId(): Int {
+        return dashboardId
+    }
+
+    fun setDashboardId(dashboardId: Int) {
+        this.dashboardId = dashboardId
+    }
 
     fun getId(): Int {
         return id
@@ -65,5 +74,3 @@ class PiDto {
         this.roomNo = roomNo
     }
 }
-
-
