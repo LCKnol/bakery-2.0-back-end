@@ -93,7 +93,7 @@ class PiControllerTests {
         val response: ResponseEntity<HttpStatus> = sut.initPi(piDto)
         // Assert
         assertEquals(HttpStatus.CREATED, response.statusCode)
-        verify(piService).addPi(anyString(), anyString(), anyString())
+        verify(piService).addPi(anyString(), anyString(), anyString(), anyString())
     }
 
     @Test

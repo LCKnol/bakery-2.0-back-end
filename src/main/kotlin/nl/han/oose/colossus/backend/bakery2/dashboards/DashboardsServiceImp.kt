@@ -48,6 +48,4 @@ class DashboardsServiceImp : DashboardsService {
     override fun editDashboard(dashboardDto: DashboardDto) {
         dashboardDao.editDashboard(dashboardDto)
     }
-
-
 }

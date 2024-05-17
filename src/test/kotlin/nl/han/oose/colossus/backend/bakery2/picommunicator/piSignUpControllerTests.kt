@@ -33,7 +33,7 @@ class piSignUpControllerTests {
         sut.signUpPi(piSignUpRequestDto)
 
         // Assert
-        Mockito.verify(pisSignupService).createSignUpRequest("")
+        Mockito.verify(pisSignupService).createSignUpRequest("", "")
     }
 
     @Test

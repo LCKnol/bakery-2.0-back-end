@@ -25,12 +25,13 @@ class piSignUpServiceTests {
     fun correctlyCreatesPiSignUpRequest() {
         // Arrange
         val macAddress = "macAddress"
+        val ipAddress = "ipAddress"
 
         // Act
-        sut.createSignUpRequest(macAddress)
+        sut.createSignUpRequest(macAddress, ipAddress)
 
         // Assert
-        Mockito.verify(piSignUpDao).insertSignUpRequest(macAddress)
+        Mockito.verify(piSignUpDao).insertSignUpRequest(macAddress, ipAddress)
     }
 
     @Test

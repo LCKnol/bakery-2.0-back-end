@@ -44,4 +44,3 @@ class AuthenticationController {
         return ResponseEntity(HttpStatus.NO_CONTENT)
     }
 }
-

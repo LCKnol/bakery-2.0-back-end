@@ -5,6 +5,7 @@ class TeamCollectionDto {
     fun setTeamCollection(roomCollection: ArrayList<TeamDto>) {
         this.teamCollection = roomCollection
     }
+
     fun getTeamCollection(): ArrayList<TeamDto> {
         return teamCollection
     }

@@ -5,6 +5,7 @@ import nl.han.oose.colossus.backend.bakery2.dto.DashboardDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiRequestsCollectionDto
+import nl.han.oose.colossus.backend.bakery2.picommunicator.dto.PiSignUpRequestDto
 import nl.han.oose.colossus.backend.bakery2.exceptions.HttpNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Primary
@@ -78,12 +79,14 @@ class PiDaoImp : PiDao {
     }
 
     @Throws(ServerErrorException::class)
-    override fun insertPi(macAddress: String, name: String, roomno: String) {
+    override fun insertPi(macAddress: String, ipAddress: String, name: String, roomno: String) {
         val connection = databaseConnection.getConnection()
-        val statement = connection.prepareStatement("INSERT INTO PI (macAddress, name, roomno) VALUES(?, ?, ?)")
+        val statement =
+            connection.prepareStatement("INSERT INTO PI (macAddress, ipAddress, name, roomno) VALUES(?, ?, ?, ?)")
         statement.setString(1, macAddress)
-        statement.setString(2, name)
-        statement.setString(3, roomno)
+        statement.setString(2, ipAddress)
+        statement.setString(3, name)
+        statement.setString(4, roomno)
         statement.executeUpdate()
         statement.close()
         connection.close()
@@ -99,7 +102,6 @@ class PiDaoImp : PiDao {
         connection.close()
     }
 
-
     @Throws(ServerErrorException::class)
     override fun editPi(piDto: PiDto) {
         val connection = databaseConnection.getConnection()
@@ -107,6 +109,18 @@ class PiDaoImp : PiDao {
         statement.setString(1, piDto.getName())
         statement.setString(2, piDto.getRoomNo())
         statement.setInt(3, piDto.getId())
+        statement.executeUpdate()
+        statement.close()
+        connection.close()
+    }
+
+    @Throws(ServerErrorException::class)
+    override fun updatePiIp(piSignUpRequestDto: PiSignUpRequestDto) {
+        val connection = databaseConnection.getConnection()
+        val statement =
+            connection.prepareStatement("UPDATE PI SET IPADDRESS = ? WHERE MACADDRESS = ?")
+        statement.setString(1, piSignUpRequestDto.getIpAddress())
+        statement.setString(2, piSignUpRequestDto.getMacAddress())
         statement.executeUpdate()
         statement.close()
         connection.close()
@@ -132,8 +146,20 @@ class PiDaoImp : PiDao {
         return pi
     }
 
+    override fun getPi(piId: Int): PiDto? {
+        val connection = databaseConnection.getConnection()
+        val statement =
+            connection.prepareStatement("SELECT p.*, d.NAME AS dashboardname FROM PI p LEFT JOIN DASHBOARD d ON p.DASHBOARDID = d.DASHBOARDID WHERE PIID =?")
+        statement.setInt(1, piId)
+        val result = statement.executeQuery()
+        val pi = piMapper.getPiMapper(result)
+        statement.close()
+        connection.close()
+        return pi
+    }
+
     @Throws(ServerErrorException::class)
-    override fun assignDashboard(piId: Int,dashboardId: Int,) {
+    override fun assignDashboard(piId: Int, dashboardId: Int) {
         val connection = databaseConnection.getConnection()
         val statement = connection.prepareStatement("UPDATE PI SET DASHBOARDID = ? WHERE PIID = ?");
         statement.setInt(1, dashboardId)
@@ -142,5 +168,4 @@ class PiDaoImp : PiDao {
         statement.close()
         connection.close()
     }
-
 }

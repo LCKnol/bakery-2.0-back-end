@@ -32,7 +32,7 @@ class piSignUpDaoTests {
         statement.setString(1, mac)
 
         // Act
-        sut.insertSignUpRequest("macAddress")
+        sut.insertSignUpRequest("macAddress", "ipAddress")
 
         // Assert
         val resultSet = statement.executeQuery()
@@ -58,9 +58,11 @@ class piSignUpDaoTests {
     fun checkPiSignUpExistsReturnsTrue() {
         // Arrange
         val macAddress = "mac address"
+        val ipAddress = "ip address"
         val connection = dbconnection.getConnection()
-        val statement = connection.prepareStatement("insert into pirequest (macaddress, requestedon) values (?, NOW())")
+        val statement = connection.prepareStatement("insert into pirequest (macaddress, ipAddress, requestedon) values (?, ?, NOW())")
         statement.setString(1, macAddress)
+        statement.setString(2, ipAddress)
         statement.executeUpdate()
 
         // Act

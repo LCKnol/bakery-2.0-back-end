@@ -83,14 +83,15 @@ class PiServiceTest {
     fun testAddpi() {
         // arrange
         val macAddress = "00:11:22:33:44:55"
+        val ipAddress = "123.123.123.123"
         val name = "fake pi"
         val roomNo = "fake room"
 
         // act
-        sut.addPi(macAddress, name, roomNo)
+        sut.addPi(macAddress, ipAddress, name, roomNo)
 
         // assert
-        verify(piDao).insertPi(macAddress, name, roomNo)
+        verify(piDao).insertPi(macAddress, ipAddress, name, roomNo)
         verify(piDao).deletePiRequest(macAddress)
 
     }

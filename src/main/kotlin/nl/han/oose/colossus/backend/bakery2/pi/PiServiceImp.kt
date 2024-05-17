@@ -6,6 +6,7 @@ import nl.han.oose.colossus.backend.bakery2.dto.PiDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiRequestsCollectionDto
 import nl.han.oose.colossus.backend.bakery2.exceptions.HttpNotFoundException
 import nl.han.oose.colossus.backend.bakery2.picommunicator.dto.PiAcceptDto
+import nl.han.oose.colossus.backend.bakery2.picommunicator.dto.PiSignUpRequestDto
 import nl.han.oose.colossus.backend.bakery2.picommunicator.dto.PiSetDashboardDto
 import nl.han.oose.colossus.backend.bakery2.picommunicator.dto.SocketResponseDto
 import org.springframework.beans.factory.annotation.Autowired
@@ -17,6 +18,9 @@ import org.springframework.messaging.simp.SimpMessagingTemplate
 @Component
 class PiServiceImp : PiService {
     @Autowired
+    private lateinit var piDaoImp: PiDaoImp
+
+    @Autowired
     private lateinit var piDao: PiDao
 
     @Autowired
@@ -24,8 +28,6 @@ class PiServiceImp : PiService {
 
     @Autowired
     private lateinit var messagingTemplate: SimpMessagingTemplate
-
-
 
     override fun setPiDao(dao: PiDao) {
         piDao = dao
@@ -38,7 +40,6 @@ class PiServiceImp : PiService {
     override fun setMessagingTemplate(messagingTemplate: SimpMessagingTemplate) {
         this.messagingTemplate = messagingTemplate
     }
-
 
     override fun getPis(user: Int): PiCollectionDto {
         val pis = piDao.getPis(user)
@@ -53,10 +54,9 @@ class PiServiceImp : PiService {
         return piDao.getAllPiRequests()
     }
 
-    override fun addPi(macAddress: String, name: String, roomno: String) {
-        piDao.insertPi(macAddress, name, roomno)
+    override fun addPi(macAddress: String, ipAddress: String, name: String, roomno: String) {
+        piDao.insertPi(macAddress, ipAddress, name, roomno)
         deletePiRequest(macAddress)
-
     }
 
     override fun declinePiRequest(macAddress: String) {
@@ -76,9 +76,12 @@ class PiServiceImp : PiService {
         messagingTemplate.convertAndSend("/topic/init-pi/$macAddress", socketResponseDto)
     }
 
-
     override fun editPi(piDto: PiDto, userId: Int) {
         piDao.editPi(piDto)
+    }
+
+    override fun updatePiIp(piSignUpRequestDto: PiSignUpRequestDto) {
+        piDaoImp.updatePiIp(piSignUpRequestDto)
     }
 
     override fun getPi(piId: Int?, macAddress: String?): PiDto {
@@ -87,7 +90,7 @@ class PiServiceImp : PiService {
     }
 
     override fun assignDashboardToPi(request: PiDto) {
-        piDao.assignDashboard(request.getId(),request.getDashboardId())
+        piDao.assignDashboard(request.getId(), request.getDashboardId())
 
         val assignedDashboard = PiSetDashboardDto()
         val dashboardUrl = dashboardDao.getDashboardUrl(request.getDashboardId())
@@ -97,6 +100,5 @@ class PiServiceImp : PiService {
         socketResponseDto.setBody(assignedDashboard)
         socketResponseDto.setInstruction("set-dashboard")
         messagingTemplate.convertAndSend("/topic/pi-listener/${request.getMacAddress()}", socketResponseDto)
-
     }
 }

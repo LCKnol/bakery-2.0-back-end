@@ -2,9 +2,10 @@ package nl.han.oose.colossus.backend.bakery2.dto
 
 class PiRequestDto {
 
-    private var id : Int = 0
+    private var id: Int = 0
     private var requestedOn: String = ""
     private var macAddress: String = ""
+    private var ipAddress: String = ""
 
 
     fun getId(): Int {
@@ -14,6 +15,7 @@ class PiRequestDto {
     fun setId(id: Int) {
         this.id = id
     }
+
     fun getRequestedOn(): String {
         return this.requestedOn
     }
@@ -30,4 +32,11 @@ class PiRequestDto {
         this.macAddress = macAddress
     }
 
+    fun getIpAddress(): String {
+        return this.ipAddress
+    }
+
+    fun setIpAddress(ipAddress: String) {
+        this.ipAddress = ipAddress
+    }
 }

@@ -5,7 +5,6 @@ import nl.han.oose.colossus.backend.bakery2.dto.DashboardCollectionDto
 import nl.han.oose.colossus.backend.bakery2.dto.DashboardDto
 
 interface DashboardsDao {
-
     fun getAllDashboards(userId: Int): DashboardCollectionDto
     fun getDashboardForUser(dashboardId: Int, userId: Int): DashboardDto?
     fun deleteDashboard(dashboardId: Int)
@@ -14,5 +13,4 @@ interface DashboardsDao {
     fun addDashboard(dashboardDto: DashboardDto)
     fun editDashboard(dashboardDto: DashboardDto)
     fun getDashboardUrl(dashboardId: Int): String
-
 }
