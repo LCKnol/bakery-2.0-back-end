@@ -107,6 +107,14 @@ class PiControllerTests {
         verify(piService).declinePiRequest(fakeAdress)
     }
 
-
-
+    @Test
+    fun testAssignDashboardToPiWorksCorrectly() {
+        // Arrange
+        val piDto = PiDto()
+        // Act
+        val response: ResponseEntity<HttpStatus> = sut.assignDashboardToPi(piDto)
+        // Assert
+        assertEquals(HttpStatus.OK, response.statusCode)
+        verify(piService).assignDashboardToPi(piDto)
+    }
 }

@@ -25,10 +25,7 @@ class PiServiceImp : PiService {
     @Autowired
     private lateinit var messagingTemplate: SimpMessagingTemplate
 
-    override fun getPis(user: Int): PiCollectionDto {
-        val pis = piDao.getPis(user)
-        return pis
-    }
+
 
     override fun setPiDao(dao: PiDao) {
         piDao = dao
@@ -38,6 +35,15 @@ class PiServiceImp : PiService {
         dashboardDao = dao
     }
 
+    override fun setMessagingTemplate(messagingTemplate: SimpMessagingTemplate) {
+        this.messagingTemplate = messagingTemplate
+    }
+
+
+    override fun getPis(user: Int): PiCollectionDto {
+        val pis = piDao.getPis(user)
+        return pis
+    }
 
     override fun getAllPis(): PiCollectionDto {
         return piDao.getAllPis()
@@ -81,8 +87,8 @@ class PiServiceImp : PiService {
     }
 
     override fun assignDashboardToPi(request: PiDto) {
+        piDao.assignDashboard(request.getId(),request.getDashboardId())
 
-        piDao.assignDashboard(request)
         val assignedDashboard = PiSetDashboardDto()
         val dashboardUrl = dashboardDao.getDashboardUrl(request.getDashboardId())
         assignedDashboard.setUrl(dashboardUrl)
