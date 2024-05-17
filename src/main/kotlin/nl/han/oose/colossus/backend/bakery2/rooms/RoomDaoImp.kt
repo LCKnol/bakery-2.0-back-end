@@ -31,12 +31,13 @@ class RoomDaoImp : RoomDao {
     override fun deleteRoom(roomNo: String) {
             val query = "DELETE FROM TEAMINROOM WHERE ROOMNO = ?"
             val query2 = "DELETE FROM ROOM WHERE ROOMNO = ?"
-            try {
-                val statement = dbConnection.prepareStatement(query)
+        try{
+            val connection = dbConnection.getConnection()
+            val statement = connection.prepareStatement(query)
                 statement.setString(1, roomNo)
                 statement.executeUpdate()
                 statement.close()
-                val statement2 = dbConnection.prepareStatement(query2)
+            val statement2 = connection.prepareStatement(query2)
                 statement2.setString(1, roomNo)
                 statement2.executeUpdate()
                 statement2.close()
