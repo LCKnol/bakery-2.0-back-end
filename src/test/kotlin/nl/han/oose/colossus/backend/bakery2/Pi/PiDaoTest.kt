@@ -2,7 +2,6 @@ package nl.han.oose.colossus.backend.bakery2.Pi
 
 import nl.han.oose.colossus.backend.bakery2.database.DatabaseConnection
 import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDto
-import nl.han.oose.colossus.backend.bakery2.dto.PiDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiRequestsCollectionDto
 import nl.han.oose.colossus.backend.bakery2.pi.PiDao
 import nl.han.oose.colossus.backend.bakery2.pi.PiDaoImp
@@ -143,14 +142,22 @@ class PiDaoTest {
         // arrange
         val dashboardId = 2
         val piID = 1
-        val macAddress = "aa:41:16:f3:81:fc"
+        val macAddress = "macAddress"
+
+        val statement1 = dbconnection.getConnection().prepareStatement("insert into pi (roomno, dashboardId, name, macaddress) values (15.05, ?, 'testpi', ?)")
+        statement1.setInt(1, dashboardId)
+        statement1.setString(2, macAddress)
+
+        val statement2 = dbconnection.getConnection().prepareStatement("SELECT DASHBOARDID FROM PI WHERE MACADDRESS = ?")
+        statement2.setString(1,macAddress)
 
         // act
+        statement1.executeUpdate()
         sut.assignDashboard(dashboardId,piID)
-        val statement = dbconnection.getConnection().prepareStatement("SELECT DASHBOARDID FROM PI WHERE MACADDRESS = ?")
-        statement.setString(1,macAddress)
-        val result = statement.executeQuery()
+        val resultSet = statement2.executeQuery()
+        resultSet.next()
+        val result = resultSet.getInt(1)
         //assert
-        Assertions.assertTrue(result.next())
+        Assertions.assertEquals(dashboardId, result)
     }
 }
