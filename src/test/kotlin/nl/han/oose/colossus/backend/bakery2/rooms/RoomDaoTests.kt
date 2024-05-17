@@ -2,6 +2,7 @@ package nl.han.oose.colossus.backend.bakery2.rooms
 
 import nl.han.oose.colossus.backend.bakery2.database.DatabaseConnection
 import nl.han.oose.colossus.backend.bakery2.dto.RoomCollectionDto
+import nl.han.oose.colossus.backend.bakery2.dto.RoomDto
 import nl.han.oose.colossus.backend.bakery2.util.MockitoHelper
 import nl.han.oose.colossus.backend.bakery2.util.ScriptRunner
 import org.junit.jupiter.api.Assertions
@@ -79,5 +80,24 @@ class RoomDaoTests {
         Assertions.assertTrue(resultSet1.next())
 
         Assertions.assertFalse(resultSet2.next())
+    }
+
+    @Test
+    fun testAddRoomWorksCorrectly() {
+        // Arrange
+        val roomNo = "11:11"
+        val roomDto = RoomDto()
+        roomDto.setRoomNo(roomNo)
+        // Act
+        sut.addRoom(roomDto)
+
+        val statement = dbconnection.getConnection().prepareStatement("SELECT ROOMNO FROM ROOM WHERE ROOMNO = ? ")
+        statement.setString(1, roomDto.getRoomNo())
+        val resultSet = statement.executeQuery()
+        resultSet.next()
+        val finalResult = resultSet.getString(1)
+
+        // Assert
+        Assertions.assertEquals(roomDto.getRoomNo(), finalResult)
     }
 }

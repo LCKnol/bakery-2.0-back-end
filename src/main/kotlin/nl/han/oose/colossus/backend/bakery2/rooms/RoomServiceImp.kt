@@ -1,6 +1,7 @@
 package nl.han.oose.colossus.backend.bakery2.rooms
 
 import nl.han.oose.colossus.backend.bakery2.dto.RoomCollectionDto
+import nl.han.oose.colossus.backend.bakery2.dto.RoomDto
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Primary
 import org.springframework.stereotype.Component
@@ -18,6 +19,10 @@ class RoomServiceImp : RoomService {
 
     override fun deleteRoom(roomNo: String) {
         roomDao.deleteRoom(roomNo)
+    }
+
+    override fun addRoom(roomDto: RoomDto) {
+        roomDao.addRoom(roomDto)
     }
 
 
