@@ -3,6 +3,7 @@ package nl.han.oose.colossus.backend.bakery2.rooms
 
 import junit.framework.Assert.assertEquals
 import nl.han.oose.colossus.backend.bakery2.dto.RoomCollectionDto
+import nl.han.oose.colossus.backend.bakery2.dto.RoomDto
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
@@ -47,4 +48,17 @@ class RoomControllerTests {
 
         verify(roomService).deleteRoom(roomNo)
     }
-}
+
+        @Test
+        fun testAddRoomWorksCorrectly(){
+            // Arrange
+            val roomNo = "11:11"
+            val roomDto = RoomDto()
+            roomDto.setRoomNo(roomNo)
+            // Act
+            val response = sut.addRoom(roomDto).statusCode.value()
+            // Assert
+            assertEquals(201, response)
+            verify(roomService).addRoom(roomDto)
+        }
+    }

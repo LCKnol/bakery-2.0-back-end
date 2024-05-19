@@ -2,6 +2,7 @@ package nl.han.oose.colossus.backend.bakery2.rooms
 
 import nl.han.oose.colossus.backend.bakery2.database.DatabaseConnection
 import nl.han.oose.colossus.backend.bakery2.dto.RoomCollectionDto
+import nl.han.oose.colossus.backend.bakery2.dto.RoomDto
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Primary
 import org.springframework.stereotype.Component
@@ -41,6 +42,16 @@ class RoomDaoImp : RoomDao {
                 statement2.executeUpdate()
                 statement2.close()
         }
+    @Throws(ServerErrorException::class)
+    override fun addRoom(roomDto: RoomDto) {
+        val query = "INSERT INTO ROOM (ROOMNO) VALUES (?)"
+        val connection = dbConnection.getConnection()
+            val statement = connection.prepareStatement(query)
+            statement.setString(1, roomDto.getRoomNo())
+            statement.executeUpdate()
+            statement.close()
+            connection.close()
+    }
 
     @Throws(ServerErrorException::class)
     override fun getAllRooms(): RoomCollectionDto {
