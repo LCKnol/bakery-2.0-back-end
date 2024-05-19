@@ -99,6 +99,7 @@ class PiServiceImp : PiService {
         val socketResponseDto = SocketResponseDto()
         socketResponseDto.setBody(assignedDashboard)
         socketResponseDto.setInstruction("set-dashboard")
-        messagingTemplate.convertAndSend("/topic/pi-listener/${request.getMacAddress()}", socketResponseDto)
+        val macAddress = request.getMacAddress()
+        messagingTemplate.convertAndSend("/topic/pi-listener/$macAddress", socketResponseDto)
     }
 }

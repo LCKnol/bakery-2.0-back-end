@@ -28,11 +28,15 @@ class PiSignUpController {
         if (piSignUpService.checkPiExists(request.getMacAddress())) {
             piService.handlePiRequest(request.getMacAddress(), true)
             piService.updatePiIp(request)
+
+            // Sleep 1 second so pi has time to assign onto the topic/pi-listener
+            Thread.sleep(1000)
+
             val pi = piService.getPi(null, request.getMacAddress())
             piService.assignDashboardToPi(pi)
         }
         // check if pi already signed up
-        else if (!piSignUpService.checkPiSignUpExists(request.getMacAddress())) {
+        else {
             piSignUpService.createSignUpRequest(request.getMacAddress(), request.getIpAddress())
         }
     }
