@@ -83,6 +83,7 @@ class UserMapperImp : UserMapper {
             var teams = user.getTeams()
             var team = TeamDto()
             team.setName(resultSet.getString("teamname"))
+            team.setId(resultSet.getInt("teamid"))
             teams.add(team)
 
         }

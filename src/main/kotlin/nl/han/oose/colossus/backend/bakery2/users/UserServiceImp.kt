@@ -62,6 +62,10 @@ class UserServiceImp : UserService {
     override fun getAllUsers(): UserCollectionDto {
         return userDao.getAllUsers()
     }
+
+    override fun deleteUser(userId: Int) {
+        userDao.deleteUser(userId)
+    }
 }
 
 

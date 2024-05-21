@@ -69,13 +69,24 @@ class UserDaoImp : UserDao {
         }
     }
 
+    @Throws(ServerErrorException::class)
     override fun getAllUsers(): UserCollectionDto {
         val connection = databaseConnection.getConnection()
-        val preparedStatement = connection.prepareStatement("SELECT distinct   u.userid, u.firstname, u.lastname, u.password, u.email, u.isadmin, t.teamname from USERS u left join USERINTEAM ut on u.userid = ut.userid left join TEAMINROOM tr on ut.teamid = tr.teamid left join TEAM t on t.TEAMID = ut.TEAMID ")
+        val preparedStatement = connection.prepareStatement("SELECT distinct  u.userid, u.firstname, u.lastname, u.password, u.email, u.isadmin, t.teamname,t.teamid from USERS u left join USERINTEAM ut on u.userid = ut.userid left join TEAMINROOM tr on ut.teamid = tr.teamid left join TEAM t on t.TEAMID = ut.TEAMID ")
         val resultSet = preparedStatement.executeQuery()
         val users = userMapper.mapUserCollection(resultSet)
         preparedStatement.close()
         connection.close()
-        return users!!
+        return users !!
+    }
+
+    @Throws(ServerErrorException::class)
+    override fun deleteUser(userId: Int) {
+        val connection = databaseConnection.getConnection()
+        val preparedStatement = connection.prepareStatement("DELETE FROM USERS WHERE USERID = ?")
+        preparedStatement.setInt(1,userId)
+        preparedStatement.executeUpdate()
+        preparedStatement.close()
+        connection.close()
     }
 }

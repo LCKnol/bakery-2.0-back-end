@@ -19,4 +19,5 @@ interface UserService {
 
     fun checkUserInTeam(userId: Int, teamId: Int)
     fun getAllUsers(): UserCollectionDto
+    fun deleteUser(userId: Int)
 }

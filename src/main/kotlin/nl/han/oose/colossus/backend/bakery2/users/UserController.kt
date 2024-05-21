@@ -51,4 +51,12 @@ class UserController {
         var users = userService.getAllUsers()
         return ResponseEntity(users, HttpStatus.OK)
     }
+
+    @Authenticate
+    @Admin
+    @DeleteMapping(path = ["/{userId}"])
+    fun deleteUser(@PathVariable userId: Int): ResponseEntity<UserCollectionDto> {
+        userService.deleteUser(userId)
+        return ResponseEntity(HttpStatus.OK)
+    }
 }
