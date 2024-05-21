@@ -1,9 +1,9 @@
 package nl.han.oose.colossus.backend.bakery2.users
 
+import nl.han.oose.colossus.backend.bakery2.dto.UserCollectionDto
 import nl.han.oose.colossus.backend.bakery2.dto.UserDto
 import nl.han.oose.colossus.backend.bakery2.dto.UserInfoDto
 import nl.han.oose.colossus.backend.bakery2.exceptions.HttpForbiddenException
-import nl.han.oose.colossus.backend.bakery2.exceptions.HttpUnauthorizedException
 import nl.han.oose.colossus.backend.bakery2.teams.TeamDao
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Primary
@@ -57,6 +57,10 @@ class UserServiceImp : UserService {
             }
         }
         throw HttpForbiddenException("User is not in given team")
+    }
+
+    override fun getAllUsers(): UserCollectionDto {
+        return userDao.getAllUsers()
     }
 }
 

@@ -1,10 +1,7 @@
 package nl.han.oose.colossus.backend.bakery2.users
 
 import nl.han.oose.colossus.backend.bakery2.database.DatabaseConnection
-import nl.han.oose.colossus.backend.bakery2.dto.RoomCollectionDto
-import nl.han.oose.colossus.backend.bakery2.dto.TeamCollectionDto
-import nl.han.oose.colossus.backend.bakery2.dto.UserDto
-import nl.han.oose.colossus.backend.bakery2.dto.UserInfoDto
+import nl.han.oose.colossus.backend.bakery2.dto.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Primary
 import org.springframework.stereotype.Component
@@ -44,7 +41,7 @@ class UserDaoImp : UserDao {
     @Throws(ServerErrorException::class)
     override fun getUser(token: String): UserDto? {
         val connection = databaseConnection.getConnection()
-        val preparedStatement = connection.prepareStatement("SELECT userid, firstname, lastname, password, email, isadmin FROM USERS WHERE userid = (SELECT userid FROM USERSESSION WHERE token = ?)")
+        val preparedStatement = connection.prepareStatement("SELECT u.userid, u.firstname, u.lastname, u.password, u.email, u.isadmin, t.teamname from USERS u left join USERINTEAM ut on u.userid = ut.userid left join TEAMINROOM tr on ut.teamid = tr.teamid left join TEAM t on t.TEAMID = ut.TEAMID where u.userid = (select userid from USERSESSION where token = ?)")
         preparedStatement.setString(1, token)
         val resultSet = preparedStatement.executeQuery()
         val user = userMapper.mapUser(resultSet)
@@ -70,5 +67,15 @@ class UserDaoImp : UserDao {
         } catch (e: SQLException) {
             println(e.message)
         }
+    }
+
+    override fun getAllUsers(): UserCollectionDto {
+        val connection = databaseConnection.getConnection()
+        val preparedStatement = connection.prepareStatement("SELECT distinct   u.userid, u.firstname, u.lastname, u.password, u.email, u.isadmin, t.teamname from USERS u left join USERINTEAM ut on u.userid = ut.userid left join TEAMINROOM tr on ut.teamid = tr.teamid left join TEAM t on t.TEAMID = ut.TEAMID ")
+        val resultSet = preparedStatement.executeQuery()
+        val users = userMapper.mapUserCollection(resultSet)
+        preparedStatement.close()
+        connection.close()
+        return users!!
     }
 }

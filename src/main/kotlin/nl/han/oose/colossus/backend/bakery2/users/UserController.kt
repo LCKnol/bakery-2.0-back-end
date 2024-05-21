@@ -1,5 +1,6 @@
 package nl.han.oose.colossus.backend.bakery2.users
 
+import nl.han.oose.colossus.backend.bakery2.dto.UserCollectionDto
 import nl.han.oose.colossus.backend.bakery2.dto.UserDto
 import nl.han.oose.colossus.backend.bakery2.dto.UserInfoDto
 import nl.han.oose.colossus.backend.bakery2.header.Admin
@@ -43,4 +44,11 @@ class UserController {
         return ResponseEntity(HttpStatus.CREATED)
     }
 
+    @Authenticate
+    @Admin
+    @GetMapping(path = ["/all"],produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun getAllUsers(): ResponseEntity<UserCollectionDto> {
+        var users = userService.getAllUsers()
+        return ResponseEntity(users, HttpStatus.OK)
+    }
 }

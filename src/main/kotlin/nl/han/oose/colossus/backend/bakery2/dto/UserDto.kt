@@ -13,13 +13,16 @@ class UserDto {
 
     private var isAdmin: Boolean
 
-    constructor(id: Int, firstname: String, lastname: String, email: String, password: String, isAdmin: Boolean) {
+    private var teams: ArrayList<TeamDto>
+
+    constructor(id: Int, firstname: String, lastname: String, email: String, password: String, teams: ArrayList<TeamDto>,isAdmin: Boolean) {
         this.id = id
         this.firstName = firstname
         this.lastName = lastname
         this.email = email
         this.password = password
         this.isAdmin = isAdmin
+        this.teams = teams
     }
 
     fun setId(id: Int) {
@@ -69,4 +72,12 @@ class UserDto {
     fun getIsAdmin(): Boolean {
         return isAdmin
     }
+
+    fun getTeams(): ArrayList<TeamDto>{
+        return  this.teams
+    }
+    fun setTeams(newTeams: ArrayList<TeamDto> ) {
+        this.teams = newTeams
+    }
+
 }
