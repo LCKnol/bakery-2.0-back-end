@@ -1,5 +1,6 @@
 package nl.han.oose.colossus.backend.bakery2.Users
 
+import nl.han.oose.colossus.backend.bakery2.dto.TeamDto
 import nl.han.oose.colossus.backend.bakery2.dto.UserDto
 import nl.han.oose.colossus.backend.bakery2.dto.UserInfoDto
 import nl.han.oose.colossus.backend.bakery2.header.HeaderService
@@ -55,11 +56,12 @@ class UserControllerTest {
         // Arrange
         val userDto = UserDto(
             id = 1,
-            firstname = "reem",
-            lastname = "man",
+            firstName = "reem",
+            lastName = "man",
             email = "reem.@gmail.com",
             password = "mypassword",
-            isAdmin = true
+            isAdmin = true,
+            teams =  ArrayList<TeamDto>()
         )
         Mockito.doNothing().`when`(userService).registerUser(userDto)
 

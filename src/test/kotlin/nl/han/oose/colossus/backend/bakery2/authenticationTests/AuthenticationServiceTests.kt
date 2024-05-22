@@ -1,6 +1,7 @@
 import nl.han.oose.colossus.backend.bakery2.authentication.AuthenticationDao
 import nl.han.oose.colossus.backend.bakery2.authentication.AuthenticationService
 import nl.han.oose.colossus.backend.bakery2.authentication.AuthenticationServiceImp
+import nl.han.oose.colossus.backend.bakery2.dto.TeamDto
 import nl.han.oose.colossus.backend.bakery2.dto.UserDto
 import nl.han.oose.colossus.backend.bakery2.exceptions.HttpUnauthorizedException
 import nl.han.oose.colossus.backend.bakery2.users.UserDao
@@ -52,7 +53,7 @@ class AuthenticationServiceTests {
         val email = "user@example.com"
         val password = "correctPassword"
         val storedHash = BCrypt.hashpw(password, BCrypt.gensalt())
-        val mockUser : UserDto = UserDto(12, "e", "e", "d", "d", true)
+        val mockUser : UserDto = UserDto(12, "e", "e", "d", "d", ArrayList<TeamDto>(),true)
 
         `when`(authenticationDao.findPassword(email)).thenReturn(storedHash)
         `when`(userDao.getUser(anyString())).thenReturn(mockUser)

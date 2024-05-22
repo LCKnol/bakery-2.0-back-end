@@ -50,7 +50,7 @@ class UserServiceImp : UserService {
     }
 
     override fun checkUserInTeam(userId: Int, teamId: Int) {
-        val teamsOfUser = teamDao.getTeams(userId)
+        val teamsOfUser = teamDao.getTeamsFromUser(userId)
         for (team in teamsOfUser.getTeamCollection()) {
             if (team.getId() == teamId) {
                 return

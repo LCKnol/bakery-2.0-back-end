@@ -1,6 +1,7 @@
 package nl.han.oose.colossus.backend.bakery2.Users
 
 import nl.han.oose.colossus.backend.bakery2.database.DatabaseConnection
+import nl.han.oose.colossus.backend.bakery2.dto.TeamDto
 import nl.han.oose.colossus.backend.bakery2.dto.UserDto
 import nl.han.oose.colossus.backend.bakery2.dto.UserInfoDto
 import nl.han.oose.colossus.backend.bakery2.users.UserDaoImp
@@ -60,7 +61,7 @@ class UserDaoTest {
         insertStatement.setString(2, "123")
         insertStatement.executeUpdate()
         val token: String = "123"
-        val user : UserDto = UserDto(1, "Arnoud", "Visi", "Avisi@outlook.com", "test password", false)
+        val user : UserDto = UserDto(1, "Arnoud", "Visi", "Avisi@outlook.com", "test password", ArrayList<TeamDto>(),false)
         `when`(userMapper.mapUser(MockitoHelper.anyObject())).thenReturn(user)
 
 
@@ -74,7 +75,7 @@ class UserDaoTest {
     @Test
     fun insertUser() {
         // Arrange
-        val userDto = UserDto(-1, "John", "Doe", "john.doe@example.com", "securePassword123", true)
+        val userDto = UserDto(-1, "John", "Doe", "john.doe@example.com", "securePassword123",ArrayList<TeamDto>(), true)
 
         dbConnection = DatabaseConnection()
         val insertStatement = dbConnection.getConnection().prepareStatement(

@@ -206,6 +206,6 @@ alter table USERINTEAM add constraint FK_USERINTEAM2 foreign key (TEAMID)
     references TEAM (TEAMID) on delete cascade on update restrict;
 
 alter table USERSESSION add constraint FK_USERSESSION foreign key (USERID)
-    references USERS (USERID) on cascade  restrict on update restrict;
+    references USERS (USERID) on delete cascade on update restrict;
 
 

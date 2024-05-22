@@ -52,7 +52,7 @@ class UserServiceTest {
     fun testGetUser() {
         // Arrange
         val token = "fakeToken"
-        val user : UserDto = UserDto(1, "pieter", "post", "123", "123", true)
+        val user : UserDto = UserDto(1, "pieter", "post", "123", "123", ArrayList<TeamDto>(),true)
         `when`(userDao.getUser(token)).thenReturn(user)
 
         // Act
@@ -68,11 +68,12 @@ class UserServiceTest {
         // Arrange
         val userDto = UserDto(
             id = 1,
-            firstname = "reem",
-            lastname = "man",
+            firstName = "reem",
+            lastName = "man",
             email = "reem.@gmail.com",
             password = "mypassword",
-            isAdmin = true
+            isAdmin = true,
+            teams = ArrayList<TeamDto>()
         )
 
         val userPassword = BCrypt.hashpw(userDto.getPassword(), BCrypt.gensalt())
