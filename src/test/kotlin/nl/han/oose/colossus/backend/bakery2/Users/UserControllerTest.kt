@@ -1,6 +1,7 @@
 package nl.han.oose.colossus.backend.bakery2.Users
 
 import nl.han.oose.colossus.backend.bakery2.dto.TeamDto
+import nl.han.oose.colossus.backend.bakery2.dto.UserCollectionDto
 import nl.han.oose.colossus.backend.bakery2.dto.UserDto
 import nl.han.oose.colossus.backend.bakery2.dto.UserInfoDto
 import nl.han.oose.colossus.backend.bakery2.header.HeaderService
@@ -71,5 +72,27 @@ class UserControllerTest {
         // Assert
         verify(userService).registerUser(userDto)
         assertEquals(HttpStatus.CREATED, response.statusCode)
+    }
+
+
+    @Test
+    fun testGetAllUsersSuccess() {
+        // Act
+        val response: ResponseEntity<UserCollectionDto> = sut.getAllUsers()
+        // Assert
+        verify(userService).getAllUsers()
+        assertEquals(HttpStatus.OK, response.statusCode)
+    }
+
+
+    @Test
+    fun testDeleteUsersSuccess() {
+
+        // Act
+        val response: ResponseEntity<UserCollectionDto> = sut.deleteUser(1)
+
+        // Assert
+        verify(userService).deleteUser(1)
+        assertEquals(HttpStatus.OK, response.statusCode)
     }
 }
