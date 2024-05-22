@@ -52,7 +52,7 @@ class PiServiceImp : PiService {
     override fun pingPi(piId: Int) {
         val socketResponseDto = SocketResponseDto()
         socketResponseDto.setInstruction("ping")
-        val macAddress = "mac_address"
+        val macAddress = this.piDao.getMacAddress(piId)
         messagingTemplate.convertAndSend("/topic/pi-listener/$macAddress", socketResponseDto)
     }
 
