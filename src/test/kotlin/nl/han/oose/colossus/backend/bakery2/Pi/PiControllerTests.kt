@@ -4,6 +4,7 @@ import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiRequestsCollectionDto
 import nl.han.oose.colossus.backend.bakery2.exceptions.HttpUnauthorizedException
+import nl.han.oose.colossus.backend.bakery2.header.Authenticate
 import nl.han.oose.colossus.backend.bakery2.header.HeaderService
 import nl.han.oose.colossus.backend.bakery2.pi.PiController
 import nl.han.oose.colossus.backend.bakery2.pi.PiService
@@ -15,6 +16,8 @@ import org.junit.jupiter.api.Test
 import org.mockito.Mockito.*
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 
 class PiControllerTests {
 
@@ -128,6 +131,27 @@ class PiControllerTests {
         verify(userService).getUserId(token)
         verify(piService).editPi(piDto, userId)
     }
+    @Test
+    fun testAssignDashboardToPi() {
+        // Arrange
+        val piDto = PiDto()
 
+        // Act
+        val response: ResponseEntity<HttpStatus> = sut.assignDashboardToPi(piDto)
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.statusCode)
+        verify(piService).assignDashboardToPi(piDto)
+    }
+    @Test
+    fun testRebootPi() {
+        // Arrange
+        val piId = 1
+        // Act
+        val response: ResponseEntity<HttpStatus> = sut.rebootPi(piId)
+        // Assert
+        assertEquals(HttpStatus.OK, response.statusCode)
+        verify(piService).rebootPi(piId)
+    }
 
 }

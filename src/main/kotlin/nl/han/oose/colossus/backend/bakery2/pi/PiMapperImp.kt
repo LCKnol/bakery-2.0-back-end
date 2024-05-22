@@ -42,7 +42,7 @@ class PiMapperImp : PiMapper {
         val piRequests = arrayListOf<PiRequestDto>()
         while (resultSet.next()) {
             val id = resultSet.getInt("requestid")
-            val requestedOn= resultSet.getString("requestedon")
+            val requestedOn = resultSet.getString("requestedon")
             val macAddress = resultSet.getString("macaddress")
             val piRequestDto = PiRequestDto()
             piRequestDto.setId(id)
@@ -74,5 +74,13 @@ class PiMapperImp : PiMapper {
         }
 
         return pi
+    }
+
+    override fun mapMacAddress(resultSet: ResultSet): String {
+        return if (resultSet.next()) {
+            resultSet.getString("macAddress")
+        } else {
+            "No MAC address found"
+        }
     }
 }

@@ -42,6 +42,8 @@ class PiDaoTest {
         scriptRunner.runScript(InputStreamReader(ClassLoader.getSystemResourceAsStream("BakeryDB_Create.sql")!!))
         sut.setDatabaseConnection(dbconnection)
         sut.setPiMapper(piMapper)
+
+
     }
 
     @Test
@@ -97,7 +99,7 @@ class PiDaoTest {
 
             dbconnection = DatabaseConnection()
             val selectStatement = dbconnection.getConnection().prepareStatement(
-                    "SELECT MACADDRESS FROM PIREQUEST WHERE MACADDRESS = ?"
+                "SELECT MACADDRESS FROM PIREQUEST WHERE MACADDRESS = ?"
             )
             selectStatement.setString(1, macAddress)
 
@@ -121,7 +123,8 @@ class PiDaoTest {
         val adress = "fake adress"
 
         val statement1 =
-                dbconnection.getConnection().prepareStatement("INSERT INTO PIREQUEST (MACADDRESS, REQUESTEDON) VALUES (?, ?)")
+            dbconnection.getConnection()
+                .prepareStatement("INSERT INTO PIREQUEST (MACADDRESS, REQUESTEDON) VALUES (?, ?)")
         statement1.setString(1, adress)
         statement1.setString(2, "2024-04-24 09:36:22")
 
@@ -129,7 +132,7 @@ class PiDaoTest {
 
         // Act & Assert
         val statement2 =
-                dbconnection.getConnection().prepareStatement("SELECT MACADDRESS FROM PIREQUEST WHERE MACADDRESS = ?")
+            dbconnection.getConnection().prepareStatement("SELECT MACADDRESS FROM PIREQUEST WHERE MACADDRESS = ?")
         statement2.setString(1, adress)
         val resultSet1 = statement2.executeQuery()
         Assertions.assertTrue(resultSet1.next())
@@ -138,7 +141,7 @@ class PiDaoTest {
 
         // Dashboard with id sampleDashboardId should now be deleted
         val statement3 =
-                dbconnection.getConnection().prepareStatement("SELECT MACADDRESS FROM PIREQUEST WHERE MACADDRESS = ?")
+            dbconnection.getConnection().prepareStatement("SELECT MACADDRESS FROM PIREQUEST WHERE MACADDRESS = ?")
         statement3.setString(1, adress)
         val resultSet2 = statement3.executeQuery()
         Assertions.assertFalse(resultSet2.next())
@@ -146,3 +149,7 @@ class PiDaoTest {
 
 
 }
+
+
+
+

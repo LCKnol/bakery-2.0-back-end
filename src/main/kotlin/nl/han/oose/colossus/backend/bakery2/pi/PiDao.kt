@@ -17,4 +17,6 @@ interface PiDao {
     fun editPi(piDto: PiDto)
     fun getPi(piId: Int): PiDto?
     fun assignDashboard(piDto: PiDto)
+
+    fun getMacAddress(piId: Int):String
 }

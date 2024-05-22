@@ -108,5 +108,11 @@ class PiController {
         piService.assignDashboardToPi(request)
         return ResponseEntity(HttpStatus.OK)
     }
+    @GetMapping("/reboot/{piId}")
+    @Authenticate
+    fun rebootPi(@PathVariable piId:Int): ResponseEntity<HttpStatus> {
+        piService.rebootPi(piId)
+        return ResponseEntity(HttpStatus.OK)
+    }
 
 }

@@ -9,4 +9,6 @@ interface PiMapper {
     fun mapPis(resultSet : ResultSet) : PiCollectionDto
     fun mapPiRequests(resultSet: ResultSet): PiRequestsCollectionDto
     fun getPiMapper(resultSet: ResultSet): PiDto?
+
+    fun mapMacAddress(resultSet: ResultSet):String
 }

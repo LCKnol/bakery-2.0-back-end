@@ -10,22 +10,27 @@ import nl.han.oose.colossus.backend.bakery2.exceptions.HttpNotFoundException
 import nl.han.oose.colossus.backend.bakery2.pi.PiDao
 import nl.han.oose.colossus.backend.bakery2.pi.PiService
 import nl.han.oose.colossus.backend.bakery2.pi.PiServiceImp
+import nl.han.oose.colossus.backend.bakery2.picommunicator.dto.SocketResponseDto
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.*
+import org.springframework.messaging.simp.SimpMessagingTemplate
 
 class PiServiceTest {
 
     private lateinit var sut: PiService
 
     private lateinit var piDao: PiDao
+    private lateinit var messagingTemplate: SimpMessagingTemplate
 
     @BeforeEach
     fun setUp() {
         sut = PiServiceImp()
         piDao = mock(PiDao::class.java)
         sut.setPiDao(piDao)
+        messagingTemplate = mock(SimpMessagingTemplate::class.java)
+        sut.setMessagingTemplate(messagingTemplate)
     }
 
     @Test
@@ -154,6 +159,21 @@ class PiServiceTest {
 
         assertEquals("pi does not exist", exception.message)
         verify(piDao).getPi(piId)
+    }
+
+    @Test
+    fun testRebootPi() {
+        // Arrange
+        val piId = 1
+        val macAddress = "00:11:22:33:44:55"
+        `when`(piDao.getMacAddress(piId)).thenReturn(macAddress)
+
+        // Act
+        sut.rebootPi(piId)
+
+        // Assert
+        verify(piDao).getMacAddress(piId)
+        verify(messagingTemplate).convertAndSend(eq("/topic/pi-listener/$macAddress"), any(SocketResponseDto::class.java))
     }
 
 }
