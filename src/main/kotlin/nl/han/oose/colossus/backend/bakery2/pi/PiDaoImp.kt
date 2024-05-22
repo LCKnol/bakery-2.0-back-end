@@ -5,6 +5,8 @@ import nl.han.oose.colossus.backend.bakery2.dto.DashboardDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiRequestsCollectionDto
+import nl.han.oose.colossus.backend.bakery2.picommunicator.dto.PiSignUpRequestDto
+import nl.han.oose.colossus.backend.bakery2.exceptions.HttpNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Primary
 import org.springframework.stereotype.Component
@@ -77,12 +79,14 @@ class PiDaoImp : PiDao {
     }
 
     @Throws(ServerErrorException::class)
-    override fun insertPi(macAddress: String, name: String, roomno: String) {
+    override fun insertPi(macAddress: String, ipAddress: String, name: String, roomno: String) {
         val connection = databaseConnection.getConnection()
-        val statement = connection.prepareStatement("INSERT INTO PI (macAddress, name, roomno) VALUES(?, ?, ?)")
+        val statement =
+            connection.prepareStatement("INSERT INTO PI (macAddress, ipAddress, name, roomno) VALUES(?, ?, ?, ?)")
         statement.setString(1, macAddress)
-        statement.setString(2, name)
-        statement.setString(3, roomno)
+        statement.setString(2, ipAddress)
+        statement.setString(3, name)
+        statement.setString(4, roomno)
         statement.executeUpdate()
         statement.close()
         connection.close()
@@ -98,7 +102,6 @@ class PiDaoImp : PiDao {
         connection.close()
     }
 
-
     @Throws(ServerErrorException::class)
     override fun editPi(piDto: PiDto) {
         val connection = databaseConnection.getConnection()
@@ -112,6 +115,37 @@ class PiDaoImp : PiDao {
     }
 
     @Throws(ServerErrorException::class)
+    override fun updatePiIp(piSignUpRequestDto: PiSignUpRequestDto) {
+        val connection = databaseConnection.getConnection()
+        val statement =
+            connection.prepareStatement("UPDATE PI SET IPADDRESS = ? WHERE MACADDRESS = ?")
+        statement.setString(1, piSignUpRequestDto.getIpAddress())
+        statement.setString(2, piSignUpRequestDto.getMacAddress())
+        statement.executeUpdate()
+        statement.close()
+        connection.close()
+    }
+
+    @Throws(ServerErrorException::class)
+    override fun getPi(piId: Int?, macAddress: String?): PiDto? {
+        val connection = databaseConnection.getConnection()
+        val query = if (piId != null) {
+            "SELECT p.*, d.NAME AS dashboardname, d.dashboardId FROM PI p LEFT JOIN DASHBOARD d ON p.DASHBOARDID = d.DASHBOARDID WHERE PIID = ?"
+        } else if (macAddress != null) {
+            "SELECT p.*, d.NAME AS dashboardname, d.dashboardId FROM PI p LEFT JOIN DASHBOARD d ON p.DASHBOARDID = d.DASHBOARDID WHERE MACADDRESS = ?"
+        } else {
+            return null
+        }
+        val statement =
+            connection.prepareStatement(query)
+        if (piId != null) statement.setInt(1, piId) else statement.setString(1, macAddress)
+        val result = statement.executeQuery()
+        val pi = piMapper.getPiMapper(result)
+        statement.close()
+        connection.close()
+        return pi
+    }
+
     override fun getPi(piId: Int): PiDto? {
         val connection = databaseConnection.getConnection()
         val statement =
@@ -125,11 +159,11 @@ class PiDaoImp : PiDao {
     }
 
     @Throws(ServerErrorException::class)
-    override fun assignDashboard(piDto: PiDto) {
+    override fun assignDashboard(piId: Int, dashboardId: Int) {
         val connection = databaseConnection.getConnection()
         val statement = connection.prepareStatement("UPDATE PI SET DASHBOARDID = ? WHERE PIID = ?");
-        statement.setInt(1, piDto.getDashboardId())
-        statement.setInt(2, piDto.getId())
+        statement.setInt(1, dashboardId)
+        statement.setInt(2, piId)
         statement.executeUpdate()
         statement.close()
         connection.close()
@@ -146,5 +180,4 @@ class PiDaoImp : PiDao {
         return result
 
     }
-
 }

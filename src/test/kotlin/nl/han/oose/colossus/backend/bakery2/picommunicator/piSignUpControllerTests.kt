@@ -28,12 +28,12 @@ class piSignUpControllerTests {
         // Arrange
         val piSignUpRequestDto = PiSignUpRequestDto()
 
-        Mockito.`when`(pisSignupService.checkPiExists(piSignUpRequestDto)).thenReturn(false)
+        Mockito.`when`(pisSignupService.checkPiExists(piSignUpRequestDto.getMacAddress())).thenReturn(false)
         // Act
         sut.signUpPi(piSignUpRequestDto)
 
         // Assert
-        Mockito.verify(pisSignupService).createSignUpRequest("")
+        Mockito.verify(pisSignupService).createSignUpRequest("", "")
     }
 
     @Test
@@ -41,7 +41,7 @@ class piSignUpControllerTests {
         // Arrange
         val piSignUpRequestDto = PiSignUpRequestDto()
 
-        Mockito.`when`(pisSignupService.checkPiExists(piSignUpRequestDto)).thenReturn(true)
+        Mockito.`when`(pisSignupService.checkPiExists(piSignUpRequestDto.getMacAddress())).thenReturn(true)
         // Act
         sut.signUpPi(piSignUpRequestDto)
 

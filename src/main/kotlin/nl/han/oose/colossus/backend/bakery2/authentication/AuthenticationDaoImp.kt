@@ -37,6 +37,7 @@ class AuthenticationDaoImp : AuthenticationDao {
         connection.close()
         return password ?: "Password not found"
     }
+
     @Throws(ServerErrorException::class)
     override fun tokenExists(token: String): Boolean {
         val connection = databaseConnection.getConnection()
@@ -50,6 +51,7 @@ class AuthenticationDaoImp : AuthenticationDao {
         connection.close()
         return result
     }
+
     @Throws(ServerErrorException::class)
     override fun insertToken(email: String, token: String) {
         val connection = databaseConnection.getConnection()

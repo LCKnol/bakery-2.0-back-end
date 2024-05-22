@@ -3,11 +3,13 @@ package nl.han.oose.colossus.backend.bakery2.rooms
 
 import junit.framework.Assert.assertEquals
 import nl.han.oose.colossus.backend.bakery2.dto.RoomCollectionDto
+import nl.han.oose.colossus.backend.bakery2.dto.RoomDto
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
+import org.springframework.http.HttpStatus
 
 class RoomControllerTests {
 
@@ -33,4 +35,30 @@ class RoomControllerTests {
         assertEquals(200, response)
         verify(roomService).getAllRooms()
     }
-}
+    @Test
+    fun testDeleteRoomWorksCorrectly() {
+        // Arrange
+        val roomNo = "13.01"
+
+        // Act
+        val response = sut.deleteRoom(roomNo).statusCode
+
+        // Assert
+        assertEquals(HttpStatus.OK, response)
+
+        verify(roomService).deleteRoom(roomNo)
+    }
+
+        @Test
+        fun testAddRoomWorksCorrectly(){
+            // Arrange
+            val roomNo = "11:11"
+            val roomDto = RoomDto()
+            roomDto.setRoomNo(roomNo)
+            // Act
+            val response = sut.addRoom(roomDto).statusCode.value()
+            // Assert
+            assertEquals(201, response)
+            verify(roomService).addRoom(roomDto)
+        }
+    }

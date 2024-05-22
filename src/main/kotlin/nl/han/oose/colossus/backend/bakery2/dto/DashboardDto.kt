@@ -14,7 +14,14 @@ class DashboardDto {
 
     private var hasAccess: Boolean
 
-    constructor(id: Int, dashboardUrl: String, dashboardName: String, imageUrl: String, team: TeamDto, hasAccess: Boolean) {
+    constructor(
+        id: Int,
+        dashboardUrl: String,
+        dashboardName: String,
+        imageUrl: String,
+        team: TeamDto,
+        hasAccess: Boolean
+    ) {
         this.id = id
         this.dashboardUrl = dashboardUrl
         this.dashboardName = dashboardName

@@ -1,12 +1,9 @@
 package nl.han.oose.colossus.backend.bakery2.picommunicator
 
 import nl.han.oose.colossus.backend.bakery2.pi.PiService
-import nl.han.oose.colossus.backend.bakery2.picommunicator.dto.PiAcceptDto
 import nl.han.oose.colossus.backend.bakery2.picommunicator.dto.PiSignUpRequestDto
-import nl.han.oose.colossus.backend.bakery2.picommunicator.dto.SocketResponseDto
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.messaging.handler.annotation.MessageMapping
-import org.springframework.messaging.handler.annotation.SendTo
 import org.springframework.stereotype.Controller
 
 @Controller
@@ -28,11 +25,19 @@ class PiSignUpController {
 
     @MessageMapping("/sign-up-pi")
     fun signUpPi(request: PiSignUpRequestDto) {
-        if (piSignUpService.checkPiExists(request)) {
+        if (piSignUpService.checkPiExists(request.getMacAddress())) {
             piService.handlePiRequest(request.getMacAddress(), true)
-            //todo handle further pi setup like showdashboard
-        } else {
-            piSignUpService.createSignUpRequest(request.getMacAddress())
+            piService.updatePiIp(request)
+
+            // Sleep 1 second so pi has time to assign onto the topic/pi-listener
+            Thread.sleep(1000)
+
+            val pi = piService.getPi(null, request.getMacAddress())
+            piService.assignDashboardToPi(pi)
+        }
+        // check if pi already signed up
+        else {
+            piSignUpService.createSignUpRequest(request.getMacAddress(), request.getIpAddress())
         }
     }
 }

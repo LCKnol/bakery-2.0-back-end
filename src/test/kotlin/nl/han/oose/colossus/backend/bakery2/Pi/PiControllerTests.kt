@@ -98,7 +98,7 @@ class PiControllerTests {
         val response: ResponseEntity<HttpStatus> = sut.initPi(piDto)
         // Assert
         assertEquals(HttpStatus.CREATED, response.statusCode)
-        verify(piService).addPi(anyString(), anyString(), anyString())
+        verify(piService).addPi(anyString(), anyString(), anyString(), anyString())
     }
 
     @Test
@@ -112,6 +112,16 @@ class PiControllerTests {
         verify(piService).declinePiRequest(fakeAdress)
     }
 
+    @Test
+    fun testAssignDashboardToPiWorksCorrectly() {
+        // Arrange
+        val piDto = PiDto()
+        // Act
+        val response: ResponseEntity<HttpStatus> = sut.assignDashboardToPi(piDto)
+        // Assert
+        assertEquals(HttpStatus.OK, response.statusCode)
+        verify(piService).assignDashboardToPi(piDto)
+    }
     @Test
     fun testEditPi() {
         // Arrange

@@ -149,4 +149,17 @@ class DashboardDaoTests {
         // Dashboard with id sampleDashboardId should now be deleted
         assertFalse(resultSet2.next())
     }
+
+
+    @Test
+    fun testGetDashboardUrl() {
+        //Arrange
+        val expectedUrl = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+
+        //Act
+        val result = sut.getDashboardUrl(1)
+
+        //Assert
+        assertEquals(expectedUrl, result)
+    }
 }
