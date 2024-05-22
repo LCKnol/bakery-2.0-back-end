@@ -13,14 +13,11 @@ import nl.han.oose.colossus.backend.bakery2.pi.PiService
 import nl.han.oose.colossus.backend.bakery2.pi.PiServiceImp
 import nl.han.oose.colossus.backend.bakery2.picommunicator.dto.SocketResponseDto
 import org.junit.jupiter.api.Assertions.assertThrows
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.*
 import org.springframework.messaging.simp.SimpMessagingTemplate
-import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
-import org.springframework.messaging.simp.SimpMessagingTemplate
+
 
 class PiServiceTest {
 
@@ -144,15 +141,15 @@ class PiServiceTest {
             setMacAddress("00:11:22:33:44:55")
             setStatus("Active")
         }
-        `when`(piDao.getPi(piId)).thenReturn(expectedPi)
+        `when`(piDao.getPi(piId,expectedPi.getMacAddress())).thenReturn(expectedPi)
 
         // Act
-        val resultPi = sut.getPi(piId)
+        val resultPi = sut.getPi(piId,expectedPi.getMacAddress())
 
         // Assert
         assertNotNull(resultPi)
         assertEquals(expectedPi, resultPi)
-        verify(piDao).getPi(piId)
+        verify(piDao).getPi(piId,expectedPi.getMacAddress())
     }
 
     @Test
@@ -163,11 +160,11 @@ class PiServiceTest {
 
         // Act & Assert
         val exception = assertThrows(HttpNotFoundException::class.java) {
-            sut.getPi(piId)
+            sut.getPi(piId,"0")
         }
 
         assertEquals("pi does not exist", exception.message)
-        verify(piDao).getPi(piId)
+        verify(piDao).getPi(piId,"0")
     }
 
     @Test
