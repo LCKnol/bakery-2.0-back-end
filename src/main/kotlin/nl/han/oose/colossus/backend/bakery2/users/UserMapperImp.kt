@@ -82,10 +82,11 @@ class UserMapperImp : UserMapper {
             var user = userlist.filter { item -> item.getId() == currentId }[0]
             var teams = user.getTeams()
             var team = TeamDto()
-            team.setName(resultSet.getString("teamname"))
-            team.setId(resultSet.getInt("teamid"))
-            teams.add(team)
-
+            if (resultSet.getString("teamname") !=null){
+                team.setName(resultSet.getString("teamname"))
+                team.setId(resultSet.getInt("teamid"))
+                teams.add(team)
+            }
         }
         users.setUserCollection(userlist)
         return users

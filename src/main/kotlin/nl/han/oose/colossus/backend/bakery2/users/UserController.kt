@@ -36,9 +36,8 @@ class UserController {
         return ResponseEntity(user, HttpStatus.OK)
     }
 
-    @PostMapping(path = ["/register"], consumes = [MediaType.APPLICATION_JSON_VALUE])
-    @Authenticate
-    @Admin
+
+    @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE])
     fun registerUser(@RequestBody userDto: UserDto): ResponseEntity<HttpStatus> {
         userService.registerUser(userDto)
         return ResponseEntity(HttpStatus.CREATED)
