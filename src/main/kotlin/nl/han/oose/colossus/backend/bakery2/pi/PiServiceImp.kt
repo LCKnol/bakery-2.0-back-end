@@ -6,6 +6,7 @@ import nl.han.oose.colossus.backend.bakery2.dto.PiDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiRequestsCollectionDto
 import nl.han.oose.colossus.backend.bakery2.exceptions.HttpNotFoundException
 import nl.han.oose.colossus.backend.bakery2.picommunicator.dto.PiAcceptDto
+import nl.han.oose.colossus.backend.bakery2.picommunicator.dto.PiRebootDto
 import nl.han.oose.colossus.backend.bakery2.picommunicator.dto.PiSignUpRequestDto
 import nl.han.oose.colossus.backend.bakery2.picommunicator.dto.PiSetDashboardDto
 import nl.han.oose.colossus.backend.bakery2.picommunicator.dto.SocketResponseDto
@@ -34,9 +35,18 @@ class PiServiceImp : PiService {
     override fun setDashboardDao(dao: DashboardsDao) {
         dashboardDao = dao
     }
-
     override fun setMessagingTemplate(messagingTemplate: SimpMessagingTemplate) {
         this.messagingTemplate = messagingTemplate
+    }
+
+    override fun rebootPi(piId: Int) {
+        val piRebootDto = PiRebootDto()
+        piRebootDto.setReboot(true)
+        val socketResponseDto = SocketResponseDto()
+        socketResponseDto.setInstruction("reboot")
+        socketResponseDto.setBody(piRebootDto)
+        val macAddress = piDao.getMacAddress(piId)
+        messagingTemplate.convertAndSend("/topic/pi-listener/$macAddress",socketResponseDto)
     }
 
     override fun pingPi(piId: Int) {
