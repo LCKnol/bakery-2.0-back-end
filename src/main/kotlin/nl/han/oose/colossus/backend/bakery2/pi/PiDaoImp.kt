@@ -168,4 +168,16 @@ class PiDaoImp : PiDao {
         statement.close()
         connection.close()
     }
+
+    override fun getMacAddress(piId: Int):String {
+        val connection = databaseConnection.getConnection()
+        val statement = connection.prepareStatement("SELECT macAddress FROM PI WHERE PIID = ?");
+        statement.setInt(1, piId)
+        val resultSet = statement.executeQuery()
+        val result = piMapper.mapMacAddress(resultSet)
+        statement.close()
+        connection.close()
+        return result
+
+    }
 }
