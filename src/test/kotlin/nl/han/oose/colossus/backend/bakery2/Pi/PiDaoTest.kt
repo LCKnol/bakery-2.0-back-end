@@ -17,6 +17,8 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.mockito.Mockito.*
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import java.io.InputStreamReader
 import java.sql.Connection
 import java.sql.PreparedStatement
@@ -170,5 +172,32 @@ class PiDaoTest {
         val result = resultSet.getInt(1)
         //assert
         Assertions.assertEquals(dashboardId, result)
+    }
+
+
+    @Test
+    fun testGetMacAddress() {
+        // arrange
+        val dashboardId = 2
+        val piID = 1
+        val macAddress = "macAddress"
+        val ipAddress = "ipAddress"
+
+        val statement1 = dbconnection.getConnection().prepareStatement("insert into pi (roomno, dashboardId, name, macaddress, ipaddress) values (15.05, ?, 'testpi', ?, ?)")
+        statement1.setInt(1, dashboardId)
+        statement1.setString(2, macAddress)
+        statement1.setString(3, ipAddress)
+
+        val statement2 = dbconnection.getConnection().prepareStatement("SELECT macaddress FROM PI WHERE MACADDRESS = ?")
+        statement2.setString(1,macAddress)
+
+        // act
+        statement1.executeUpdate()
+        sut.getMacAddress(piID)
+        val resultSet = statement2.executeQuery()
+        resultSet.next()
+        val result = resultSet.getString(1)
+        //assert
+        Assertions.assertEquals(macAddress, result)
     }
 }
