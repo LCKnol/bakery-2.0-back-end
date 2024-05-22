@@ -37,4 +37,16 @@ class TeamDaoImp: TeamDao {
         connection.close()
         return teams
     }
+
+    @Throws(ServerErrorException::class)
+    override fun assignUserToTeam(userId: Int, teamId: Int) {
+        val query = "INSERT INTO USERINTEAM (USERID,TEAMID) VALUES(?,?)"
+        val connection = dbConnection.getConnection()
+        val preparedStatement = connection.prepareStatement(query)
+        preparedStatement.setInt(1, userId)
+        preparedStatement.setInt(2, teamId)
+        preparedStatement.executeUpdate()
+        preparedStatement.close()
+        connection.close()
+    }
 }

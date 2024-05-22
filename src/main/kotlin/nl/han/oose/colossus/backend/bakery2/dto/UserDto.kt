@@ -15,10 +15,10 @@ class UserDto {
 
     private var teams: ArrayList<TeamDto>
 
-    constructor(id: Int, firstname: String, lastname: String, email: String, password: String, teams: ArrayList<TeamDto>,isAdmin: Boolean) {
+    constructor(id: Int, firstName: String, lastName: String, email: String, password: String, teams: ArrayList<TeamDto>,isAdmin: Boolean) {
         this.id = id
-        this.firstName = firstname
-        this.lastName = lastname
+        this.firstName = firstName
+        this.lastName = lastName
         this.email = email
         this.password = password
         this.isAdmin = isAdmin
