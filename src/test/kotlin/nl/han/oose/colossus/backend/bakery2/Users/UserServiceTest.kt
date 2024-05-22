@@ -2,21 +2,19 @@ package nl.han.oose.colossus.backend.bakery2.Users
 
 import junit.framework.Assert.assertEquals
 import junit.framework.Assert.assertSame
-import nl.han.oose.colossus.backend.bakery2.dto.TeamCollectionDto
-import nl.han.oose.colossus.backend.bakery2.dto.TeamDto
-import nl.han.oose.colossus.backend.bakery2.dto.UserDto
-import nl.han.oose.colossus.backend.bakery2.dto.UserInfoDto
+import nl.han.oose.colossus.backend.bakery2.dto.*
 import nl.han.oose.colossus.backend.bakery2.exceptions.HttpForbiddenException
-import nl.han.oose.colossus.backend.bakery2.exceptions.HttpUnauthorizedException
 import nl.han.oose.colossus.backend.bakery2.teams.TeamDao
 import nl.han.oose.colossus.backend.bakery2.users.UserDao
 import nl.han.oose.colossus.backend.bakery2.users.UserServiceImp
-import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
 import org.mockito.Mockito.*
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.security.crypto.bcrypt.BCrypt
 
 class UserServiceTest {
@@ -54,7 +52,7 @@ class UserServiceTest {
     fun testGetUser() {
         // Arrange
         val token = "fakeToken"
-        val user : UserDto = UserDto(1, "pieter", "post", "123", "123", true)
+        val user : UserDto = UserDto(1, "pieter", "post", "123", "123", ArrayList<TeamDto>(),true)
         `when`(userDao.getUser(token)).thenReturn(user)
 
         // Act
@@ -70,11 +68,12 @@ class UserServiceTest {
         // Arrange
         val userDto = UserDto(
             id = 1,
-            firstname = "reem",
-            lastname = "man",
+            firstName = "reem",
+            lastName = "man",
             email = "reem.@gmail.com",
             password = "mypassword",
-            isAdmin = true
+            isAdmin = true,
+            teams = ArrayList<TeamDto>()
         )
 
         val userPassword = BCrypt.hashpw(userDto.getPassword(), BCrypt.gensalt())
@@ -101,13 +100,13 @@ class UserServiceTest {
         teamList.add(team1)
         teamCollection.setTeamCollection(teamList)
 
-        `when`(teamDao.getTeams(userId)).thenReturn(teamCollection)
+        `when`(teamDao.getTeamsFromUser(userId)).thenReturn(teamCollection)
 
         // Act
         sut.checkUserInTeam(userId, teamId)
 
         // Assert
-        verify(teamDao).getTeams(userId)
+        verify(teamDao).getTeamsFromUser(userId)
     }
 
     @Test
@@ -123,9 +122,33 @@ class UserServiceTest {
         teamList.add(team1)
         teamCollection.setTeamCollection(teamList)
 
-        `when`(teamDao.getTeams(userId)).thenReturn(teamCollection)
+        `when`(teamDao.getTeamsFromUser(userId)).thenReturn(teamCollection)
 
         // Act & Assert
         assertThrows<HttpForbiddenException> {sut.checkUserInTeam(userId, teamId)  }
+    }
+
+    @Test
+    fun testGetAllUsersSuccess() {
+
+        //Arrange
+        var userCollectionDto = UserCollectionDto()
+        // Act
+        `when`(userDao.getAllUsers()).thenReturn(userCollectionDto)
+        val response: UserCollectionDto = sut.getAllUsers()
+
+        // Assert
+        verify(userDao).getAllUsers()
+        Assertions.assertEquals(userCollectionDto,response)
+    }
+
+
+    @Test
+    fun testDeleteUsersSuccess() {
+        // Act
+        sut.deleteUser(1)
+
+        // Assert
+        verify(userDao).deleteUser(1)
     }
 }
