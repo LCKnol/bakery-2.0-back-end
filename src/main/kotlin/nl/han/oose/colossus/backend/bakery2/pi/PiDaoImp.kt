@@ -168,4 +168,14 @@ class PiDaoImp : PiDao {
         statement.close()
         connection.close()
     }
+
+    override fun updateStatus(status: String, piId: Int) {
+        val connection = databaseConnection.getConnection()
+        val statement = connection.prepareStatement("UPDATE PI SET STATUS = ? WHERE PIID = ?")
+        statement.setString(1, status)
+        statement.setInt(2, piId)
+        statement.executeUpdate()
+        statement.close()
+        connection.close()
+    }
 }

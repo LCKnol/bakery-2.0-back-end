@@ -17,8 +17,6 @@ import org.springframework.messaging.simp.SimpMessagingTemplate
 @Primary
 @Component
 class PiServiceImp : PiService {
-    @Autowired
-    private lateinit var piDaoImp: PiDaoImp
 
     @Autowired
     private lateinit var piDao: PiDao
@@ -39,6 +37,17 @@ class PiServiceImp : PiService {
 
     override fun setMessagingTemplate(messagingTemplate: SimpMessagingTemplate) {
         this.messagingTemplate = messagingTemplate
+    }
+
+    override fun pingPi(piId: Int) {
+        val socketResponseDto = SocketResponseDto()
+        socketResponseDto.setInstruction("ping")
+        val macAddress = "mac_address"
+        messagingTemplate.convertAndSend("/topic/pi-listener/$macAddress", socketResponseDto)
+    }
+
+    override fun setPiStatus(piStatus: PiStatus, piId: Int) {
+        this.piDao.updateStatus(piStatus.toString(), piId)
     }
 
     override fun getPis(user: Int): PiCollectionDto {
@@ -81,7 +90,7 @@ class PiServiceImp : PiService {
     }
 
     override fun updatePiIp(piSignUpRequestDto: PiSignUpRequestDto) {
-        piDaoImp.updatePiIp(piSignUpRequestDto)
+        piDao.updatePiIp(piSignUpRequestDto)
     }
 
     override fun getPi(piId: Int?, macAddress: String?): PiDto {

@@ -21,4 +21,6 @@ interface PiService {
     fun assignDashboardToPi(request: PiDto)
     fun setDashboardDao(dao: DashboardsDao)
     fun setMessagingTemplate(messagingTemplate: SimpMessagingTemplate)
+    fun pingPi(piId: Int)
+    fun setPiStatus(piStatus: PiStatus, piId: Int)
 }

@@ -122,4 +122,16 @@ class PiServiceTest {
         verify(dashboardsDao).getDashboardUrl(1)
         verify(piDao).assignDashboard(piDto.getId(),piDto.getDashboardId())
     }
+
+    @Test
+    fun pingPiworksCorrectly() {
+        // Arrange
+        val piId = 1
+
+        // Act
+        sut.pingPi(piId)
+
+        // Assert
+        verify(messagingTemplate.convertAndSend("/topic/pi-listener/", piId))
+    }
 }

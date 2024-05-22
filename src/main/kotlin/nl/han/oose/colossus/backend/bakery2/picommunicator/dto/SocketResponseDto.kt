@@ -2,7 +2,7 @@ package nl.han.oose.colossus.backend.bakery2.picommunicator.dto
 
 class SocketResponseDto {
     private lateinit var instruction: String
-    private lateinit var body: Any
+    private var body: Any? = null
 
     fun getInstruction(): String {
         return instruction
@@ -16,7 +16,7 @@ class SocketResponseDto {
         this.body = body
     }
 
-    fun getBody(): Any {
+    fun getBody(): Any? {
         return body
     }
 }
