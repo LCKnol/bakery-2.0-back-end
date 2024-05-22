@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test
 import org.mockito.Mockito.mock
 import junit.framework.Assert.assertEquals
 import org.mockito.Mockito
-import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
 
 class TeamControllerTests {
@@ -33,7 +32,7 @@ class TeamControllerTests {
         val teams = TeamCollectionDto()
         Mockito.`when`(teamService.getTeamsFromUser(0)).thenReturn(teams)
         //Act
-        val response = sut.getTeamsFromUser()
+        val response = sut.getTeamsFromCurrentUser()
         //Assert
         assertEquals(200, response.statusCode.value())
         verify(teamService).getTeamsFromUser(0)

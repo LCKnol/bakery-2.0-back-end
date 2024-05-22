@@ -3,7 +3,6 @@ package nl.han.oose.colossus.backend.bakery2.teams
 import nl.han.oose.colossus.backend.bakery2.dto.TeamCollectionDto
 import nl.han.oose.colossus.backend.bakery2.header.Authenticate
 import nl.han.oose.colossus.backend.bakery2.header.HeaderService
-import nl.han.oose.colossus.backend.bakery2.users.UserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
@@ -29,10 +28,22 @@ class TeamController {
 
     @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
     @Authenticate
-    fun getTeamsFromUser(): ResponseEntity<TeamCollectionDto> {
+    fun getTeamsFromCurrentUser(): ResponseEntity<TeamCollectionDto> {
         val userId = headerService.getUserId()
 
         return ResponseEntity(teamService.getTeamsFromUser(userId), HttpStatus.OK)
+    }
+
+    @GetMapping(path = ["/user/{userId}"],produces = [MediaType.APPLICATION_JSON_VALUE])
+    @Authenticate
+    fun getTeamsFromUser(@PathVariable userId: Int): ResponseEntity<TeamCollectionDto> {
+        return ResponseEntity(teamService.getTeamsFromUser(userId), HttpStatus.OK)
+    }
+
+    @GetMapping(path = ["/all"],produces = [MediaType.APPLICATION_JSON_VALUE])
+    @Authenticate
+    fun getAllTeams(): ResponseEntity<TeamCollectionDto> {
+        return ResponseEntity(teamService.getAllTeams(), HttpStatus.OK)
     }
 
     @PostMapping(path = ["assignToTeam/{userId}/{teamId}"],produces = [MediaType.APPLICATION_JSON_VALUE])
@@ -40,6 +51,13 @@ class TeamController {
     fun assignUsertoTeam(@PathVariable userId: Int,@PathVariable teamId: Int): ResponseEntity<HttpStatus> {
         teamService.assignUserToTeam(userId,teamId)
 
+        return ResponseEntity(HttpStatus.OK)
+    }
+
+    @DeleteMapping(path = ["removeFromTeam/{userId}/{teamId}"],produces = [MediaType.APPLICATION_JSON_VALUE])
+    @Authenticate
+    fun removeUserFromTeam(@PathVariable userId: Int,@PathVariable teamId: Int): ResponseEntity<HttpStatus> {
+        teamService.removeUserFromTeam(userId,teamId)
         return ResponseEntity(HttpStatus.OK)
     }
 }

@@ -7,11 +7,9 @@ import nl.han.oose.colossus.backend.bakery2.dto.TeamDto
 import nl.han.oose.colossus.backend.bakery2.dto.UserDto
 import nl.han.oose.colossus.backend.bakery2.dto.UserInfoDto
 import nl.han.oose.colossus.backend.bakery2.exceptions.HttpForbiddenException
-import nl.han.oose.colossus.backend.bakery2.exceptions.HttpUnauthorizedException
 import nl.han.oose.colossus.backend.bakery2.teams.TeamDao
 import nl.han.oose.colossus.backend.bakery2.users.UserDao
 import nl.han.oose.colossus.backend.bakery2.users.UserServiceImp
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -101,13 +99,13 @@ class UserServiceTest {
         teamList.add(team1)
         teamCollection.setTeamCollection(teamList)
 
-        `when`(teamDao.getTeams(userId)).thenReturn(teamCollection)
+        `when`(teamDao.getTeamsFromUser(userId)).thenReturn(teamCollection)
 
         // Act
         sut.checkUserInTeam(userId, teamId)
 
         // Assert
-        verify(teamDao).getTeams(userId)
+        verify(teamDao).getTeamsFromUser(userId)
     }
 
     @Test
@@ -123,7 +121,7 @@ class UserServiceTest {
         teamList.add(team1)
         teamCollection.setTeamCollection(teamList)
 
-        `when`(teamDao.getTeams(userId)).thenReturn(teamCollection)
+        `when`(teamDao.getTeamsFromUser(userId)).thenReturn(teamCollection)
 
         // Act & Assert
         assertThrows<HttpForbiddenException> {sut.checkUserInTeam(userId, teamId)  }

@@ -16,10 +16,18 @@ class TeamServiceImp: TeamService {
     }
 
     override fun getTeamsFromUser(userId: Int): TeamCollectionDto {
-        return teamDao.getTeams(userId)
+        return teamDao.getTeamsFromUser(userId)
     }
 
     override fun assignUserToTeam(userId: Int, teamId: Int) {
         teamDao.assignUserToTeam(userId,teamId)
+    }
+
+    override fun removeUserFromTeam(userId: Int, teamId: Int) {
+        teamDao.removeUserFromTeam(userId,teamId)
+    }
+
+    override fun getAllTeams(): TeamCollectionDto {
+        return teamDao.getAllTeams()
     }
 }

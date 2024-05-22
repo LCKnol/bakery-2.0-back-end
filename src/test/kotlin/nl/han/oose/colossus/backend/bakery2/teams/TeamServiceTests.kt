@@ -1,12 +1,8 @@
 package nl.han.oose.colossus.backend.bakery2.teams
 
 import nl.han.oose.colossus.backend.bakery2.dto.TeamCollectionDto
-import nl.han.oose.colossus.backend.bakery2.rooms.RoomDao
-import nl.han.oose.colossus.backend.bakery2.rooms.RoomService
-import nl.han.oose.colossus.backend.bakery2.rooms.RoomServiceImp
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito
 import org.mockito.Mockito.*
 
 class TeamServiceTests {
@@ -25,13 +21,13 @@ class TeamServiceTests {
     fun getTeamsFromUserPassesToDao() {
         // Arrange
         val teams = TeamCollectionDto()
-        `when`(teamDao.getTeams(1)).thenReturn(teams)
+        `when`(teamDao.getTeamsFromUser(1)).thenReturn(teams)
 
         // Act
         sut.getTeamsFromUser(1)
 
         // Assert
-        verify(teamDao).getTeams(1)
+        verify(teamDao).getTeamsFromUser(1)
 
     }
 }

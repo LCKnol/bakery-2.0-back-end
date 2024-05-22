@@ -36,7 +36,7 @@ class TeamDaoTests {
         `when`(teamMapper.mapUserTeams(MockitoHelper.anyObject())).thenReturn(teamCollectionDto)
 
         // Act
-        val result = sut.getTeams(userId)
+        val result = sut.getTeamsFromUser(userId)
 
         // Assert
         Assertions.assertEquals(result, teamCollectionDto)
