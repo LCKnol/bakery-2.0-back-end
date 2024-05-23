@@ -1,15 +1,19 @@
 package nl.han.oose.colossus.backend.bakery2.Users
 
 import nl.han.oose.colossus.backend.bakery2.database.DatabaseConnection
+import nl.han.oose.colossus.backend.bakery2.dto.TeamDto
+import nl.han.oose.colossus.backend.bakery2.dto.UserCollectionDto
 import nl.han.oose.colossus.backend.bakery2.dto.UserDto
 import nl.han.oose.colossus.backend.bakery2.dto.UserInfoDto
 import nl.han.oose.colossus.backend.bakery2.users.UserDaoImp
 import nl.han.oose.colossus.backend.bakery2.users.UserMapper
 import nl.han.oose.colossus.backend.bakery2.util.MockitoHelper
 import nl.han.oose.colossus.backend.bakery2.util.ScriptRunner
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.mockito.Mockito
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
 import java.io.InputStreamReader
@@ -60,7 +64,7 @@ class UserDaoTest {
         insertStatement.setString(2, "123")
         insertStatement.executeUpdate()
         val token: String = "123"
-        val user : UserDto = UserDto(1, "Arnoud", "Visi", "Avisi@outlook.com", "test password", false)
+        val user : UserDto = UserDto(1, "Arnoud", "Visi", "Avisi@outlook.com", "test password", ArrayList<TeamDto>(),false)
         `when`(userMapper.mapUser(MockitoHelper.anyObject())).thenReturn(user)
 
 
@@ -74,7 +78,7 @@ class UserDaoTest {
     @Test
     fun insertUser() {
         // Arrange
-        val userDto = UserDto(-1, "John", "Doe", "john.doe@example.com", "securePassword123", true)
+        val userDto = UserDto(-1, "John", "Doe", "john.doe@example.com", "securePassword123",ArrayList<TeamDto>(), true)
 
         dbConnection = DatabaseConnection()
         val insertStatement = dbConnection.getConnection().prepareStatement(
@@ -92,5 +96,35 @@ class UserDaoTest {
         val result = resultSet.getString(1)
 
         assertEquals(result, "John")
+    }
+
+
+    @Test
+    fun testGetAllUsersSuccess() {
+
+        //Arrange
+        var userCollectionDto = UserCollectionDto()
+        // Act
+        `when`(userMapper.mapUserCollection(MockitoHelper.anyObject())).thenReturn(userCollectionDto)
+        val response: UserCollectionDto = sut.getAllUsers()
+
+        // Assert
+        Mockito.verify(userMapper).mapUserCollection(MockitoHelper.anyObject())
+        assertEquals(userCollectionDto,response)
+    }
+
+
+    @Test
+    fun testDeleteUsersSuccess() {
+        dbConnection = DatabaseConnection()
+        val statement = dbConnection.getConnection().prepareStatement("SELECT * FROM USERS WHERE USERID = ?")
+        statement.setInt(1,1)
+        // Act
+        sut.deleteUser(1)
+        statement.executeQuery()
+        var result = statement.resultSet.first()
+
+        // Assert
+        assertEquals(false,result)
     }
 }

@@ -200,12 +200,12 @@ alter table TEAMINROOM add constraint FK_TEAMINROOM2 foreign key (ROOMNO)
     references ROOM (ROOMNO) on delete restrict on update restrict;
 
 alter table USERINTEAM add constraint FK_USERINTEAM foreign key (USERID)
-    references USERS (USERID) on delete restrict on update restrict;
+    references USERS (USERID) on delete cascade  on update restrict;
 
 alter table USERINTEAM add constraint FK_USERINTEAM2 foreign key (TEAMID)
-    references TEAM (TEAMID) on delete restrict on update restrict;
+    references TEAM (TEAMID) on delete cascade on update restrict;
 
 alter table USERSESSION add constraint FK_USERSESSION foreign key (USERID)
-    references USERS (USERID) on delete restrict on update restrict;
+    references USERS (USERID) on delete cascade on update restrict;
 
 

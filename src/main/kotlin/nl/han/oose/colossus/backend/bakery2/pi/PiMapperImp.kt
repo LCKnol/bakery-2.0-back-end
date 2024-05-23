@@ -78,4 +78,15 @@ class PiMapperImp : PiMapper {
         }
         return pi
     }
+
+
+    override fun mapMacAddress(resultSet: ResultSet): String {
+        return if (resultSet.next()) {
+            resultSet.getString("macAddress")
+        } else {
+            "No MAC address found"
+        }
+    }
 }
+
+

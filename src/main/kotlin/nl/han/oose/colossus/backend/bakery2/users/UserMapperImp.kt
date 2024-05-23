@@ -46,16 +46,51 @@ class UserMapperImp : UserMapper {
     override fun mapUser(resultSet: ResultSet): UserDto? {
         var user: UserDto? = null
         while (resultSet.next()) {
+            val teams = ArrayList<TeamDto>()
             user = UserDto(
                 resultSet.getInt("userid"),
                 resultSet.getString("FIRSTNAME"),
                 resultSet.getString("LASTNAME"),
                 resultSet.getString("PASSWORD"),
                 resultSet.getString("EMAIL"),
+                teams,
                 resultSet.getBoolean("ISADMIN")
             )
+
         }
         return user
     }
+
+    override fun mapUserCollection(resultSet: ResultSet): UserCollectionDto {
+        var users: UserCollectionDto = UserCollectionDto()
+        var userlist = ArrayList<UserDto>()
+        while (resultSet.next()) {
+            var currentId = resultSet.getInt("userid")
+            if (!userlist.any{item -> item.getId() == currentId}){
+                var teams = ArrayList<TeamDto>()
+                var  user = UserDto(
+                    resultSet.getInt("userid"),
+                    resultSet.getString("FIRSTNAME"),
+                    resultSet.getString("LASTNAME"),
+                    resultSet.getString("EMAIL"),
+                    resultSet.getString("PASSWORD"),
+                    teams,
+                    resultSet.getBoolean("ISADMIN")
+                )
+                userlist.add(user)
+            }
+            var user = userlist.filter { item -> item.getId() == currentId }[0]
+            var teams = user.getTeams()
+            var team = TeamDto()
+            if (resultSet.getString("teamname") !=null){
+                team.setName(resultSet.getString("teamname"))
+                team.setId(resultSet.getInt("teamid"))
+                teams.add(team)
+            }
+        }
+        users.setUserCollection(userlist)
+        return users
+    }
+
 }
 

@@ -2,20 +2,26 @@ package nl.han.oose.colossus.backend.bakery2.Pi
 
 
 import junit.framework.Assert.assertEquals
+import junit.framework.Assert.assertNotNull
 import nl.han.oose.colossus.backend.bakery2.dashboards.DashboardsDao
 import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiRequestsCollectionDto
+import nl.han.oose.colossus.backend.bakery2.exceptions.HttpNotFoundException
 import nl.han.oose.colossus.backend.bakery2.pi.PiDao
 import nl.han.oose.colossus.backend.bakery2.pi.PiService
 import nl.han.oose.colossus.backend.bakery2.pi.PiServiceImp
-import org.junit.jupiter.api.Assertions
+import nl.han.oose.colossus.backend.bakery2.pi.PiStatus
+import nl.han.oose.colossus.backend.bakery2.picommunicator.dto.SocketResponseDto
+import nl.han.oose.colossus.backend.bakery2.util.MockitoHelper
+import org.junit.jupiter.api.Assertions.assertThrows
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.mockito.Mockito
 import org.mockito.Mockito.*
-import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
 import org.springframework.messaging.simp.SimpMessagingTemplate
+
 
 class PiServiceTest {
 
@@ -108,6 +114,77 @@ class PiServiceTest {
         verify(piDao).deletePiRequest(macAddress)
 
     }
+    @Test
+    fun testEditPiCallsDaoWithCorrectParameters() {
+        // Arrange
+        val piDto = PiDto().apply {
+            setId(1)
+            setName("Pi Device")
+            setStatus("Active")
+            setDashboardName("Main Dashboard")
+            setMacAddress("00:1A:22:33:44:55")
+            setRoomNo("101B")
+        }
+        val userId = 1234  // Currently not used
+
+        // Act
+        sut.editPi(piDto, userId)
+
+        // Assert
+        verify(piDao).editPi(piDto)
+        verifyNoMoreInteractions(piDao)
+    }
+    @Test
+    fun testGetPiSuccessfully() {
+        // Arrange
+        val piId = 1
+        val expectedPi = PiDto().apply {
+
+            setName("Pi Name")
+            setRoomNo("Room 101")
+            setMacAddress("00:11:22:33:44:55")
+            setStatus("Active")
+        }
+        `when`(piDao.getPi(piId,expectedPi.getMacAddress())).thenReturn(expectedPi)
+
+        // Act
+        val resultPi = sut.getPi(piId,expectedPi.getMacAddress())
+
+        // Assert
+        assertNotNull(resultPi)
+        assertEquals(expectedPi, resultPi)
+        verify(piDao).getPi(piId,expectedPi.getMacAddress())
+    }
+
+    @Test
+    fun testGetPiThrowsNotFoundException() {
+        // Arrange
+        val piId = 1
+        `when`(piDao.getPi(piId)).thenReturn(null)
+
+        // Act & Assert
+        val exception = assertThrows(HttpNotFoundException::class.java) {
+            sut.getPi(piId,"0")
+        }
+
+        assertEquals("pi does not exist", exception.message)
+        verify(piDao).getPi(piId,"0")
+    }
+
+    @Test
+    fun testRebootPi() {
+        // Arrange
+        val piId = 1
+        val macAddress = "00:11:22:33:44:55"
+        `when`(piDao.getMacAddress(piId)).thenReturn(macAddress)
+
+        // Act
+        sut.rebootPi(piId)
+
+        // Assert
+        verify(piDao).getMacAddress(piId)
+        verify(messagingTemplate).convertAndSend(eq("/topic/pi-listener/$macAddress"), any(SocketResponseDto::class.java))
+    }
 
     @Test
     fun testAssignDashboardToPi() {
@@ -121,5 +198,30 @@ class PiServiceTest {
         // Assert
         verify(dashboardsDao).getDashboardUrl(1)
         verify(piDao).assignDashboard(piDto.getId(),piDto.getDashboardId())
+    }
+
+    @Test
+    fun pingPiworksCorrectly() {
+        // Arrange
+        val piId = 1
+        `when`(piDao.getMacAddress(piId)).thenReturn("macAddress")
+        // Act
+        sut.pingPi(piId)
+
+        // Assert
+        verify(piDao).getMacAddress(piId)
+    }
+
+    @Test
+    fun setPiStatusCallsCorrectly() {
+        // Arrange
+        val piStatus = PiStatus.OFFLINE
+        val piId = 1
+
+        // Act
+        sut.setPiStatus(piStatus, piId)
+
+        // Assert
+        verify(piDao).updateStatus("OFFLINE", piId)
     }
 }
