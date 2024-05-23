@@ -21,7 +21,7 @@ class PingPiService {
         return this.piService
     }
 
-    @Scheduled(fixedRate = 300000)
+    @Scheduled(fixedRate = 10000)
     fun pingPis() {
         val allPis = piService.getAllPis()
         allPis.getPis().forEach { pi: PiDto ->
