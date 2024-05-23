@@ -21,5 +21,5 @@ interface PiDao {
     fun getMacAddress(piId: Int):String
     fun assignDashboard(dashboardId: Int, piId: Int)
     fun getPi(piId: Int?, macAddress: String?): PiDto?
-
+    fun updateStatus(status: String, piId: Int)
 }

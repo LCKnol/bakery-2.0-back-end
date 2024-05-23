@@ -118,6 +118,12 @@ class PiController {
         return ResponseEntity(HttpStatus.OK)
     }
 
+
+    @GetMapping("ping/{piId}")
+    @Authenticate
+    fun pingPi(@PathVariable("piId") piId: Int): ResponseEntity<HttpStatus> {
+        this.piService.setPiStatus(PiStatus.OFFLINE, piId)
+        this.piService.pingPi(piId)
+        return ResponseEntity(HttpStatus.OK)
+    }
 }
-
-

@@ -11,10 +11,14 @@ import nl.han.oose.colossus.backend.bakery2.exceptions.HttpNotFoundException
 import nl.han.oose.colossus.backend.bakery2.pi.PiDao
 import nl.han.oose.colossus.backend.bakery2.pi.PiService
 import nl.han.oose.colossus.backend.bakery2.pi.PiServiceImp
+import nl.han.oose.colossus.backend.bakery2.pi.PiStatus
 import nl.han.oose.colossus.backend.bakery2.picommunicator.dto.SocketResponseDto
+import nl.han.oose.colossus.backend.bakery2.util.MockitoHelper
 import org.junit.jupiter.api.Assertions.assertThrows
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.mockito.Mockito
 import org.mockito.Mockito.*
 import org.springframework.messaging.simp.SimpMessagingTemplate
 
@@ -194,5 +198,30 @@ class PiServiceTest {
         // Assert
         verify(dashboardsDao).getDashboardUrl(1)
         verify(piDao).assignDashboard(piDto.getId(),piDto.getDashboardId())
+    }
+
+    @Test
+    fun pingPiworksCorrectly() {
+        // Arrange
+        val piId = 1
+        `when`(piDao.getMacAddress(piId)).thenReturn("macAddress")
+        // Act
+        sut.pingPi(piId)
+
+        // Assert
+        verify(piDao).getMacAddress(piId)
+    }
+
+    @Test
+    fun setPiStatusCallsCorrectly() {
+        // Arrange
+        val piStatus = PiStatus.OFFLINE
+        val piId = 1
+
+        // Act
+        sut.setPiStatus(piStatus, piId)
+
+        // Assert
+        verify(piDao).updateStatus("OFFLINE", piId)
     }
 }

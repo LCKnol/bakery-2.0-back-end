@@ -8,6 +8,7 @@ import nl.han.oose.colossus.backend.bakery2.header.Authenticate
 import nl.han.oose.colossus.backend.bakery2.header.HeaderService
 import nl.han.oose.colossus.backend.bakery2.pi.PiController
 import nl.han.oose.colossus.backend.bakery2.pi.PiService
+import nl.han.oose.colossus.backend.bakery2.pi.PiStatus
 import nl.han.oose.colossus.backend.bakery2.users.UserService
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertThrows
@@ -164,4 +165,20 @@ class PiControllerTests {
         verify(piService).rebootPi(piId)
     }
 
+
+    @Test
+    fun testPingPiCallsRightFunctions() {
+        // Arrange
+        val piId = 1
+        doNothing().`when`(piService).setPiStatus(PiStatus.OFFLINE, piId)
+        doNothing().`when`(piService).pingPi(piId)
+
+        // Act
+        val response = sut.pingPi(piId)
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.statusCode)
+        verify(piService).pingPi(piId)
+        verify(piService).setPiStatus(PiStatus.OFFLINE, piId)
+    }
 }

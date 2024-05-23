@@ -10,9 +10,11 @@ import nl.han.oose.colossus.backend.bakery2.dto.PiRequestsCollectionDto
 import nl.han.oose.colossus.backend.bakery2.pi.PiDao
 import nl.han.oose.colossus.backend.bakery2.pi.PiDaoImp
 import nl.han.oose.colossus.backend.bakery2.pi.PiMapper
+import nl.han.oose.colossus.backend.bakery2.pi.PiStatus
 import nl.han.oose.colossus.backend.bakery2.util.MockitoHelper
 import nl.han.oose.colossus.backend.bakery2.util.ScriptRunner
 import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
@@ -172,6 +174,22 @@ class PiDaoTest {
         val result = resultSet.getInt(1)
         //assert
         Assertions.assertEquals(dashboardId, result)
+    }
+
+    @Test
+    fun testUpdatePiStatusWorksCorrectly() {
+        // Arrange pi id = 1 && status == online
+        val connection = dbconnection.getConnection()
+        val statement1 = connection.prepareStatement("SELECT STATUS FROM PI WHERE PIID = 1")
+        val resultSet = statement1.executeQuery()
+        resultSet.next()
+        val status = resultSet.getString("status")
+
+        // Act
+        sut.updateStatus("OFFLINE", 1)
+
+        // Assert
+        assertEquals("offline", status)
     }
 
 
