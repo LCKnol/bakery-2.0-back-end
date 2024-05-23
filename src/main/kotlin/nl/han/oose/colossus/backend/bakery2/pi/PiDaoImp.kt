@@ -169,6 +169,7 @@ class PiDaoImp : PiDao {
         connection.close()
     }
 
+    @Throws(ServerErrorException::class)
     override fun getMacAddress(piId: Int):String {
         val connection = databaseConnection.getConnection()
         val statement = connection.prepareStatement("SELECT macAddress FROM PI WHERE PIID = ?");
@@ -181,6 +182,7 @@ class PiDaoImp : PiDao {
 
     }
 
+    @Throws(ServerErrorException::class)
     override fun updateStatus(status: String, piId: Int) {
         val connection = databaseConnection.getConnection()
         val statement = connection.prepareStatement("UPDATE PI SET STATUS = ? WHERE PIID = ?")
