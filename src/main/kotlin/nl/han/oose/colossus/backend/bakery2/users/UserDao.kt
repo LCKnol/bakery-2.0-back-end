@@ -16,4 +16,6 @@ interface UserDao {
     fun setDatabaseConnection(connection: DatabaseConnection)
 
     fun insertUser(userDto: UserDto)
+
+    fun emailExists(email: String): Boolean
 }

@@ -58,6 +58,10 @@ class UserServiceImp : UserService {
         }
         throw HttpForbiddenException("User is not in given team")
     }
+
+    override fun emailExists(email: String): Boolean {
+        return userDao.emailExists(email)
+    }
 }
 
 

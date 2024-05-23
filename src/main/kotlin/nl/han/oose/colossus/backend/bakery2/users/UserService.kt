@@ -17,4 +17,6 @@ interface UserService {
     fun registerUser(userDto: UserDto)
 
     fun checkUserInTeam(userId: Int, teamId: Int)
+
+    fun emailExists(email: String): Boolean
 }

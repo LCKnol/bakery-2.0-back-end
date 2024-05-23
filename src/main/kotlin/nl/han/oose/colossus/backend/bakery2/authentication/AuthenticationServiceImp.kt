@@ -18,6 +18,7 @@ class AuthenticationServiceImp : AuthenticationService {
     @Autowired
     private lateinit var userDao: UserDao
 
+
     override fun setAuthenticationDao(authenticationDao: AuthenticationDao) {
         this.authenticationDao = authenticationDao
     }
@@ -43,6 +44,17 @@ class AuthenticationServiceImp : AuthenticationService {
         authenticationDao.insertToken(email, token)
         return LoginResponseDto(token, userDao.getUser(token)!!.getIsAdmin())
     }
+
+    override fun handleGoogleSignIn(email: String, userExists: Boolean) : LoginResponseDto {
+        if (!userExists) {
+            return LoginResponseDto("", false)
+        }
+
+        val token = this.generateToken()
+        authenticationDao.insertToken(email, token)
+        return LoginResponseDto(token, userDao.getUser(token)!!.getIsAdmin())
+    }
+
 
     override fun destroySession(token: String) {
         authenticationDao.deleteSession(token)
