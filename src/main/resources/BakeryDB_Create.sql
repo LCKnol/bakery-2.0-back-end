@@ -24,7 +24,6 @@ create table DASHBOARD
     TEAMID               int,
     NAME                 varchar(64) not null,
     DASHBOARDURL         varchar(1024) not null,
-    IMAGEURL             varchar(1024),
     primary key (DASHBOARDID)
 );
 
@@ -132,14 +131,10 @@ VALUES ('TheBestTeamingTeamEverToHaveTeamed');
 INSERT INTO TEAM (TEAMNAME)
 VALUES ('MediocreTeam');
 
-INSERT INTO DASHBOARD (TEAMID, NAME, DASHBOARDURL, IMAGEURL)
-VALUES (1, 'MEMES', 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-        'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.vecteezy.com%2Fsystem%2Fresources%2Fpreviews%2F013%2F480%2F841%2Foriginal%2Fcartoon-illustration-of-mother-and-baby-ducks-vector.jpg&f=1&nofb=1&ipt=44a60e01529dd6fb9a7ee5510fd043aa451bbf13599518a5ae912f2499fd38a8&ipo=images');
-
-INSERT INTO DASHBOARD (TEAMID, NAME, DASHBOARDURL, IMAGEURL)
-VALUES (2, 'FancyDashboard', 'https://www.aldi.nl/',
-        'https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fclipart-library.com%2Fnewhp%2F85-850924_alien-spaceship-ufo-future-fantasy-futuristic-alien-in.png&f=1&nofb=1&ipt=152625c66c7e671454fe7a31fec903a6adf7dad480b8a2e425678a491e130887&ipo=images');
-
+INSERT INTO DASHBOARD (TEAMID, NAME, DASHBOARDURL)
+VALUES (1, 'MEMES', 'https://www.youtube.com/watch?v=dQw4w9WgXcQ');
+INSERT INTO DASHBOARD (TEAMID, NAME, DASHBOARDURL)
+VALUES (2, 'FancyDashboard', 'https://www.aldi.nl/');
 INSERT INTO PI (ROOMNO, DASHBOARDID, NAME, MACADDRESS, IPADDRESS, STATUS)
 VALUES ('14.02', null, '14.02:01', 'aa:41:16:f3:81:fc', '123.123.123.123', 'offline');
 

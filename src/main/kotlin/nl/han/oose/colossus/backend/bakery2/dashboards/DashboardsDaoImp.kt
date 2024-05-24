@@ -31,11 +31,10 @@ class DashboardsDaoImp : DashboardsDao {
     override fun addDashboard(dashboardDto: DashboardDto) {
         val connection = databaseConnection.getConnection()
         val statement =
-            connection.prepareStatement("INSERT INTO DASHBOARD (TEAMID,NAME,DASHBOARDURL,IMAGEURL) VALUES(?,?,?,?)")
+            connection.prepareStatement("INSERT INTO DASHBOARD (TEAMID,NAME,DASHBOARDURL) VALUES(?,?,?)")
         statement.setInt(1, dashboardDto.getTeam().getId())
         statement.setString(2, dashboardDto.getDashboardName())
         statement.setString(3, dashboardDto.getDashboardUrl())
-        statement.setString(4, dashboardDto.getImageUrl())
         statement.executeUpdate()
         statement.close()
         connection.close()
@@ -73,12 +72,11 @@ class DashboardsDaoImp : DashboardsDao {
     override fun editDashboard(dashboardDto: DashboardDto) {
         val connection = databaseConnection.getConnection()
         val statement =
-            connection.prepareStatement("UPDATE DASHBOARD SET TEAMID = ?, NAME = ?, DASHBOARDURL = ?, IMAGEURL = ? WHERE DASHBOARDID = ?")
+            connection.prepareStatement("update dashboard set teamid = ?, name = ?, DASHBOARDURL = ? where DASHBOARDID = ?")
         statement.setInt(1, dashboardDto.getTeam().getId())
         statement.setString(2, dashboardDto.getDashboardName())
         statement.setString(3, dashboardDto.getDashboardUrl())
-        statement.setString(4, dashboardDto.getImageUrl())
-        statement.setInt(5, dashboardDto.getId())
+        statement.setInt(4, dashboardDto.getId())
         statement.executeUpdate()
         statement.close()
         connection.close()
