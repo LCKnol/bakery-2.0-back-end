@@ -1,15 +1,11 @@
 package nl.han.oose.colossus.backend.bakery2.teams
 
-import junit.framework.Assert
+import junit.framework.Assert.assertEquals
 import nl.han.oose.colossus.backend.bakery2.dto.TeamCollectionDto
-import nl.han.oose.colossus.backend.bakery2.dto.UserCollectionDto
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito
 import org.mockito.Mockito.*
-import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
 
 class TeamServiceTests {
     private lateinit var sut: TeamService
@@ -77,5 +73,20 @@ class TeamServiceTests {
 
         //Assert
         verify(teamDao).removeUserFromTeam(userId,teamId)
+    }
+
+    @Test
+    fun testGetTeamsNotInRoom() {
+        // Arrange
+        val roomNo = "12.01"
+        val teams = TeamCollectionDto()
+        `when`(teamDao.getTeamsNotInRoom(roomNo)).thenReturn(teams)
+
+        // Act
+        val response = sut.getTeamsNotInRoom(roomNo)
+
+        // Assert
+        verify(teamDao).getTeamsNotInRoom(roomNo)
+        assertEquals(teams, response)
     }
 }

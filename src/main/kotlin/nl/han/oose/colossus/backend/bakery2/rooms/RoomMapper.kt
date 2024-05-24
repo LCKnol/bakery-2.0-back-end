@@ -5,4 +5,6 @@ import java.sql.ResultSet
 
 interface RoomMapper {
     fun mapRooms(resultSet: ResultSet): RoomCollectionDto
+
+    fun mapRoomsAndTeams(resultSet: ResultSet): RoomCollectionDto
 }
