@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
-import org.springframework.messaging.handler.annotation.MessageMapping
 import org.springframework.web.bind.annotation.*
 
 
@@ -129,8 +128,8 @@ class PiController {
 
     @GetMapping("tv/{piId}/{option}")
     @Authenticate
-    fun turnTvOnAndOff(@PathVariable piId: Int,@PathVariable option: Boolean): ResponseEntity<HttpStatus> {
-        this.piService.setTv(piId,option)
+    fun setTvPower(@PathVariable piId: Int, @PathVariable option: Boolean): ResponseEntity<HttpStatus> {
+        this.piService.setTvPower(piId,option)
         return ResponseEntity(HttpStatus.OK)
     }
 }

@@ -24,5 +24,5 @@ interface PiService {
     fun setMessagingTemplate(messagingTemplate: SimpMessagingTemplate)
     fun pingPi(piId: Int)
     fun setPiStatus(piStatus: PiStatus, piId: Int)
-    fun setTv(piId: Int,option: Boolean)
+    fun setTvPower(piId: Int, option: Boolean)
 }

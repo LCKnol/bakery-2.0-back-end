@@ -56,7 +56,7 @@ class PiServiceImp : PiService {
         this.piDao.updateStatus(piStatus.toString(), piId)
     }
 
-    override fun setTv(piId: Int,option: Boolean) {
+    override fun setTvPower(piId: Int, option: Boolean) {
         val socketResponseDto = SocketResponseDto()
         val piSetTvDto = PiSetTvDto()
         piSetTvDto.setOption(option)
