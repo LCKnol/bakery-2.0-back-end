@@ -66,6 +66,10 @@ class UserServiceImp : UserService {
     override fun deleteUser(userId: Int) {
         userDao.deleteUser(userId)
     }
+
+    override fun assignAdminRightsToUser(userDto: UserDto) {
+        userDao.assignAdminRightsToUser(userDto)
+    }
 }
 
 
