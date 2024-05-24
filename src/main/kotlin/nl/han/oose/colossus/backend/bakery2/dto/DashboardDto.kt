@@ -8,7 +8,9 @@ class DashboardDto {
 
     private var dashboardName: String
 
-    private var imageUrl: String
+//    private var imageUrl: String
+
+    private var dashboardRefresh: Int
 
     private var team: TeamDto
 
@@ -18,14 +20,16 @@ class DashboardDto {
         id: Int,
         dashboardUrl: String,
         dashboardName: String,
-        imageUrl: String,
+//        imageUrl: String,
+        dashboardRefresh: Int,
         team: TeamDto,
         hasAccess: Boolean
     ) {
         this.id = id
         this.dashboardUrl = dashboardUrl
         this.dashboardName = dashboardName
-        this.imageUrl = imageUrl
+//        this.imageUrl = imageUrl
+        this.dashboardRefresh = dashboardRefresh
         this.team = team
         this.hasAccess = hasAccess
     }
@@ -54,13 +58,13 @@ class DashboardDto {
         return this.dashboardUrl // You can still access it within the class
     }
 
-    fun setImageUrl(newValue: String) {
-        this.imageUrl = newValue // You can still access it within the class
-    }
-
-    fun getImageUrl(): String {
-        return this.imageUrl // You can still access it within the class
-    }
+//    fun setImageUrl(newValue: String) {
+//        this.imageUrl = newValue // You can still access it within the class
+//    }
+//
+//    fun getImageUrl(): String {
+//        return this.imageUrl // You can still access it within the class
+//    }
 
     fun setDashboardName(newValue: String) {
         this.dashboardName = newValue // You can still access it within the class
@@ -68,6 +72,14 @@ class DashboardDto {
 
     fun getDashboardName(): String {
         return this.dashboardName // You can still access it within the class
+    }
+
+    fun setDashboardRefresh(newValue: Int) {
+        this.dashboardRefresh = newValue
+    }
+
+    fun getDashboardRefresh(): Int {
+        return this.dashboardRefresh
     }
 
     fun setHasAccess(newValue: Boolean) {

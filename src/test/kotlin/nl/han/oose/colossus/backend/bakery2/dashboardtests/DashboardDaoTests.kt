@@ -56,7 +56,7 @@ class DashboardDaoTests {
     @Test
     fun testAddDashboardWorksCorrectly() {
         // Arrange
-        val dashboard = DashboardDto(12, "test", "uniek", "test", team, true)
+        val dashboard = DashboardDto(12, "test", "uniek", 69, team, true)
 
         // Act
         sut.addDashboard(dashboard)
@@ -78,7 +78,7 @@ class DashboardDaoTests {
             1,
             "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
             "meme update",
-            "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.vecteezy.com%2Fsystem%2Fresources%2Fpreviews%2F013%2F480%2F841%2Foriginal%2Fcartoon-illustration-of-mother-and-baby-ducks-vector.jpg&f=1&nofb=1&ipt=44a60e01529dd6fb9a7ee5510fd043aa451bbf13599518a5ae912f2499fd38a8&ipo=images",
+            12,
             team,
             true
         )
@@ -102,7 +102,7 @@ class DashboardDaoTests {
             1,
             "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
             "meme update",
-            "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.vecteezy.com%2Fsystem%2Fresources%2Fpreviews%2F013%2F480%2F841%2Foriginal%2Fcartoon-illustration-of-mother-and-baby-ducks-vector.jpg&f=1&nofb=1&ipt=44a60e01529dd6fb9a7ee5510fd043aa451bbf13599518a5ae912f2499fd38a8&ipo=images",
+            666,
             TeamDto(),
             true
         )
