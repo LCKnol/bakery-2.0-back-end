@@ -126,4 +126,11 @@ class PiController {
         this.piService.pingPi(piId)
         return ResponseEntity(HttpStatus.OK)
     }
+
+    @GetMapping("tv/{piId}/{option}")
+    @Authenticate
+    fun turnTvOnAndOff(@PathVariable piId: Int,@PathVariable option: Boolean): ResponseEntity<HttpStatus> {
+        this.piService.setTv(piId,option)
+        return ResponseEntity(HttpStatus.OK)
+    }
 }
