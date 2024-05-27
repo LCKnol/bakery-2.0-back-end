@@ -26,6 +26,12 @@ class RoomController {
         return ResponseEntity(roomService.getAllRooms(), HttpStatus.OK)
     }
 
+    @GetMapping(path = ["/roomandteam"], produces = ["application/json"])
+    @Authenticate
+    fun getAllRoomsAndTeams(): ResponseEntity<RoomCollectionDto> {
+        return ResponseEntity(roomService.getAllRoomsAndTeams(), HttpStatus.OK)
+    }
+
     @DeleteMapping(path = ["/{roomNo}"])
     @Authenticate
     fun deleteRoom(@PathVariable roomNo: String): ResponseEntity<HttpStatus> {
@@ -39,4 +45,19 @@ class RoomController {
         this.roomService.addRoom(roomDto)
         return ResponseEntity(HttpStatus.CREATED)
     }
-}
+
+    @DeleteMapping(path = ["removeFromRoom/{roomNo}/{teamId}"],produces = [MediaType.APPLICATION_JSON_VALUE])
+    @Authenticate
+    fun removeUserFromTeam(@PathVariable roomNo: String,@PathVariable teamId: Int): ResponseEntity<HttpStatus> {
+        roomService.removeTeamFromRoom(roomNo,teamId)
+        return ResponseEntity(HttpStatus.OK)
+    }
+
+    @PostMapping(path = ["addToRoom/{roomNo}/{teamId}"],produces = [MediaType.APPLICATION_JSON_VALUE])
+    @Authenticate
+    fun assignUsertoTeam(@PathVariable roomNo: String, @PathVariable teamId: Int): ResponseEntity<HttpStatus> {
+        roomService.addTeamToRoom(roomNo,teamId)
+
+        return ResponseEntity(HttpStatus.OK)
+    }
+    }

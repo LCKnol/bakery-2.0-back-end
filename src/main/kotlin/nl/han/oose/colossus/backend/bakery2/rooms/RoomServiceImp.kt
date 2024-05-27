@@ -18,15 +18,27 @@ class RoomServiceImp : RoomService {
     }
 
     override fun deleteRoom(roomNo: String) {
+        roomDao.removePisFromRoom(roomNo)
         roomDao.deleteRoom(roomNo)
+    }
+
+    override fun removeTeamFromRoom(roomNo: String, team: Int) {
+        roomDao.removeTeamFromRoom(roomNo, team)
+    }
+
+    override fun addTeamToRoom(roomNo: String, team: Int) {
+        roomDao.addTeamToRoom(roomNo, team)
     }
 
     override fun addRoom(roomDto: RoomDto) {
         roomDao.addRoom(roomDto)
     }
 
-
     override fun getAllRooms(): RoomCollectionDto {
         return roomDao.getAllRooms()
+    }
+
+    override fun getAllRoomsAndTeams(): RoomCollectionDto {
+       return roomDao.getAllRoomsAndTeams()
     }
 }

@@ -89,4 +89,27 @@ class UserDaoImp : UserDao {
         preparedStatement.close()
         connection.close()
     }
+
+    @Throws(ServerErrorException::class)
+    override fun assignAdminRightsToUser(userDto: UserDto) {
+        val connection = databaseConnection.getConnection()
+        val preparedStatement = connection.prepareStatement("UPDATE USERS SET ISADMIN = ? WHERE USERID = ? ")
+        preparedStatement.setBoolean(1,userDto.getIsAdmin())
+        preparedStatement.setInt(2,userDto.getId())
+        preparedStatement.executeUpdate()
+        preparedStatement.close()
+        connection.close()
+    }
+
+    override fun emailExists(email: String): Boolean {
+        val connection = databaseConnection.getConnection()
+        val query = "SELECT email FROM USERS WHERE email = ?"
+        val preparedStatement = connection.prepareStatement(query)
+        preparedStatement.setString(1, email)
+        val resultSet = preparedStatement.executeQuery()
+        val result = resultSet.next()
+        preparedStatement.close()
+        connection.close()
+        return result
+    }
 }

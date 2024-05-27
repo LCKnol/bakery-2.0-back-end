@@ -42,6 +42,39 @@ class RoomDaoImp : RoomDao {
                 statement2.executeUpdate()
                 statement2.close()
         }
+
+    @Throws(ServerErrorException::class)
+    override fun removePisFromRoom(roomNo: String) {
+        val query = "UPDATE PI SET ROOMNO = NULL WHERE ROOMNO = ?"
+        val connection = dbConnection.getConnection()
+        val statement = connection.prepareStatement(query)
+        statement.setString(1, roomNo)
+        statement.executeUpdate()
+        statement.close()       }
+    @Throws(ServerErrorException::class)
+    override fun removeTeamFromRoom(roomNo: String, team: Int) {
+        val query = "DELETE FROM TEAMINROOM WHERE ROOMNO = ? AND TEAMID = ?"
+        val connection = dbConnection.getConnection()
+        val statement = connection.prepareStatement(query)
+        statement.setString(1, roomNo)
+        statement.setInt(2, team)
+        statement.executeUpdate()
+        statement.close()
+    }
+
+
+    @Throws(ServerErrorException::class)
+    override fun addTeamToRoom(roomNo: String, team: Int) {
+        val query = "INSERT INTO TEAMINROOM (ROOMNO, TEAMID) VALUES (?, ?)"
+        val connection = dbConnection.getConnection()
+        val statement = connection.prepareStatement(query)
+        statement.setString(1, roomNo)
+        statement.setInt(2, team)
+        statement.executeUpdate()
+        statement.close()
+        connection.close()
+    }
+
     @Throws(ServerErrorException::class)
     override fun addRoom(roomDto: RoomDto) {
         val query = "INSERT INTO ROOM (ROOMNO) VALUES (?)"
@@ -59,6 +92,17 @@ class RoomDaoImp : RoomDao {
         val statement = connection.prepareStatement("SELECT roomNo FROM ROOM")
         val result = statement.executeQuery()
         val rooms = roomMapper.mapRooms(result)
+        statement.close()
+        connection.close()
+        return rooms
+
+    }
+    @Throws(ServerErrorException::class)
+    override fun getAllRoomsAndTeams(): RoomCollectionDto {
+        val connection = dbConnection.getConnection()
+        val statement = connection.prepareStatement("SELECT R.ROOMNO, T.TEAMID, T.TEAMNAME FROM ROOM R LEFT JOIN TEAMINROOM TR ON TR.ROOMNO = R.ROOMNO LEFT JOIN TEAM T ON T.TEAMID = TR.TEAMID")
+        val result = statement.executeQuery()
+        val rooms = roomMapper.mapRoomsAndTeams(result)
         statement.close()
         connection.close()
         return rooms

@@ -41,12 +41,12 @@ class AuthenticationDaoImp : AuthenticationDao {
     @Throws(ServerErrorException::class)
     override fun tokenExists(token: String): Boolean {
         val connection = databaseConnection.getConnection()
-        val query = "SELECT COUNT(*) FROM USERSESSION WHERE token = ?"
+        val query = "SELECT * FROM USERSESSION WHERE token = ?"
 
         val preparedStatement = connection.prepareStatement(query)
         preparedStatement.setString(1, token)
         val resultSet = preparedStatement.executeQuery()
-        val result = resultSet.next() && resultSet.getInt(1) > 0
+        val result = resultSet.next()
         preparedStatement.close()
         connection.close()
         return result

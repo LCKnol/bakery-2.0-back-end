@@ -56,7 +56,11 @@ class DashboardDaoTests {
     @Test
     fun testAddDashboardWorksCorrectly() {
         // Arrange
+<<<<<<< HEAD
         val dashboard = DashboardDto(12, "test", "uniek", 69, team, true)
+=======
+        val dashboard = DashboardDto(12, "test", "uniek", team, true)
+>>>>>>> 887fdcd8c5f7a121baed5501652091394208b431
 
         // Act
         sut.addDashboard(dashboard)
@@ -78,7 +82,10 @@ class DashboardDaoTests {
             1,
             "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
             "meme update",
+<<<<<<< HEAD
             12,
+=======
+>>>>>>> 887fdcd8c5f7a121baed5501652091394208b431
             team,
             true
         )
@@ -102,7 +109,10 @@ class DashboardDaoTests {
             1,
             "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
             "meme update",
+<<<<<<< HEAD
             666,
+=======
+>>>>>>> 887fdcd8c5f7a121baed5501652091394208b431
             TeamDto(),
             true
         )

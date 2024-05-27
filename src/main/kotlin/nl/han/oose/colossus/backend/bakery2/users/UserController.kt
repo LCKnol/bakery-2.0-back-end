@@ -58,4 +58,12 @@ class UserController {
         userService.deleteUser(userId)
         return ResponseEntity(HttpStatus.OK)
     }
+
+    @Authenticate
+    @Admin
+    @PostMapping(path = ["/assignAdminRights"])
+    fun assignAdminRightsToUser(@RequestBody userDto: UserDto): ResponseEntity<UserCollectionDto> {
+        userService.assignAdminRightsToUser(userDto)
+        return ResponseEntity(HttpStatus.OK)
+    }
 }

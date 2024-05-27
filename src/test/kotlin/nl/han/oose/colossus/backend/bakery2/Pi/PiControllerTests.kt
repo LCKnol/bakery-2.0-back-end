@@ -3,22 +3,17 @@ package nl.han.oose.colossus.backend.bakery2.Pi
 import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiRequestsCollectionDto
-import nl.han.oose.colossus.backend.bakery2.exceptions.HttpUnauthorizedException
-import nl.han.oose.colossus.backend.bakery2.header.Authenticate
 import nl.han.oose.colossus.backend.bakery2.header.HeaderService
 import nl.han.oose.colossus.backend.bakery2.pi.PiController
 import nl.han.oose.colossus.backend.bakery2.pi.PiService
 import nl.han.oose.colossus.backend.bakery2.pi.PiStatus
 import nl.han.oose.colossus.backend.bakery2.users.UserService
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.*
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
 
 class PiControllerTests {
 
@@ -180,5 +175,20 @@ class PiControllerTests {
         assertEquals(HttpStatus.OK, response.statusCode)
         verify(piService).pingPi(piId)
         verify(piService).setPiStatus(PiStatus.OFFLINE, piId)
+    }
+
+    @Test
+    fun turnTvOnAndOff(){
+        // Arrange
+        val piId = 1
+        val option = true
+
+        // Act
+        val response = sut.setTvPower(piId,option)
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.statusCode)
+        verify(piService).setTvPower(piId,option)
+
     }
 }

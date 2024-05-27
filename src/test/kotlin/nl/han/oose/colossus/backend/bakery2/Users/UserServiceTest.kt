@@ -151,4 +151,24 @@ class UserServiceTest {
         // Assert
         verify(userDao).deleteUser(1)
     }
+
+
+    @Test
+    fun testAssignAdminRightsToUserSuccess() {
+        //Arrange
+        var userDto = UserDto(
+            id = 2,
+            firstName = "Arnoud",
+            lastName = "Visi",
+            email = "Avisi@outlook.com",
+            password = "mypassword",
+            isAdmin = true,
+            teams =  ArrayList<TeamDto>()
+        )
+        // Act
+        sut.assignAdminRightsToUser(userDto)
+
+        // Assert
+        verify(userDao).assignAdminRightsToUser(userDto)
+    }
 }

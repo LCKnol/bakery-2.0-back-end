@@ -9,4 +9,5 @@ interface AuthenticationDao {
     fun deleteSession(token: String)
     fun setDatabaseConnection(databaseConnection: DatabaseConnection)
     fun findPassword(email: String): String
+
 }

@@ -20,4 +20,7 @@ interface UserService {
     fun checkUserInTeam(userId: Int, teamId: Int)
     fun getAllUsers(): UserCollectionDto
     fun deleteUser(userId: Int)
+
+    fun emailExists(email: String): Boolean
+    fun assignAdminRightsToUser(userDto: UserDto)
 }
