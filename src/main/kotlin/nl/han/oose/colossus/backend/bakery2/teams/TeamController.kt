@@ -1,6 +1,7 @@
 package nl.han.oose.colossus.backend.bakery2.teams
 
 import nl.han.oose.colossus.backend.bakery2.dto.TeamCollectionDto
+import nl.han.oose.colossus.backend.bakery2.dto.TeamInfoCollectionDto
 import nl.han.oose.colossus.backend.bakery2.dto.TeamInfoDto
 import nl.han.oose.colossus.backend.bakery2.header.Admin
 import nl.han.oose.colossus.backend.bakery2.header.Authenticate
@@ -83,5 +84,11 @@ class TeamController {
     fun removeUserFromTeam(@PathVariable userId: Int,@PathVariable teamId: Int): ResponseEntity<HttpStatus> {
         teamService.removeUserFromTeam(userId,teamId)
         return ResponseEntity(HttpStatus.OK)
+    }
+
+    @GetMapping(path = ["/allInfo"],produces = [MediaType.APPLICATION_JSON_VALUE])
+    @Authenticate
+    fun getAllTeamInfo(): ResponseEntity<TeamInfoCollectionDto> {
+        return ResponseEntity(teamService.getAllTeamInfo(), HttpStatus.OK)
     }
 }

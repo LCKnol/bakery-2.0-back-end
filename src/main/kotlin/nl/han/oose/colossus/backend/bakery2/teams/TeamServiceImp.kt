@@ -1,6 +1,7 @@
 package nl.han.oose.colossus.backend.bakery2.teams
 
 import nl.han.oose.colossus.backend.bakery2.dto.TeamCollectionDto
+import nl.han.oose.colossus.backend.bakery2.dto.TeamInfoCollectionDto
 import nl.han.oose.colossus.backend.bakery2.dto.TeamInfoDto
 import nl.han.oose.colossus.backend.bakery2.rooms.RoomDao
 import nl.han.oose.colossus.backend.bakery2.users.UserDao
@@ -62,5 +63,9 @@ class TeamServiceImp: TeamService {
 
     override fun removeTeam(teamId: Int) {
         teamDao.removeTeam(teamId)
+    }
+
+    override fun getAllTeamInfo(): TeamInfoCollectionDto {
+        return teamDao.getAllTeamInfo()
     }
 }

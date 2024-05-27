@@ -3,6 +3,7 @@ package nl.han.oose.colossus.backend.bakery2.teams
 import nl.han.oose.colossus.backend.bakery2.database.DatabaseConnection
 import nl.han.oose.colossus.backend.bakery2.dto.TeamCollectionDto
 import nl.han.oose.colossus.backend.bakery2.dto.TeamDto
+import nl.han.oose.colossus.backend.bakery2.dto.TeamInfoCollectionDto
 import nl.han.oose.colossus.backend.bakery2.dto.TeamInfoDto
 
 interface TeamDao {
@@ -17,4 +18,5 @@ interface TeamDao {
     fun addTeam(teamInfoDto: TeamInfoDto)
     fun getTeam(teamName: String): TeamDto
     fun removeTeam(teamId: Int)
+    fun getAllTeamInfo(): TeamInfoCollectionDto
 }

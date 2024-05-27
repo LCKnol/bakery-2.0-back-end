@@ -3,6 +3,7 @@ package nl.han.oose.colossus.backend.bakery2.teams
 import nl.han.oose.colossus.backend.bakery2.database.DatabaseConnection
 import nl.han.oose.colossus.backend.bakery2.dto.TeamCollectionDto
 import nl.han.oose.colossus.backend.bakery2.dto.TeamDto
+import nl.han.oose.colossus.backend.bakery2.dto.TeamInfoCollectionDto
 import nl.han.oose.colossus.backend.bakery2.dto.TeamInfoDto
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Primary
@@ -131,5 +132,17 @@ class TeamDaoImp: TeamDao {
         preparedStatement.executeUpdate()
         preparedStatement.close()
         connection.close()
+    }
+
+    override fun getAllTeamInfo(): TeamInfoCollectionDto {
+        val connection = dbConnection.getConnection()
+
+        val preparedStatement =
+            connection.prepareStatement("select t.TEAMID as teamId, t.TEAMNAME as teamname, tir.ROOMNO as roomNo, uit.USERID as userId, u.FIRSTNAME, u.LASTNAME from team t left join teaminroom tir on t.TEAMID = tir.TEAMID left join userinteam uit on t.TEAMID = uit.TEAMID left join users u on uit.USERID = u.USERID")
+        val resultSet = preparedStatement.executeQuery()
+        val teamInfo = teamMapper.mapTeamInfoCollection(resultSet)
+        preparedStatement.close()
+        connection.close()
+        return teamInfo
     }
 }

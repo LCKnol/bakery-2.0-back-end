@@ -1,6 +1,7 @@
 package nl.han.oose.colossus.backend.bakery2.teams
 
 import nl.han.oose.colossus.backend.bakery2.dto.TeamCollectionDto
+import nl.han.oose.colossus.backend.bakery2.dto.TeamInfoCollectionDto
 import nl.han.oose.colossus.backend.bakery2.dto.TeamInfoDto
 import nl.han.oose.colossus.backend.bakery2.rooms.RoomDao
 
@@ -16,6 +17,8 @@ interface TeamService {
 
     fun addTeam(teamInfoDto: TeamInfoDto)
     fun removeTeam(teamId: Int)
+
+    fun getAllTeamInfo(): TeamInfoCollectionDto
 
 
 }
