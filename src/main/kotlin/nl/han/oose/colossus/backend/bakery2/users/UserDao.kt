@@ -15,4 +15,5 @@ interface UserDao {
     fun insertUser(userDto: UserDto)
     fun getAllUsers(): UserCollectionDto
     fun deleteUser(userId: Int)
+    fun assignAdminRightsToUser(userDto: UserDto)
 }

@@ -16,6 +16,8 @@ import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import java.io.InputStreamReader
 
 
@@ -126,5 +128,31 @@ class UserDaoTest {
 
         // Assert
         assertEquals(false,result)
+    }
+
+
+    @Test
+    fun testAssignAdminRightsToUserSuccess() {
+        //Arrange
+        dbConnection = DatabaseConnection()
+        val statement = dbConnection.getConnection().prepareStatement("SELECT isAdmin FROM USERS WHERE USERID = ?")
+        statement.setInt(1,2)
+        var userDto = UserDto(
+            id = 2,
+            firstName = "Arnoud",
+            lastName = "Visi",
+            email = "Avisi@outlook.com",
+            password = "mypassword",
+            isAdmin = true,
+            teams =  ArrayList<TeamDto>()
+        )
+        // Act
+        sut.assignAdminRightsToUser(userDto)
+        statement.executeQuery()
+        var resultSet = statement.resultSet
+        resultSet.next()
+        var result = resultSet.getBoolean(1)
+        // Assert
+        assertEquals(true,result)
     }
 }

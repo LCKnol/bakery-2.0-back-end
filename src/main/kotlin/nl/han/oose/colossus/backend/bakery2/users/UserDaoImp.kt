@@ -89,4 +89,15 @@ class UserDaoImp : UserDao {
         preparedStatement.close()
         connection.close()
     }
+
+    @Throws(ServerErrorException::class)
+    override fun assignAdminRightsToUser(userDto: UserDto) {
+        val connection = databaseConnection.getConnection()
+        val preparedStatement = connection.prepareStatement("UPDATE USERS SET ISADMIN = ? WHERE USERID = ? ")
+        preparedStatement.setBoolean(1,userDto.getIsAdmin())
+        preparedStatement.setInt(2,userDto.getId())
+        preparedStatement.executeUpdate()
+        preparedStatement.close()
+        connection.close()
+    }
 }

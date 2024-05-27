@@ -15,6 +15,7 @@ import org.mockito.Mockito
 import org.mockito.Mockito.*
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.RequestBody
 
 class UserControllerTest {
 
@@ -93,6 +94,26 @@ class UserControllerTest {
 
         // Assert
         verify(userService).deleteUser(1)
+        assertEquals(HttpStatus.OK, response.statusCode)
+    }
+
+    @Test
+    fun testAssignAdminRightsToUser() {
+        //Arrange
+        var userDto = UserDto(
+            id = 2,
+            firstName = "Arnoud",
+            lastName = "Visi",
+            email = "Avisi@outlook.com",
+            password = "mypassword",
+            isAdmin = true,
+            teams =  ArrayList<TeamDto>()
+        )
+        // Act
+        val response: ResponseEntity<UserCollectionDto> = sut.assignAdminRightsToUser(userDto)
+
+        // Assert
+        verify(userService).assignAdminRightsToUser(userDto)
         assertEquals(HttpStatus.OK, response.statusCode)
     }
 }
