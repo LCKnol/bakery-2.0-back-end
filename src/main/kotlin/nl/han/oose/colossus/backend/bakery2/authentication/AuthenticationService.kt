@@ -11,4 +11,5 @@ interface AuthenticationService {
     fun setAuthenticationDao(authenticationDao: AuthenticationDao)
     fun setUserDao(userDao: UserDao)
     fun isAdmin(token: String): Boolean
+    fun handleGoogleSignIn(email: String, userExists: Boolean): LoginResponseDto
 }
