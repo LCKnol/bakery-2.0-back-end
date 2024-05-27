@@ -3,7 +3,7 @@ package nl.han.oose.colossus.backend.bakery2.dto
 class NewGoogleUserDto {
 
     private var jwtToken: String = ""
-    private var userDto : UserDto? = null
+    private lateinit var userDto : UserDto
 
     fun getJwtToken(): String {
         return this.jwtToken

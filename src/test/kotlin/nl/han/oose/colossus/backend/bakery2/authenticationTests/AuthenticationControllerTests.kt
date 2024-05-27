@@ -4,16 +4,14 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken
 import junit.framework.Assert
 import nl.han.oose.colossus.backend.bakery2.authentication.AuthenticationController
 import nl.han.oose.colossus.backend.bakery2.authentication.AuthenticationService
-import nl.han.oose.colossus.backend.bakery2.dto.LoginRequestDto
-import nl.han.oose.colossus.backend.bakery2.dto.LoginResponseDto
+import nl.han.oose.colossus.backend.bakery2.authentication.GoogleAuthService
+import nl.han.oose.colossus.backend.bakery2.dto.*
 import nl.han.oose.colossus.backend.bakery2.header.HeaderService
 import nl.han.oose.colossus.backend.bakery2.users.UserService
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito
-import org.mockito.Mockito.verify
-import org.mockito.Mockito.`when`
+import org.mockito.Mockito.*
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 
@@ -67,7 +65,7 @@ class AuthenticationControllerTests {
         // Arrange
         val mockToken = "myToken"
         `when`(headerService.getToken()).thenReturn(mockToken)
-        Mockito.doNothing().`when`(authenticationService).destroySession(mockToken)
+        doNothing().`when`(authenticationService).destroySession(mockToken)
 
         // Act
         val response: ResponseEntity<HttpStatus> = sut.logout()
@@ -96,7 +94,7 @@ class AuthenticationControllerTests {
         // Assert
         verify(googleAuthService).verifyToken(googleTokenDto.getJwtToken())
         verify(authenticationService).handleGoogleSignIn(googleIdToken.email, true)
-        verify(userService, Mockito.times(2)).emailExists(googleIdToken.email)
+        verify(userService, times(2)).emailExists(googleIdToken.email)
         assertEquals(HttpStatus.OK, response.statusCode)
 
     }

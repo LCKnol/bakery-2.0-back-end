@@ -9,6 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCrypt
 import org.springframework.stereotype.Component
 import java.util.*
 
+
 @Primary
 @Component
 class AuthenticationServiceImp : AuthenticationService {
@@ -36,7 +37,12 @@ class AuthenticationServiceImp : AuthenticationService {
 
         val passwordHash = authenticationDao.findPassword(email)
 
-        if (!BCrypt.checkpw(password, passwordHash)) {
+        try {
+            if (!BCrypt.checkpw(password, passwordHash)) {
+                throw HttpUnauthorizedException("Invalid login credentials")
+            }
+        } catch (e: IllegalArgumentException) {
+            println("BCrypt encountered an invalid salt: " + e.message)
             throw HttpUnauthorizedException("Invalid login credentials")
         }
 

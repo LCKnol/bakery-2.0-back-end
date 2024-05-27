@@ -18,7 +18,7 @@ class GoogleAuthServiceImp : GoogleAuthService {
 
     //CONFIG
     private val clientID = "459811137064-cfhur48n8304qbm0t55hg9c06rtbl9l0.apps.googleusercontent.com"
-    private val authorizedDomain = null
+    private val authorizedDomain = "avisi.nl"
 
 
     private val transport: HttpTransport = NetHttpTransport()
@@ -37,7 +37,6 @@ class GoogleAuthServiceImp : GoogleAuthService {
             if (idToken == null || idToken.payload.hostedDomain != authorizedDomain) {
                 throw HttpUnauthorizedException("Invalid ID token")
             }
-            println(idToken.payload.hostedDomain)
             return idToken.payload
 
         } catch (e: IllegalArgumentException) {
