@@ -8,4 +8,5 @@ interface TeamService {
     fun assignUserToTeam(userId: Int, teamId: Int)
     fun removeUserFromTeam(userId: Int, teamId: Int)
     fun getAllTeams(): TeamCollectionDto
+    fun getTeamsNotInRoom(roomNo: String): TeamCollectionDto
 }

@@ -7,7 +7,6 @@ import nl.han.oose.colossus.backend.bakery2.util.ScriptRunner
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito
 import org.mockito.Mockito.*
 import java.io.InputStreamReader
 
@@ -95,5 +94,20 @@ class TeamDaoTests {
 
         // Assert
         Assertions.assertEquals(false, result)
+    }
+
+    @Test
+    fun testGetTeamsNotInRoomWorksCorrectly() {
+        // Arrange
+        val roomNo = "13.01"
+        val teamCollectionDto = TeamCollectionDto()
+        `when`(teamMapper.mapUserTeams(MockitoHelper.anyObject())).thenReturn(teamCollectionDto)
+
+        // Act
+        val result = sut.getTeamsNotInRoom(roomNo)
+
+        // Assert
+        verify(teamMapper).mapUserTeams(MockitoHelper.anyObject())
+        Assertions.assertEquals(result, teamCollectionDto)
     }
 }

@@ -34,6 +34,13 @@ class TeamController {
         return ResponseEntity(teamService.getTeamsFromUser(userId), HttpStatus.OK)
     }
 
+
+    @GetMapping(path = ["/notinroom/{roomNo}"], produces = ["application/json"])
+    @Authenticate
+    fun getTeamsNotInRoom(@PathVariable roomNo: String): ResponseEntity<TeamCollectionDto> {
+        return ResponseEntity(teamService.getTeamsNotInRoom(roomNo.trim()), HttpStatus.OK)
+    }
+
     @GetMapping(path = ["/user/{userId}"],produces = [MediaType.APPLICATION_JSON_VALUE])
     @Authenticate
     fun getTeamsFromUser(@PathVariable userId: Int): ResponseEntity<TeamCollectionDto> {

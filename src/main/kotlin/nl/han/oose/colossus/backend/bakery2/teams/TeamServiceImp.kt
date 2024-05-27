@@ -30,4 +30,7 @@ class TeamServiceImp: TeamService {
     override fun getAllTeams(): TeamCollectionDto {
         return teamDao.getAllTeams()
     }
+    override fun getTeamsNotInRoom(roomNo: String): TeamCollectionDto {
+        return teamDao.getTeamsNotInRoom(roomNo)
+    }
 }
