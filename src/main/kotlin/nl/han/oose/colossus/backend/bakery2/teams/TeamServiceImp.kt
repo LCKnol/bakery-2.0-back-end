@@ -47,12 +47,16 @@ class TeamServiceImp: TeamService {
 
     override fun addTeam(teamInfoDto: TeamInfoDto) {
         teamDao.addTeam(teamInfoDto)
-        val teamId = teamDao.getTeam(teamInfoDto.getName()).getId()
-        for (user in teamInfoDto.getMembers()) {
-            teamDao.assignUserToTeam(user.getId(), teamId)
+        val team = teamDao.getTeam(teamInfoDto.getName())
+        if (teamInfoDto.getMembers().size != 0) {
+            for (user in teamInfoDto.getMembers()) {
+                teamDao.assignUserToTeam(user.getId(), team.getId())
+            }
         }
-        for (room in teamInfoDto.getRooms()) {
-            roomDao.addTeamToRoom(room.getRoomNo(), teamId)
+        if (teamInfoDto.getRooms().size != 0) {
+            for (room in teamInfoDto.getRooms()) {
+                roomDao.addTeamToRoom(room.getRoomNo(), team.getId())
+            }
         }
     }
 

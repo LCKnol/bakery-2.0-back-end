@@ -28,6 +28,7 @@ class TeamMapperImp: TeamMapper {
     }
 
     override fun mapTeam(resultSet: ResultSet): TeamDto {
+        resultSet.next()
         return mapSingleTeam(resultSet)
     }
 }
