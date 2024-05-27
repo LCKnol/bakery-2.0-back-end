@@ -16,4 +16,5 @@ interface TeamDao {
     fun getAllTeams(): TeamCollectionDto
     fun addTeam(teamInfoDto: TeamInfoDto)
     fun getTeam(teamName: String): TeamDto
+    fun removeTeam(teamId: Int)
 }

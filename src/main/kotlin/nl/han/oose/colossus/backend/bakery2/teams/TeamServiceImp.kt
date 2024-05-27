@@ -55,4 +55,8 @@ class TeamServiceImp: TeamService {
             roomDao.addTeamToRoom(room.getRoomNo(), teamId)
         }
     }
+
+    override fun removeTeam(teamId: Int) {
+        teamDao.removeTeam(teamId)
+    }
 }

@@ -122,4 +122,14 @@ class TeamDaoImp: TeamDao {
         connection.close()
         return team
     }
+
+    override fun removeTeam(teamId: Int) {
+        val connection = dbConnection.getConnection()
+
+        val preparedStatement = connection.prepareStatement("DELETE FROM TEAM WHERE TEAMID = ?")
+        preparedStatement.setInt(1, teamId)
+        preparedStatement.executeUpdate()
+        preparedStatement.close()
+        connection.close()
+    }
 }

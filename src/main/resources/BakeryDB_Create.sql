@@ -195,7 +195,7 @@ alter table PI add constraint FK_PIINROOM foreign key (ROOMNO)
     references ROOM (ROOMNO) on delete restrict on update restrict;
 
 alter table TEAMINROOM add constraint FK_TEAMINROOM foreign key (TEAMID)
-    references TEAM (TEAMID) on delete restrict on update restrict;
+    references TEAM (TEAMID) on delete cascade on update restrict;
 
 alter table TEAMINROOM add constraint FK_TEAMINROOM2 foreign key (ROOMNO)
     references ROOM (ROOMNO) on delete restrict on update restrict;

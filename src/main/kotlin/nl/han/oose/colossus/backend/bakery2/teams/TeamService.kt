@@ -14,6 +14,8 @@ interface TeamService {
 
     fun getTeamsNotInRoom(roomNo: String): TeamCollectionDto
 
-     fun addTeam(teamInfoDto: TeamInfoDto)
+    fun addTeam(teamInfoDto: TeamInfoDto)
+    fun removeTeam(teamId: Int)
+
 
 }
