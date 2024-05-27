@@ -1,6 +1,7 @@
 package nl.han.oose.colossus.backend.bakery2.teams
 
 import nl.han.oose.colossus.backend.bakery2.dto.TeamCollectionDto
+import nl.han.oose.colossus.backend.bakery2.dto.TeamInfoDto
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Primary
 import org.springframework.stereotype.Component
@@ -30,7 +31,13 @@ class TeamServiceImp: TeamService {
     override fun getAllTeams(): TeamCollectionDto {
         return teamDao.getAllTeams()
     }
+
     override fun getTeamsNotInRoom(roomNo: String): TeamCollectionDto {
         return teamDao.getTeamsNotInRoom(roomNo)
     }
-}
+
+        override fun addTeam(teamInfoDto: TeamInfoDto) {
+            TODO("Not yet implemented")
+
+        }
+    }
