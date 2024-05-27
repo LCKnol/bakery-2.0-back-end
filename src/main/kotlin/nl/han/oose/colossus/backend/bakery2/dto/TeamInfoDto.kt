@@ -3,7 +3,7 @@ package nl.han.oose.colossus.backend.bakery2.dto
 class TeamInfoDto {
     private var id: Int = 0
     private var name: String = ""
-    private var members: ArrayList<UserInfoDto> = ArrayList()
+    private var members: ArrayList<UserDto> = ArrayList()
     private var rooms: ArrayList<RoomDto> = ArrayList()
 
     fun getId(): Int {
@@ -22,11 +22,11 @@ class TeamInfoDto {
         this.name = name
     }
 
-    fun getMembers(): ArrayList<UserInfoDto> {
+    fun getMembers(): ArrayList<UserDto> {
         return members
     }
 
-    fun setMembers(members: List<UserInfoDto>) {
+    fun setMembers(members: List<UserDto>) {
         this.members = ArrayList(members) // Properly assign the list to members
     }
 

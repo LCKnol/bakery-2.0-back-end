@@ -2,6 +2,8 @@ package nl.han.oose.colossus.backend.bakery2.teams
 
 import nl.han.oose.colossus.backend.bakery2.database.DatabaseConnection
 import nl.han.oose.colossus.backend.bakery2.dto.TeamCollectionDto
+import nl.han.oose.colossus.backend.bakery2.dto.TeamDto
+import nl.han.oose.colossus.backend.bakery2.dto.TeamInfoDto
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Primary
 import org.springframework.stereotype.Component
@@ -96,5 +98,28 @@ class TeamDaoImp: TeamDao {
         preparedStatement.close()
         connection.close()
         return teams
+    }
+
+    override fun addTeam(teamInfoDto: TeamInfoDto) {
+        val connection = dbConnection.getConnection()
+
+        val preparedStatement1 = connection.prepareStatement("INSERT INTO TEAM (TEAMNAME) VALUES (?)")
+        preparedStatement1.setString(1, teamInfoDto.getName())
+        preparedStatement1.executeUpdate()
+
+        preparedStatement1.close()
+        connection.close()
+    }
+
+    override fun getTeam(teamName: String): TeamDto {
+        val connection = dbConnection.getConnection()
+
+        val preparedStatement = connection.prepareStatement("SELECT * FROM TEAM WHERE TEAMNAME = ?")
+        preparedStatement.setString(1, teamName)
+        val resultSet = preparedStatement.executeQuery()
+        val team = teamMapper.mapTeam(resultSet)
+        preparedStatement.close()
+        connection.close()
+        return team
     }
 }

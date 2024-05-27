@@ -13,17 +13,21 @@ class TeamMapperImp: TeamMapper {
     override fun mapUserTeams(resultSet: ResultSet): TeamCollectionDto {
         val teams = ArrayList<TeamDto>()
         while (resultSet.next()) {
-            teams.add(this.mapTeam(resultSet))
+            teams.add(this.mapSingleTeam(resultSet))
         }
         val teamCollection = TeamCollectionDto()
         teamCollection.setTeamCollection(teams)
         return teamCollection
     }
 
-    private fun mapTeam(team: ResultSet): TeamDto {
+    private fun mapSingleTeam(team: ResultSet): TeamDto {
         val teamDto = TeamDto()
         teamDto.setName(team.getString("teamname"))
         teamDto.setId(team.getInt("teamid"))
         return teamDto
+    }
+
+    override fun mapTeam(resultSet: ResultSet): TeamDto {
+        return mapSingleTeam(resultSet)
     }
 }

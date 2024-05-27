@@ -6,4 +6,5 @@ import java.sql.ResultSet
 
 interface TeamMapper {
     fun mapUserTeams(resultSet: ResultSet): TeamCollectionDto
+    fun mapTeam(resultSet: ResultSet): TeamDto
 }

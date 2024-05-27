@@ -36,7 +36,9 @@ create table PI
     MACADDRESS            varchar(32) not null,
     IPADDRESS            varchar(135) not null,
     STATUS               varchar(32) null,
-    primary key (PIID)
+    primary key (PIID),
+    UNIQUE (NAME),
+    unique (MACADDRESS)
 );
 
 create table ROOM
@@ -49,7 +51,8 @@ create table TEAM
 (
     TEAMID               int not null AUTO_INCREMENT,
     TEAMNAME             varchar(256) not null,
-    primary key (TEAMID)
+    primary key (TEAMID),
+    unique (TEAMNAME)
 );
 
 create table TEAMINROOM
@@ -67,7 +70,8 @@ create table USERS
     PASSWORD             varchar(256) not null,
     EMAIL                varchar(256) not null unique,
     ISADMIN              bool not null,
-    primary key (USERID)
+    primary key (USERID),
+    unique (EMAIL)
 );
 
 create table USERINTEAM
@@ -82,7 +86,8 @@ create table USERSESSION
     SESSIONID            int not null AUTO_INCREMENT,
     USERID               int not null,
     TOKEN                varchar(36) not null,
-    primary key (SESSIONID)
+    primary key (SESSIONID),
+    UNIQUE (TOKEN)
 );
 
 create table PIREQUEST
@@ -91,7 +96,8 @@ create table PIREQUEST
     MACADDRESS            varchar(32) not null,
     IPADDRESS            varchar(135) not null,
     REQUESTEDON          datetime not null,
-    primary key (REQUESTID)
+    primary key (REQUESTID),
+    unique (MACADDRESS)
 );
 /*password: AvisiPassword*/
 INSERT INTO USERS (FIRSTNAME, LASTNAME, PASSWORD, EMAIL, ISADMIN)
@@ -202,5 +208,4 @@ alter table USERINTEAM add constraint FK_USERINTEAM2 foreign key (TEAMID)
 
 alter table USERSESSION add constraint FK_USERSESSION foreign key (USERID)
     references USERS (USERID) on delete cascade on update restrict;
-
 

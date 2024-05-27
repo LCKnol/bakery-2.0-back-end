@@ -2,6 +2,8 @@ package nl.han.oose.colossus.backend.bakery2.teams
 
 import nl.han.oose.colossus.backend.bakery2.dto.TeamCollectionDto
 import nl.han.oose.colossus.backend.bakery2.dto.TeamInfoDto
+import nl.han.oose.colossus.backend.bakery2.rooms.RoomDao
+import nl.han.oose.colossus.backend.bakery2.users.UserDao
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Primary
 import org.springframework.stereotype.Component
@@ -12,8 +14,15 @@ class TeamServiceImp: TeamService {
     @Autowired
     private lateinit var teamDao: TeamDao
 
+    @Autowired
+    private lateinit var roomDao: RoomDao
+
     override fun setTeamDao(teamDao: TeamDao) {
         this.teamDao = teamDao
+    }
+
+    override fun setRoomDao(roomDao: RoomDao) {
+        this.roomDao = roomDao
     }
 
     override fun getTeamsFromUser(userId: Int): TeamCollectionDto {
@@ -36,8 +45,14 @@ class TeamServiceImp: TeamService {
         return teamDao.getTeamsNotInRoom(roomNo)
     }
 
-        override fun addTeam(teamInfoDto: TeamInfoDto) {
-            TODO("Not yet implemented")
-
+    override fun addTeam(teamInfoDto: TeamInfoDto) {
+        teamDao.addTeam(teamInfoDto)
+        val teamId = teamDao.getTeam(teamInfoDto.getName()).getId()
+        for (user in teamInfoDto.getMembers()) {
+            teamDao.assignUserToTeam(user.getId(), teamId)
+        }
+        for (room in teamInfoDto.getRooms()) {
+            roomDao.addTeamToRoom(room.getRoomNo(), teamId)
         }
     }
+}

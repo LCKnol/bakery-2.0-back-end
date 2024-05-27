@@ -35,6 +35,11 @@ class TeamController {
         return ResponseEntity(teamService.getTeamsFromUser(userId), HttpStatus.OK)
     }
 
+    @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE])
+    fun addTeam(@RequestBody teamInfoDto: TeamInfoDto): ResponseEntity<HttpStatus> {
+        teamService.addTeam(teamInfoDto)
+        return ResponseEntity(HttpStatus.CREATED)
+    }
 
     @GetMapping(path = ["/notinroom/{roomNo}"], produces = ["application/json"])
     @Authenticate
@@ -67,11 +72,5 @@ class TeamController {
     fun removeUserFromTeam(@PathVariable userId: Int,@PathVariable teamId: Int): ResponseEntity<HttpStatus> {
         teamService.removeUserFromTeam(userId,teamId)
         return ResponseEntity(HttpStatus.OK)
-    }
-
-    @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE])
-    fun addTeam(@RequestBody teamInfoDto: TeamInfoDto): ResponseEntity<HttpStatus> {
-       teamService.addTeam(teamInfoDto)
-        return ResponseEntity(HttpStatus.CREATED)
     }
 }
