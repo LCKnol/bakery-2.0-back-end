@@ -191,4 +191,40 @@ class PiControllerTests {
         verify(piService).setTvPower(piId,option)
 
     }
+
+    @Test
+    fun testUpdateAllPis(){
+        // Arrange
+
+        // Act
+        val response = sut.updateAllPis()
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.statusCode)
+        verify(piService).updateAllPis()
+    }
+
+    @Test
+    fun testPingAllPis(){
+        // Arrange
+
+        // Act
+        val response = sut.pingAllPis()
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.statusCode)
+        verify(piService).pingAllPis()
+    }
+
+    @Test
+    fun testRebootAllPis(){
+        // Arrange
+
+        // Act
+        val response = sut.reebootAllPis()
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.statusCode)
+        verify(piService).rebootAllPis()
+    }
 }
