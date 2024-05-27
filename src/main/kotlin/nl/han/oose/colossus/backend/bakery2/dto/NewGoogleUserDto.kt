@@ -13,7 +13,7 @@ class NewGoogleUserDto {
         this.jwtToken = jwtToken
     }
 
-    fun getUserDto(): UserDto?{
+    fun getUserDto(): UserDto {
         return this.userDto
     }
 
