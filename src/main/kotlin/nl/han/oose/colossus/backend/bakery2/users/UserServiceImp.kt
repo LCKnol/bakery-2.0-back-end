@@ -67,6 +67,10 @@ class UserServiceImp : UserService {
         userDao.deleteUser(userId)
     }
 
+    override fun assignAdminRightsToUser(userDto: UserDto) {
+        userDao.assignAdminRightsToUser(userDto)
+    }
+
     override fun emailExists(email: String): Boolean {
         return userDao.emailExists(email)
     }

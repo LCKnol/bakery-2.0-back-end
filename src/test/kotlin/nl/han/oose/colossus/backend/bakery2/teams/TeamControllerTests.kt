@@ -1,21 +1,14 @@
 package nl.han.oose.colossus.backend.bakery2.teams
 
+import junit.framework.Assert.assertEquals
 import nl.han.oose.colossus.backend.bakery2.dto.TeamCollectionDto
 import nl.han.oose.colossus.backend.bakery2.header.HeaderService
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito.mock
-import junit.framework.Assert.assertEquals
-import nl.han.oose.colossus.backend.bakery2.header.Authenticate
 import org.mockito.Mockito
+import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
 import org.springframework.http.HttpStatus
-import org.springframework.http.MediaType
-import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.DeleteMapping
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
 
 class TeamControllerTests {
 
@@ -85,5 +78,21 @@ class TeamControllerTests {
         //Assert
         verify(teamService).removeUserFromTeam(userId,teamId)
         assertEquals(HttpStatus.OK,response.statusCode)
+    }
+
+    @Test
+    fun testGetTeamsNotInRoom() {
+        // Arrange
+        val roomNo = "12.01"
+        val teams = TeamCollectionDto()
+        Mockito.`when`(teamService.getTeamsNotInRoom(roomNo.trim())).thenReturn(teams)
+
+        // Act
+        val response = sut.getTeamsNotInRoom(roomNo)
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.statusCode)
+        assertEquals(teams, response.body)
+        verify(teamService).getTeamsNotInRoom(roomNo.trim())
     }
 }

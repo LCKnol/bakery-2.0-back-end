@@ -100,4 +100,59 @@ class RoomDaoTests {
         // Assert
         Assertions.assertEquals(roomDto.getRoomNo(), finalResult)
     }
+
+    @Test
+    fun testRemovePisFromRoomWorksCorrectly() {
+        // Arrange
+        val roomNo = "01.01"
+
+        val statement = dbconnection.getConnection().prepareStatement("UPDATE PI SET ROOMNO = NULL WHERE ROOMNO = ?")
+        statement.setString(1, roomNo)
+
+        // Act & Assert
+        assertDoesNotThrow { statement.executeUpdate() }
+    }
+
+    @Test
+    fun testRemoveTeamFromRoomWorksCorrectly() {
+        // Arrange
+        val roomNo = "01.01"
+        val team = 1
+
+        val statement = dbconnection.getConnection().prepareStatement("DELETE FROM TEAMINROOM WHERE ROOMNO = ? AND TEAMID = ?")
+        statement.setString(1, roomNo)
+        statement.setInt(2, team)
+
+        // Act & Assert
+        assertDoesNotThrow { statement.executeUpdate() }
+    }
+
+    @Test
+    fun testAddTeamToRoomWorksCorrectly() {
+        // Arrange
+        val roomNo = "13.01"
+        val team = 3
+
+        val statement = dbconnection.getConnection().prepareStatement("INSERT INTO TEAMINROOM (ROOMNO, TEAMID) VALUES (?, ?)")
+        statement.setString(1, roomNo)
+        statement.setInt(2, team)
+
+        // Act & Assert
+        assertDoesNotThrow { statement.executeUpdate() }
+    }
+
+    @Test
+    fun testGetAllRoomsAndTeamsWorksCorrectly() {
+        // Arrange
+        val statement = dbconnection.getConnection().prepareStatement("SELECT R.ROOMNO, T.TEAMID, T.TEAMNAME FROM ROOM R LEFT JOIN TEAMINROOM TR ON TR.ROOMNO = R.ROOMNO LEFT JOIN TEAM T ON T.TEAMID = TR.TEAMID")
+
+        // Act
+        val resultSet = statement.executeQuery()
+
+        // Assert
+        Assertions.assertTrue(resultSet.next())
+    }
+
+
+
 }

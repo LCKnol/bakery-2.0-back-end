@@ -5,11 +5,7 @@ import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiRequestsCollectionDto
 import nl.han.oose.colossus.backend.bakery2.exceptions.HttpNotFoundException
-import nl.han.oose.colossus.backend.bakery2.picommunicator.dto.PiAcceptDto
-import nl.han.oose.colossus.backend.bakery2.picommunicator.dto.PiRebootDto
-import nl.han.oose.colossus.backend.bakery2.picommunicator.dto.PiSignUpRequestDto
-import nl.han.oose.colossus.backend.bakery2.picommunicator.dto.PiSetDashboardDto
-import nl.han.oose.colossus.backend.bakery2.picommunicator.dto.SocketResponseDto
+import nl.han.oose.colossus.backend.bakery2.picommunicator.dto.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Primary
 import org.springframework.stereotype.Component
@@ -58,6 +54,16 @@ class PiServiceImp : PiService {
 
     override fun setPiStatus(piStatus: PiStatus, piId: Int) {
         this.piDao.updateStatus(piStatus.toString(), piId)
+    }
+
+    override fun setTvPower(piId: Int, option: Boolean) {
+        val socketResponseDto = SocketResponseDto()
+        val piSetTvDto = PiSetTvDto()
+        piSetTvDto.setOption(option)
+        socketResponseDto.setInstruction("set-tv")
+        socketResponseDto.setBody(piSetTvDto)
+        val macAddress = this.piDao.getMacAddress(piId)
+        messagingTemplate.convertAndSend("/topic/pi-listener/$macAddress", socketResponseDto)
     }
 
     override fun getPis(user: Int): PiCollectionDto {

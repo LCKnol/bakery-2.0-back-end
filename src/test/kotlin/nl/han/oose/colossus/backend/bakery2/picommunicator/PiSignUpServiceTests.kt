@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Assertions
 
 
 
-class piSignUpServiceTests {
+class PiSignUpServiceTests {
 
     private lateinit var sut: PiSignUpServiceImp
 

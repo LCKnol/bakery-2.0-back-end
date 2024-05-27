@@ -8,8 +8,6 @@ class DashboardDto {
 
     private var dashboardName: String
 
-    private var imageUrl: String
-
     private var team: TeamDto
 
     private var hasAccess: Boolean
@@ -18,14 +16,12 @@ class DashboardDto {
         id: Int,
         dashboardUrl: String,
         dashboardName: String,
-        imageUrl: String,
         team: TeamDto,
         hasAccess: Boolean
     ) {
         this.id = id
         this.dashboardUrl = dashboardUrl
         this.dashboardName = dashboardName
-        this.imageUrl = imageUrl
         this.team = team
         this.hasAccess = hasAccess
     }
@@ -52,14 +48,6 @@ class DashboardDto {
 
     fun getDashboardUrl(): String {
         return this.dashboardUrl // You can still access it within the class
-    }
-
-    fun setImageUrl(newValue: String) {
-        this.imageUrl = newValue // You can still access it within the class
-    }
-
-    fun getImageUrl(): String {
-        return this.imageUrl // You can still access it within the class
     }
 
     fun setDashboardName(newValue: String) {

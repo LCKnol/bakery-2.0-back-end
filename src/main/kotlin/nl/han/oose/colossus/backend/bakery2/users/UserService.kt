@@ -22,4 +22,5 @@ interface UserService {
     fun deleteUser(userId: Int)
 
     fun emailExists(email: String): Boolean
+    fun assignAdminRightsToUser(userDto: UserDto)
 }
