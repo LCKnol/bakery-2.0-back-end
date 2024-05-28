@@ -39,6 +39,7 @@ class TeamMapperImp: TeamMapper {
             if (!teamInfoArray.any{teamInfo -> teamInfo.getId() == currentTeamId }) {
                 val teamInfoDto = TeamInfoDto()
                 teamInfoDto.setId(currentTeamId)
+                teamInfoDto.setName(resultSet.getString("teamname"))
                 teamInfoArray.add(teamInfoDto)
             }
             val currentTeam = teamInfoArray.filter { teamInfo -> teamInfo.getId() == currentTeamId }[0]
