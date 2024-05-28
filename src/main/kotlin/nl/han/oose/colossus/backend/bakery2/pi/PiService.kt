@@ -8,7 +8,7 @@ import nl.han.oose.colossus.backend.bakery2.picommunicator.dto.PiSignUpRequestDt
 import org.springframework.messaging.simp.SimpMessagingTemplate
 
 interface PiService {
-    fun getPis(user: Int): PiCollectionDto
+    fun getPisFromUser(user: Int): PiCollectionDto
     fun setPiDao(dao: PiDao)
     fun getAllPis(): PiCollectionDto
     fun getAllPiRequests(): PiRequestsCollectionDto

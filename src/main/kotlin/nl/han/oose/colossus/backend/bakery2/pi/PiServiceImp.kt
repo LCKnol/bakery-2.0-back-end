@@ -66,7 +66,7 @@ class PiServiceImp : PiService {
         messagingTemplate.convertAndSend("/topic/pi-listener/$macAddress", socketResponseDto)
     }
 
-    override fun getPis(user: Int): PiCollectionDto {
+    override fun getPisFromUser(user: Int): PiCollectionDto {
         val pis = piDao.getPis(user)
         return pis
     }
