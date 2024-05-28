@@ -43,18 +43,18 @@ class TeamMapperImp: TeamMapper {
                 teamInfoArray.add(teamInfoDto)
             }
             val currentTeam = teamInfoArray.filter { teamInfo -> teamInfo.getId() == currentTeamId }[0]
-            if (!currentTeam.getRooms().any {room -> room.getRoomNo() == resultSet.getString("roomNo")}) {
+            if (resultSet.getString("roomNo") !=null && !currentTeam.getRooms().any {room -> room.getRoomNo() == resultSet.getString("roomNo")}) {
                 val room = RoomDto()
                 room.setRoomNo(resultSet.getString("roomNo"))
                 currentTeam.getRooms().add(room)
             }
 
-            if (!currentTeam.getMembers().any {member -> member.getId() == resultSet.getInt("userId")}) {
+            if (resultSet.getString("userId") !=null && !currentTeam.getMembers().any {member -> member.getId() == resultSet.getInt("userId")}) {
                 val user = UserDto(resultSet.getInt("userId"), resultSet.getString("firstname"), resultSet.getString("lastname"), "", "", ArrayList(), false)
                 currentTeam.getMembers().add(user)
             }
         }
-        teamInfoCollection.setTeamInfoDto(teamInfoArray)
+        teamInfoCollection.setTeamInfoCollection(teamInfoArray)
         return teamInfoCollection
     }
 }
