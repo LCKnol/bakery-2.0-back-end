@@ -55,11 +55,7 @@ class DashboardControllerTests {
     fun testAddDashboardsCorrectly() {
 
         // Arrange
-<<<<<<< HEAD
         val dashboard = DashboardDto(1, "test", "test", 14, team, true)
-=======
-        val dashboard = DashboardDto(1, "test", "test", team, true)
->>>>>>> 887fdcd8c5f7a121baed5501652091394208b431
         doNothing().`when`(userService).checkUserInTeam(0, 1)
         // Act
         val response = sut.addDashboard(dashboard).statusCode.value()
@@ -73,11 +69,7 @@ class DashboardControllerTests {
     fun testGetDashboardWorksCorrectly() {
         //Arrange
         `when`(headerService.getUserId()).thenReturn(1)
-<<<<<<< HEAD
         val dashboard = DashboardDto(1, "test", "test", 65, team, true)
-=======
-        val dashboard = DashboardDto(1, "test", "test", team, true)
->>>>>>> 887fdcd8c5f7a121baed5501652091394208b431
         `when`(dashboardsService.getDashboard(1, 1)).thenReturn(dashboard)
         //Act
         val response = sut.getDashboard(1).statusCode.value()
@@ -89,11 +81,7 @@ class DashboardControllerTests {
     @Test
     fun testEditDashboardWorksCorrectly() {
         //Arrange
-<<<<<<< HEAD
         val dashboard = DashboardDto(1, "test", "test", 69, team, true)
-=======
-        val dashboard = DashboardDto(1, "test", "test", team, true)
->>>>>>> 887fdcd8c5f7a121baed5501652091394208b431
         `when`(headerService.getUserId()).thenReturn(1)
         doNothing().`when`(dashboardsService).editDashboard(dashboard)
         doNothing().`when`(userService).checkUserInTeam(1, 1)
@@ -111,11 +99,7 @@ class DashboardControllerTests {
         // Arrange
         val dashboardId = 2
         val mockUserId = 1
-<<<<<<< HEAD
         val dashboard = DashboardDto(1, "test", "test", 420, team, true)
-=======
-        val dashboard = DashboardDto(1, "test", "test", team, true)
->>>>>>> 887fdcd8c5f7a121baed5501652091394208b431
 
         `when`(headerService.getUserId()).thenReturn(mockUserId)
         `when`(dashboardsService.getDashboard(dashboardId, mockUserId)).thenReturn(dashboard)
