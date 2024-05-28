@@ -1,13 +1,13 @@
 package nl.han.oose.colossus.backend.bakery2.dto
 
 class TeamInfoCollectionDto {
-    private var teamInfoDto: ArrayList<TeamInfoDto> = ArrayList()
+    private var teamInfoCollection: ArrayList<TeamInfoDto> = ArrayList()
 
-    fun getTeamInfoDto(): ArrayList<TeamInfoDto> {
-        return teamInfoDto
+    fun getTeamInfoCollection(): ArrayList<TeamInfoDto> {
+        return teamInfoCollection
     }
 
-    fun setTeamInfoDto(teamInfoDto: ArrayList<TeamInfoDto>) {
-        this.teamInfoDto = teamInfoDto
+    fun setTeamInfoCollection(teamInfoCollection: ArrayList<TeamInfoDto>) {
+        this.teamInfoCollection = teamInfoCollection
     }
 }
