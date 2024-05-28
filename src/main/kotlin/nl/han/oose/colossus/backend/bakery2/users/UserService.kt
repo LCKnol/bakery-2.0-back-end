@@ -1,7 +1,9 @@
 package nl.han.oose.colossus.backend.bakery2.users
 
+import nl.han.oose.colossus.backend.bakery2.dto.UserCollectionDto
 import nl.han.oose.colossus.backend.bakery2.dto.UserDto
 import nl.han.oose.colossus.backend.bakery2.dto.UserInfoDto
+import nl.han.oose.colossus.backend.bakery2.teams.TeamDao
 
 interface UserService {
 
@@ -9,7 +11,16 @@ interface UserService {
 
     fun setUserDao(dao: UserDao)
 
+    fun setTeamDao(dao: TeamDao)
+
     fun getUserId(token: String): Int
 
     fun registerUser(userDto: UserDto)
+
+    fun checkUserInTeam(userId: Int, teamId: Int)
+    fun getAllUsers(): UserCollectionDto
+    fun deleteUser(userId: Int)
+
+    fun emailExists(email: String): Boolean
+    fun assignAdminRightsToUser(userDto: UserDto)
 }

@@ -1,7 +1,9 @@
 package nl.han.oose.colossus.backend.bakery2.users
 
+import nl.han.oose.colossus.backend.bakery2.dto.UserCollectionDto
 import nl.han.oose.colossus.backend.bakery2.dto.UserDto
 import nl.han.oose.colossus.backend.bakery2.dto.UserInfoDto
+import nl.han.oose.colossus.backend.bakery2.header.Admin
 import nl.han.oose.colossus.backend.bakery2.header.Authenticate
 import nl.han.oose.colossus.backend.bakery2.header.HeaderService
 import org.springframework.beans.factory.annotation.Autowired
@@ -34,11 +36,34 @@ class UserController {
         return ResponseEntity(user, HttpStatus.OK)
     }
 
-    @PostMapping(path = ["/register"], consumes = [MediaType.APPLICATION_JSON_VALUE])
+
+    @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE])
     fun registerUser(@RequestBody userDto: UserDto): ResponseEntity<HttpStatus> {
-        //TODO: Only allow with admin privileges
         userService.registerUser(userDto)
         return ResponseEntity(HttpStatus.CREATED)
     }
 
+    @Authenticate
+    @Admin
+    @GetMapping(path = ["/all"],produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun getAllUsers(): ResponseEntity<UserCollectionDto> {
+        var users = userService.getAllUsers()
+        return ResponseEntity(users, HttpStatus.OK)
+    }
+
+    @Authenticate
+    @Admin
+    @DeleteMapping(path = ["/{userId}"])
+    fun deleteUser(@PathVariable userId: Int): ResponseEntity<UserCollectionDto> {
+        userService.deleteUser(userId)
+        return ResponseEntity(HttpStatus.OK)
+    }
+
+    @Authenticate
+    @Admin
+    @PostMapping(path = ["/assignAdminRights"])
+    fun assignAdminRightsToUser(@RequestBody userDto: UserDto): ResponseEntity<UserCollectionDto> {
+        userService.assignAdminRightsToUser(userDto)
+        return ResponseEntity(HttpStatus.OK)
+    }
 }

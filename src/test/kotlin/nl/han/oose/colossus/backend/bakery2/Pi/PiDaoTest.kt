@@ -1,19 +1,30 @@
 package nl.han.oose.colossus.backend.bakery2.Pi
 
+import junit.framework.Assert.assertEquals
+import junit.framework.Assert.assertTrue
 import nl.han.oose.colossus.backend.bakery2.database.DatabaseConnection
+import nl.han.oose.colossus.backend.bakery2.dto.DashboardDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDto
+import nl.han.oose.colossus.backend.bakery2.dto.PiDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiRequestsCollectionDto
 import nl.han.oose.colossus.backend.bakery2.pi.PiDao
 import nl.han.oose.colossus.backend.bakery2.pi.PiDaoImp
 import nl.han.oose.colossus.backend.bakery2.pi.PiMapper
+import nl.han.oose.colossus.backend.bakery2.pi.PiStatus
 import nl.han.oose.colossus.backend.bakery2.util.MockitoHelper
 import nl.han.oose.colossus.backend.bakery2.util.ScriptRunner
 import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.mockito.Mockito.*
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import java.io.InputStreamReader
+import java.sql.Connection
+import java.sql.PreparedStatement
+import java.sql.ResultSet
 
 
 class PiDaoTest {
@@ -85,6 +96,7 @@ class PiDaoTest {
         fun insertUser() {
             // Arrange
             val macAddress = "00:11:22:33:44:55"
+            val ipAddress = "123.123.123.123"
             val name = "fake pi"
             val roomNo = "fake room"
 
@@ -95,7 +107,7 @@ class PiDaoTest {
             selectStatement.setString(1, macAddress)
 
             // Act
-            sut.insertPi(macAddress, name, roomNo)
+            sut.insertPi(macAddress, ipAddress, name, roomNo)
 
             // Assert
             val resultSet = selectStatement.executeQuery()
@@ -114,9 +126,10 @@ class PiDaoTest {
         val adress = "fake adress"
 
         val statement1 =
-                dbconnection.getConnection().prepareStatement("INSERT INTO PIREQUEST (MACADDRESS, REQUESTEDON) VALUES (?, ?)")
+                dbconnection.getConnection().prepareStatement("INSERT INTO PIREQUEST (MACADDRESS, IPADDRESS, REQUESTEDON) VALUES (?, ?, ?)")
         statement1.setString(1, adress)
-        statement1.setString(2, "2024-04-24 09:36:22")
+        statement1.setString(2, adress)
+        statement1.setString(3, "2024-04-24 09:36:22")
 
         statement1.execute()
 
@@ -135,5 +148,74 @@ class PiDaoTest {
         statement3.setString(1, adress)
         val resultSet2 = statement3.executeQuery()
         Assertions.assertFalse(resultSet2.next())
+    }
+
+    @Test
+    fun testAssignDashboardWorksCorrectly(){
+        // arrange
+        val dashboardId = 2
+        val piID = 1
+        val macAddress = "macAddress"
+        val ipAddress = "ipAddress"
+
+        val statement1 = dbconnection.getConnection().prepareStatement("insert into pi (roomno, dashboardId, name, macaddress, ipaddress) values (15.05, ?, 'testpi', ?, ?)")
+        statement1.setInt(1, dashboardId)
+        statement1.setString(2, macAddress)
+        statement1.setString(3, ipAddress)
+
+        val statement2 = dbconnection.getConnection().prepareStatement("SELECT DASHBOARDID FROM PI WHERE MACADDRESS = ?")
+        statement2.setString(1,macAddress)
+
+        // act
+        statement1.executeUpdate()
+        sut.assignDashboard(dashboardId,piID)
+        val resultSet = statement2.executeQuery()
+        resultSet.next()
+        val result = resultSet.getInt(1)
+        //assert
+        Assertions.assertEquals(dashboardId, result)
+    }
+
+    @Test
+    fun testUpdatePiStatusWorksCorrectly() {
+        // Arrange pi id = 1 && status == online
+        val connection = dbconnection.getConnection()
+        val statement1 = connection.prepareStatement("SELECT STATUS FROM PI WHERE PIID = 1")
+        val resultSet = statement1.executeQuery()
+        resultSet.next()
+        val status = resultSet.getString("status")
+
+        // Act
+        sut.updateStatus("OFFLINE", 1)
+
+        // Assert
+        assertEquals("offline", status)
+    }
+
+
+    @Test
+    fun testGetMacAddress() {
+        // arrange
+        val dashboardId = 2
+        val piID = 1
+        val macAddress = "macAddress"
+        val ipAddress = "ipAddress"
+
+        val statement1 = dbconnection.getConnection().prepareStatement("insert into pi (roomno, dashboardId, name, macaddress, ipaddress) values (15.05, ?, 'testpi', ?, ?)")
+        statement1.setInt(1, dashboardId)
+        statement1.setString(2, macAddress)
+        statement1.setString(3, ipAddress)
+
+        val statement2 = dbconnection.getConnection().prepareStatement("SELECT macaddress FROM PI WHERE MACADDRESS = ?")
+        statement2.setString(1,macAddress)
+
+        // act
+        statement1.executeUpdate()
+        sut.getMacAddress(piID)
+        val resultSet = statement2.executeQuery()
+        resultSet.next()
+        val result = resultSet.getString(1)
+        //assert
+        Assertions.assertEquals(macAddress, result)
     }
 }

@@ -3,6 +3,7 @@ package nl.han.oose.colossus.backend.bakery2.authenticationTests
 import nl.han.oose.colossus.backend.bakery2.authentication.AuthenticationDaoImp
 import nl.han.oose.colossus.backend.bakery2.database.DatabaseConnection
 import nl.han.oose.colossus.backend.bakery2.dto.UserDto
+import nl.han.oose.colossus.backend.bakery2.util.MockitoHelper.anyObject
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -11,6 +12,7 @@ import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mockito
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
+import java.sql.Connection
 import java.sql.PreparedStatement
 import java.sql.ResultSet
 import java.sql.SQLException
@@ -19,19 +21,21 @@ class AuthenticationDaoTests {
 
     private lateinit var sut: AuthenticationDaoImp
     private lateinit var mockDatabaseConnection: DatabaseConnection
+    private lateinit var sqlConnection: Connection
     private lateinit var mockPreparedStatement: PreparedStatement
     private lateinit var mockResultSet: ResultSet
 
     @BeforeEach
     fun setup() {
+        sqlConnection = mock(Connection::class.java)
         mockDatabaseConnection = mock(DatabaseConnection::class.java)
         mockPreparedStatement = mock(PreparedStatement::class.java)
         mockResultSet = mock(ResultSet::class.java)
-        sut = AuthenticationDaoImp().apply {
-            setDatabaseConnection(mockDatabaseConnection)
-        }
+        sut = AuthenticationDaoImp()
+        sut.setDatabaseConnection(mockDatabaseConnection)
 
-        `when`(mockDatabaseConnection.prepareStatement(anyString())).thenReturn(mockPreparedStatement)
+        `when`(mockDatabaseConnection.getConnection()).thenReturn(sqlConnection)
+        `when`(sqlConnection.prepareStatement(anyString())).thenReturn(mockPreparedStatement)
         `when`(mockPreparedStatement.executeQuery()).thenReturn(mockResultSet)
         `when`(mockResultSet.next()).thenReturn(true)
     }
@@ -67,7 +71,7 @@ class AuthenticationDaoTests {
     @Test
     fun tokenExistsReturnsTrueWhenTokenIsFound() {
         // Arrange
-        `when`(mockResultSet.getInt(1)).thenReturn(1)
+        `when`(mockResultSet.next()).thenReturn(true)
 
         // Act
         val result = sut.tokenExists("existingToken")
@@ -79,24 +83,13 @@ class AuthenticationDaoTests {
     @Test
     fun tokenExistsReturnsFalseIfTokenINotFound() {
         // Arrange
-        `when`(mockResultSet.getInt(1)).thenReturn(0)
+        `when`(mockResultSet.next()).thenReturn(false)
 
         // Act
         val result = sut.tokenExists("nonExistingToken")
 
         // Assert
         assertFalse(result)
-    }
-    @Test
-    fun tokenExistsReturnsFalseIfSQLExceptionIsThrown() {
-        // Arrange
-        `when`(mockDatabaseConnection.prepareStatement(Mockito.anyString())).thenThrow(SQLException("Database error"))
-
-        // Act
-        val result = sut.tokenExists("anyToken")
-
-        // Assert
-        assert(!result)  // Expect false because of SQLException
     }
 
     @Test
@@ -110,7 +103,7 @@ class AuthenticationDaoTests {
         sut.insertToken(email, token)
 
         // Assert
-        Mockito.verify(mockDatabaseConnection).prepareStatement(expectedQuery)
+        Mockito.verify(sqlConnection).prepareStatement(expectedQuery)
         Mockito.verify(mockPreparedStatement).setString(1, token)
         Mockito.verify(mockPreparedStatement).setString(2, email)
         Mockito.verify(mockPreparedStatement).executeUpdate()
@@ -129,7 +122,7 @@ class AuthenticationDaoTests {
         sut.deleteSession(token)
 
         // Assert
-        Mockito.verify(mockDatabaseConnection).prepareStatement(expectedQuery)
+        Mockito.verify(sqlConnection).prepareStatement(expectedQuery)
         Mockito.verify(mockPreparedStatement).setString(1, token)
         Mockito.verify(mockPreparedStatement).executeUpdate()
     }

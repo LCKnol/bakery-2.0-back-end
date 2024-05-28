@@ -1,8 +1,7 @@
 package nl.han.oose.colossus.backend.bakery2.users
 
 import nl.han.oose.colossus.backend.bakery2.database.DatabaseConnection
-import nl.han.oose.colossus.backend.bakery2.dto.UserDto
-import nl.han.oose.colossus.backend.bakery2.dto.UserInfoDto
+import nl.han.oose.colossus.backend.bakery2.dto.*
 
 interface UserDao {
     fun getUserInfo(token: String): UserInfoDto
@@ -14,4 +13,9 @@ interface UserDao {
     fun setDatabaseConnection(connection: DatabaseConnection)
 
     fun insertUser(userDto: UserDto)
+    fun getAllUsers(): UserCollectionDto
+    fun deleteUser(userId: Int)
+
+    fun emailExists(email: String): Boolean
+    fun assignAdminRightsToUser(userDto: UserDto)
 }

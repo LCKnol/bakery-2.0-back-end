@@ -6,6 +6,7 @@ import nl.han.oose.colossus.backend.bakery2.dto.PiRequestsCollectionDto
 import nl.han.oose.colossus.backend.bakery2.header.HeaderService
 import nl.han.oose.colossus.backend.bakery2.pi.PiController
 import nl.han.oose.colossus.backend.bakery2.pi.PiService
+import nl.han.oose.colossus.backend.bakery2.pi.PiStatus
 import nl.han.oose.colossus.backend.bakery2.users.UserService
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
@@ -13,35 +14,33 @@ import org.junit.jupiter.api.Test
 import org.mockito.Mockito.*
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.messaging.simp.SimpMessagingTemplate
 
 class PiControllerTests {
 
     private lateinit var sut: PiController
     private lateinit var piService: PiService
     private lateinit var userService: UserService
-    private lateinit var tokenService: HeaderService
+    private lateinit var headerService: HeaderService
     @Test
     @BeforeEach
     fun setUp() {
 
         piService = mock(PiService::class.java)
         userService = mock(UserService::class.java)
-        tokenService = mock(HeaderService::class.java)
+        headerService = mock(HeaderService::class.java)
 
 
         sut = PiController()
         sut.setPiService(piService)
         sut.setUserService(userService)
-        sut.setTokenService(tokenService)
+        sut.setTokenService(headerService)
     }
 
     @Test
     fun testGetPisWorksCorrectly() {
         // Arrange
-        val pi: PiCollectionDto = PiCollectionDto()
-        `when`(tokenService.getToken()).thenReturn("fakeToken")
-        `when`(userService.getUserId("fakeToken")).thenReturn(1)
+        val pi = PiCollectionDto()
+        `when`(headerService.getUserId()).thenReturn(1)
         `when`(piService.getPis(1)).thenReturn(pi)
 
         // Act
@@ -50,8 +49,7 @@ class PiControllerTests {
         // Assert
         assertEquals(HttpStatus.OK, response.statusCode)
         assertEquals(pi, response.body)
-        verify(tokenService).getToken()
-        verify(userService).getUserId("fakeToken")
+        verify(headerService).getUserId()
         verify(piService).getPis(1)
     }
 
@@ -59,7 +57,7 @@ class PiControllerTests {
     fun testgetAllPisWorksCorrectly() {
         // Arrange
         val pi: PiCollectionDto = PiCollectionDto()
-        `when`(tokenService.getToken()).thenReturn("fakeToken")
+        `when`(headerService.getUserId()).thenReturn(1)
         `when`(piService.getAllPis()).thenReturn(pi)
 
         // Act
@@ -75,7 +73,7 @@ class PiControllerTests {
     fun testgetAllPirequestsPisWorksCorrectly() {
         // Arrange
         val piRequest: PiRequestsCollectionDto = PiRequestsCollectionDto()
-        `when`(tokenService.getToken()).thenReturn("fakeToken")
+        `when`(headerService.getUserId()).thenReturn(1)
         `when`(piService.getAllPiRequests()).thenReturn(piRequest)
 
         // Act
@@ -93,10 +91,10 @@ class PiControllerTests {
         val piDto = PiDto()
 
         // Act
-        val response: ResponseEntity<HttpStatus> = sut.initPi(PiDto())
+        val response: ResponseEntity<HttpStatus> = sut.initPi(piDto)
         // Assert
         assertEquals(HttpStatus.CREATED, response.statusCode)
-        verify(piService).addPi(anyString(), anyString(), anyString())
+        verify(piService).addPi(anyString(), anyString(), anyString(), anyString())
     }
 
     @Test
@@ -110,6 +108,87 @@ class PiControllerTests {
         verify(piService).declinePiRequest(fakeAdress)
     }
 
+    @Test
+    fun testAssignDashboardToPiWorksCorrectly() {
+        // Arrange
+        val piDto = PiDto()
+        // Act
+        val response: ResponseEntity<HttpStatus> = sut.assignDashboardToPi(piDto)
+        // Assert
+        assertEquals(HttpStatus.OK, response.statusCode)
+        verify(piService).assignDashboardToPi(piDto)
+    }
+    @Test
+    fun testEditPi() {
+        // Arrange
+        val piDto = PiDto()
+        val token = "validToken"
+        val userId = 1
+
+        `when`(headerService.getToken()).thenReturn(token)
+        `when`(userService.getUserId(token)).thenReturn(userId)
+
+        // Act
+        val response: ResponseEntity<HttpStatus> = sut.editPi(piDto)
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.statusCode)
+        verify(headerService).getToken()
+        verify(userService).getUserId(token)
+        verify(piService).editPi(piDto, userId)
+    }
+    @Test
+    fun testAssignDashboardToPi() {
+        // Arrange
+        val piDto = PiDto()
+
+        // Act
+        val response: ResponseEntity<HttpStatus> = sut.assignDashboardToPi(piDto)
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.statusCode)
+        verify(piService).assignDashboardToPi(piDto)
+    }
+    @Test
+    fun testRebootPi() {
+        // Arrange
+        val piId = 1
+        // Act
+        val response: ResponseEntity<HttpStatus> = sut.rebootPi(piId)
+        // Assert
+        assertEquals(HttpStatus.OK, response.statusCode)
+        verify(piService).rebootPi(piId)
+    }
 
 
+    @Test
+    fun testPingPiCallsRightFunctions() {
+        // Arrange
+        val piId = 1
+        doNothing().`when`(piService).setPiStatus(PiStatus.OFFLINE, piId)
+        doNothing().`when`(piService).pingPi(piId)
+
+        // Act
+        val response = sut.pingPi(piId)
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.statusCode)
+        verify(piService).pingPi(piId)
+        verify(piService).setPiStatus(PiStatus.OFFLINE, piId)
+    }
+
+    @Test
+    fun turnTvOnAndOff(){
+        // Arrange
+        val piId = 1
+        val option = true
+
+        // Act
+        val response = sut.setTvPower(piId,option)
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.statusCode)
+        verify(piService).setTvPower(piId,option)
+
+    }
 }

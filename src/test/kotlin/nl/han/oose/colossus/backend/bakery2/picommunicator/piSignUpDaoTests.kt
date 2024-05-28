@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.io.InputStreamReader
 import org.junit.jupiter.api.Assertions
+import org.mockito.Mockito
 
 class piSignUpDaoTests {
 
@@ -27,11 +28,12 @@ class piSignUpDaoTests {
     fun insertPyRequestsGoesGood() {
         // Arrange
         val mac = "macAddress"
-        val statement = dbconnection.getConnection().prepareStatement("select macaddress from pirequest where macaddress = ?")
+        val statement =
+            dbconnection.getConnection().prepareStatement("select macaddress from PIREQUEST where macaddress = ?")
         statement.setString(1, mac)
 
         // Act
-        sut.insertSignUpRequest("macAddress")
+        sut.insertSignUpRequest("macAddress", "ipAddress")
 
         // Assert
         val resultSet = statement.executeQuery()
@@ -47,9 +49,43 @@ class piSignUpDaoTests {
         piSignUpRequestDto.setMacAddress("cc:41:00:f3:81:fc")
 
         //Act
-        val result = sut.checkPiExists(piSignUpRequestDto)
+        val result = sut.checkPiExists(piSignUpRequestDto.getMacAddress())
 
         //Assert
-        Assertions.assertEquals(result,true)
+        Assertions.assertEquals(result, true)
+    }
+
+    @Test
+    fun checkPiSignUpExistsReturnsTrue() {
+        // Arrange
+        val macAddress = "mac address"
+        val ipAddress = "ip address"
+        val connection = dbconnection.getConnection()
+        val statement =
+            connection.prepareStatement("insert into pirequest (macaddress, ipAddress, requestedon) values (?, ?, NOW())")
+        statement.setString(1, macAddress)
+        statement.setString(2, ipAddress)
+        statement.executeUpdate()
+
+        // Act
+        val result = sut.checkPiSignUpExists(macAddress)
+
+        // Assert
+        Assertions.assertTrue(result)
+    }
+
+    @Test
+    fun checkPiSignUpExistsReturnsFalse() {
+        // Arrange
+        val macAddress = "non existant"
+        val connection = dbconnection.getConnection()
+        val statement = connection.prepareStatement("delete from pirequest")
+        statement.executeUpdate()
+
+        // Act
+        val result = sut.checkPiSignUpExists(macAddress)
+
+        // Assert
+        Assertions.assertFalse(result)
     }
 }

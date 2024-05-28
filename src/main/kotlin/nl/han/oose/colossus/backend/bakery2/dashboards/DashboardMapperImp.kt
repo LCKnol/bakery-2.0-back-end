@@ -2,6 +2,7 @@ package nl.han.oose.colossus.backend.bakery2.dashboards
 
 import nl.han.oose.colossus.backend.bakery2.dto.DashboardDto
 import nl.han.oose.colossus.backend.bakery2.dto.DashboardCollectionDto
+import nl.han.oose.colossus.backend.bakery2.dto.TeamDto
 import org.springframework.context.annotation.Primary
 import org.springframework.stereotype.Component
 import java.sql.ResultSet
@@ -13,14 +14,7 @@ class DashboardMapperImp : DashboardsMapper {
     override fun getAllDashboardsMapper(resultSet: ResultSet): DashboardCollectionDto {
         val newDashboardCollectionDto = DashboardCollectionDto()
         while (resultSet.next()) {
-            val newDashboardDto =
-                DashboardDto(
-                    resultSet.getInt("DASHBOARDID"),
-                    resultSet.getString("DASHBOARDURL"),
-                    resultSet.getString("NAME"),
-                    resultSet.getString("IMAGEURL"),
-                    resultSet.getInt("USERID")
-                )
+            val newDashboardDto = this.mapDashboard(resultSet)
             newDashboardCollectionDto.getDashboards().add(newDashboardDto)
         }
         return newDashboardCollectionDto
@@ -31,22 +25,31 @@ class DashboardMapperImp : DashboardsMapper {
         var dashboard: DashboardDto? = null
 
         while (resultSet.next()) {
-            dashboard = DashboardDto(
-                resultSet.getInt("dashboardId"),
-                resultSet.getString("dashboardUrl"),
-                resultSet.getString("name"),
-                resultSet.getString("imageUrl"),
-                resultSet.getInt("userId")
-            )
+            dashboard = this.mapDashboard(resultSet)
         }
         return dashboard
     }
 
-    override fun getUserIdMapper(resultSet: ResultSet): Int? {
+    override fun getTeamIdMapper(resultSet: ResultSet): Int? {
         var userId: Int? = null
         while (resultSet.next()) {
-            userId = resultSet.getInt("USERID")
+            userId = resultSet.getInt("TEAMID")
         }
         return userId
+    }
+
+    private fun mapDashboard(dashboard: ResultSet): DashboardDto {
+        val team = TeamDto()
+        team.setName(dashboard.getString("teamName"))
+        team.setId(dashboard.getInt("teamId"))
+        val dashboardDto = DashboardDto(
+            dashboard.getInt("dashboardId"),
+            dashboard.getString("dashboardUrl"),
+            dashboard.getString("name"),
+            dashboard.getInt("refreshRate"),
+            team,
+            dashboard.getBoolean("hasAccess")
+        )
+        return dashboardDto
     }
 }

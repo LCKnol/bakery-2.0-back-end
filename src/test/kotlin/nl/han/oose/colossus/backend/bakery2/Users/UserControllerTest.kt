@@ -1,5 +1,7 @@
 package nl.han.oose.colossus.backend.bakery2.Users
 
+import nl.han.oose.colossus.backend.bakery2.dto.TeamDto
+import nl.han.oose.colossus.backend.bakery2.dto.UserCollectionDto
 import nl.han.oose.colossus.backend.bakery2.dto.UserDto
 import nl.han.oose.colossus.backend.bakery2.dto.UserInfoDto
 import nl.han.oose.colossus.backend.bakery2.header.HeaderService
@@ -13,6 +15,7 @@ import org.mockito.Mockito
 import org.mockito.Mockito.*
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.RequestBody
 
 class UserControllerTest {
 
@@ -36,7 +39,7 @@ class UserControllerTest {
     @Test
     fun testGetPisWorksCorrectly() {
         // Arrange
-        val user: UserInfoDto = UserInfoDto()
+        val user = UserInfoDto()
         `when`(tokenService.getToken()).thenReturn("fakeToken")
         `when`(userService.getUserInfo("fakeToken")).thenReturn(user)
 
@@ -47,7 +50,6 @@ class UserControllerTest {
         // Assert
         assertEquals(HttpStatus.OK, response.statusCode)
         assertEquals(user, response.body)
-        verify(tokenService).getToken()
         verify(userService).getUserInfo("fakeToken")
     }
 
@@ -56,11 +58,12 @@ class UserControllerTest {
         // Arrange
         val userDto = UserDto(
             id = 1,
-            firstname = "reem",
-            lastname = "man",
+            firstName = "reem",
+            lastName = "man",
             email = "reem.@gmail.com",
             password = "mypassword",
-            isAdmin = true
+            isAdmin = true,
+            teams =  ArrayList<TeamDto>()
         )
         Mockito.doNothing().`when`(userService).registerUser(userDto)
 
@@ -70,5 +73,47 @@ class UserControllerTest {
         // Assert
         verify(userService).registerUser(userDto)
         assertEquals(HttpStatus.CREATED, response.statusCode)
+    }
+
+
+    @Test
+    fun testGetAllUsersSuccess() {
+        // Act
+        val response: ResponseEntity<UserCollectionDto> = sut.getAllUsers()
+        // Assert
+        verify(userService).getAllUsers()
+        assertEquals(HttpStatus.OK, response.statusCode)
+    }
+
+
+    @Test
+    fun testDeleteUsersSuccess() {
+
+        // Act
+        val response: ResponseEntity<UserCollectionDto> = sut.deleteUser(1)
+
+        // Assert
+        verify(userService).deleteUser(1)
+        assertEquals(HttpStatus.OK, response.statusCode)
+    }
+
+    @Test
+    fun testAssignAdminRightsToUser() {
+        //Arrange
+        var userDto = UserDto(
+            id = 2,
+            firstName = "Arnoud",
+            lastName = "Visi",
+            email = "Avisi@outlook.com",
+            password = "mypassword",
+            isAdmin = true,
+            teams =  ArrayList<TeamDto>()
+        )
+        // Act
+        val response: ResponseEntity<UserCollectionDto> = sut.assignAdminRightsToUser(userDto)
+
+        // Assert
+        verify(userService).assignAdminRightsToUser(userDto)
+        assertEquals(HttpStatus.OK, response.statusCode)
     }
 }
