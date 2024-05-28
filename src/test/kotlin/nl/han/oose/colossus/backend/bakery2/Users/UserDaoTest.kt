@@ -59,14 +59,15 @@ class UserDaoTest {
         // Arrange
         dbConnection = DatabaseConnection()
         val insertStatement = dbConnection.getConnection().prepareStatement(
-                "INSERT INTO USERSESSION (USERID, TOKEN)" +
-                        "VALUES (?, ?);"
+            "INSERT INTO USERSESSION (USERID, TOKEN)" +
+                    "VALUES (?, ?);"
         )
         insertStatement.setInt(1, 1)
         insertStatement.setString(2, "123")
         insertStatement.executeUpdate()
         val token: String = "123"
-        val user : UserDto = UserDto(1, "Arnoud", "Visi", "Avisi@outlook.com", "test password", ArrayList<TeamDto>(),false)
+        val user: UserDto =
+            UserDto(1, "Arnoud", "Visi", "Avisi@outlook.com", "test password", ArrayList<TeamDto>(), false)
         `when`(userMapper.mapUser(MockitoHelper.anyObject())).thenReturn(user)
 
 
@@ -80,7 +81,8 @@ class UserDaoTest {
     @Test
     fun insertUser() {
         // Arrange
-        val userDto = UserDto(-1, "John", "Doe", "john.doe@example.com", "securePassword123",ArrayList<TeamDto>(), true)
+        val userDto =
+            UserDto(-1, "John", "Doe", "john.doe@example.com", "securePassword123", ArrayList<TeamDto>(), true)
 
         dbConnection = DatabaseConnection()
         val insertStatement = dbConnection.getConnection().prepareStatement(

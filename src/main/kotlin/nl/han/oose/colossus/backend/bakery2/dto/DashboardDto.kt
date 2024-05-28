@@ -8,6 +8,8 @@ class DashboardDto {
 
     private var dashboardName: String
 
+    private var dashboardRefresh: Int
+
     private var team: TeamDto
 
     private var hasAccess: Boolean
@@ -16,12 +18,14 @@ class DashboardDto {
         id: Int,
         dashboardUrl: String,
         dashboardName: String,
+        dashboardRefresh: Int,
         team: TeamDto,
         hasAccess: Boolean
     ) {
         this.id = id
         this.dashboardUrl = dashboardUrl
         this.dashboardName = dashboardName
+        this.dashboardRefresh = dashboardRefresh
         this.team = team
         this.hasAccess = hasAccess
     }
@@ -56,6 +60,14 @@ class DashboardDto {
 
     fun getDashboardName(): String {
         return this.dashboardName // You can still access it within the class
+    }
+
+    fun setDashboardRefresh(newValue: Int) {
+        this.dashboardRefresh = newValue
+    }
+
+    fun getDashboardRefresh(): Int {
+        return this.dashboardRefresh
     }
 
     fun setHasAccess(newValue: Boolean) {
