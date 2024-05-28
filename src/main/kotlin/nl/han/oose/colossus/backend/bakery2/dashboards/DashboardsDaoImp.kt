@@ -31,10 +31,11 @@ class DashboardsDaoImp : DashboardsDao {
     override fun addDashboard(dashboardDto: DashboardDto) {
         val connection = databaseConnection.getConnection()
         val statement =
-            connection.prepareStatement("INSERT INTO DASHBOARD (TEAMID,NAME,DASHBOARDURL) VALUES(?,?,?)")
+            connection.prepareStatement("INSERT INTO DASHBOARD (TEAMID,NAME,DASHBOARDURL,REFRESHRATE) VALUES(?,?,?,?)")
         statement.setInt(1, dashboardDto.getTeam().getId())
         statement.setString(2, dashboardDto.getDashboardName())
         statement.setString(3, dashboardDto.getDashboardUrl())
+        statement.setInt(4, dashboardDto.getDashboardRefresh())
         statement.executeUpdate()
         statement.close()
         connection.close()
@@ -45,7 +46,7 @@ class DashboardsDaoImp : DashboardsDao {
         val newDashboardCollectionDto: DashboardCollectionDto
         val connection = databaseConnection.getConnection()
         val statement =
-            connection.prepareStatement("SELECT d.*, t.TEAMNAME, (exists(select * from userinteam where userid = ? and teamid = t.TEAMID)) as hasAccess FROM DASHBOARD d left join team t on d.TEAMID = t.TEAMID ")
+            connection.prepareStatement("SELECT d.*, t.TEAMNAME, (exists(select * from USERINTEAM where userid = ? and teamid = t.TEAMID)) as hasAccess FROM DASHBOARD d left join TEAM t on d.TEAMID = t.TEAMID ")
         statement.setInt(1, userId)
         val resultSet = statement.executeQuery()
         newDashboardCollectionDto = dashboardsMapper.getAllDashboardsMapper(resultSet)
@@ -58,7 +59,7 @@ class DashboardsDaoImp : DashboardsDao {
     override fun getDashboardForUser(dashboardId: Int, userId: Int): DashboardDto? {
         val connection = databaseConnection.getConnection()
         val statement =
-            connection.prepareStatement("SELECT d.*, t.TEAMNAME, (exists(select * from userinteam where userid = ? and teamid = t.TEAMID)) as hasAccess FROM DASHBOARD d left join team t on d.TEAMID = t.TEAMID WHERE DASHBOARDID = ?")
+            connection.prepareStatement("SELECT d.*, t.TEAMNAME, (exists(select * from USERINTEAM where userid = ? and teamid = t.TEAMID)) as hasAccess FROM DASHBOARD d left join TEAM t on d.TEAMID = t.TEAMID WHERE DASHBOARDID = ?")
         statement.setInt(1, userId)
         statement.setInt(2, dashboardId)
         val result = statement.executeQuery()
@@ -72,11 +73,12 @@ class DashboardsDaoImp : DashboardsDao {
     override fun editDashboard(dashboardDto: DashboardDto) {
         val connection = databaseConnection.getConnection()
         val statement =
-            connection.prepareStatement("update dashboard set teamid = ?, name = ?, DASHBOARDURL = ? where DASHBOARDID = ?")
+            connection.prepareStatement("UPDATE DASHBOARD SET TEAMID = ?, NAME = ?, DASHBOARDURL = ?, REFRESHRATE = ? WHERE DASHBOARDID = ?")
         statement.setInt(1, dashboardDto.getTeam().getId())
         statement.setString(2, dashboardDto.getDashboardName())
         statement.setString(3, dashboardDto.getDashboardUrl())
-        statement.setInt(4, dashboardDto.getId())
+        statement.setInt(4, dashboardDto.getDashboardRefresh())
+        statement.setInt(5, dashboardDto.getId())
         statement.executeUpdate()
         statement.close()
         connection.close()
@@ -95,6 +97,21 @@ class DashboardsDaoImp : DashboardsDao {
         statement.close()
         connection.close()
         return url
+    }
+
+    @Throws(ServerErrorException::class)
+    override fun getDashboardRefresh(dashboardId: Int): Int {
+        var refresh = 0
+        val connection = databaseConnection.getConnection()
+        val statement = connection.prepareStatement("SELECT REFRESHRATE FROM DASHBOARD WHERE DASHBOARDID = ?")
+        statement.setInt(1, dashboardId)
+        val result = statement.executeQuery()
+        while (result.next()) {
+            refresh = result.getInt("REFRESHRATE")
+        }
+        statement.close()
+        connection.close()
+        return refresh
     }
 
     @Throws(ServerErrorException::class)

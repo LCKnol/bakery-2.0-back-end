@@ -20,77 +20,78 @@ DROP TABLE IF EXISTS PIREQUEST;
 
 create table DASHBOARD
 (
-    DASHBOARDID          int not null AUTO_INCREMENT,
-    TEAMID               int,
-    NAME                 varchar(64) not null,
-    DASHBOARDURL         varchar(1024) not null,
+    DASHBOARDID  int           not null AUTO_INCREMENT,
+    TEAMID       int,
+    NAME         varchar(64)   not null,
+    DASHBOARDURL varchar(1024) not null,
+    REFRESHRATE  int,
     primary key (DASHBOARDID)
 );
 
 create table PI
 (
-    PIID                 int not null AUTO_INCREMENT,
-    ROOMNO               varchar(10),
-    DASHBOARDID          int,
-    NAME                 varchar(64) not null,
-    MACADDRESS            varchar(32) not null,
-    IPADDRESS            varchar(135) not null,
-    STATUS               varchar(32) null,
+    PIID        int          not null AUTO_INCREMENT,
+    ROOMNO      varchar(10),
+    DASHBOARDID int,
+    NAME        varchar(64)  not null,
+    MACADDRESS  varchar(32)  not null,
+    IPADDRESS   varchar(135) not null,
+    STATUS      varchar(32)  null,
     primary key (PIID)
 );
 
 create table ROOM
 (
-    ROOMNO               varchar(10) not null,
+    ROOMNO varchar(10) not null,
     primary key (ROOMNO)
 );
 
 create table TEAM
 (
-    TEAMID               int not null AUTO_INCREMENT,
-    TEAMNAME             varchar(256) not null,
+    TEAMID   int          not null AUTO_INCREMENT,
+    TEAMNAME varchar(256) not null,
     primary key (TEAMID)
 );
 
 create table TEAMINROOM
 (
-    TEAMID               int not null,
-    ROOMNO               varchar(10) not null,
+    TEAMID int         not null,
+    ROOMNO varchar(10) not null,
     primary key (TEAMID, ROOMNO)
 );
 
 create table USERS
 (
-    USERID               int not null AUTO_INCREMENT,
-    FIRSTNAME            varchar(64) not null,
-    LASTNAME             varchar(64) not null,
-    PASSWORD             varchar(256) not null,
-    EMAIL                varchar(256) not null unique,
-    ISADMIN              bool not null,
+    USERID    int          not null AUTO_INCREMENT,
+    FIRSTNAME varchar(64)  not null,
+    LASTNAME  varchar(64)  not null,
+    PASSWORD  varchar(256) not null,
+    EMAIL     varchar(256) not null unique,
+    ISADMIN   bool         not null,
     primary key (USERID)
 );
 
 create table USERINTEAM
 (
-    USERID               int not null,
-    TEAMID               int not null,
+    USERID int not null,
+    TEAMID int not null,
     primary key (USERID, TEAMID)
 );
 
 create table USERSESSION
 (
-    SESSIONID            int not null AUTO_INCREMENT,
-    USERID               int not null,
-    TOKEN                varchar(36) not null,
+    SESSIONID int         not null AUTO_INCREMENT,
+    USERID    int         not null,
+    TOKEN     varchar(36) not null,
     primary key (SESSIONID)
 );
 
 create table PIREQUEST
 (
-    REQUESTID            int not null AUTO_INCREMENT,
-    MACADDRESS            varchar(32) not null,
-    IPADDRESS            varchar(135) not null,
-    REQUESTEDON          datetime not null,
+    REQUESTID   int          not null AUTO_INCREMENT,
+    MACADDRESS  varchar(32)  not null,
+    IPADDRESS   varchar(135) not null,
+    REQUESTEDON datetime     not null,
     primary key (REQUESTID)
 );
 /*password: AvisiPassword*/
@@ -131,10 +132,18 @@ VALUES ('TheBestTeamingTeamEverToHaveTeamed');
 INSERT INTO TEAM (TEAMNAME)
 VALUES ('MediocreTeam');
 
-INSERT INTO DASHBOARD (TEAMID, NAME, DASHBOARDURL)
-VALUES (1, 'MEMES', 'https://www.youtube.com/watch?v=dQw4w9WgXcQ');
+INSERT INTO DASHBOARD (TEAMID, NAME, DASHBOARDURL, REFRESHRATE)
+VALUES (1, 'MEMES', 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', 600);
+
 INSERT INTO DASHBOARD (TEAMID, NAME, DASHBOARDURL)
 VALUES (2, 'FancyDashboard', 'https://www.aldi.nl/');
+
+INSERT INTO DASHBOARD (TEAMID, NAME, DASHBOARDURL, REFRESHRATE)
+VALUES (2, 'PIAR', 'https://puginarug.com/', 30);
+
+INSERT INTO DASHBOARD (TEAMID, NAME, DASHBOARDURL)
+VALUES (1, 'heehoo', 'https://hooooooooo.com/');
+
 INSERT INTO PI (ROOMNO, DASHBOARDID, NAME, MACADDRESS, IPADDRESS, STATUS)
 VALUES ('14.02', null, '14.02:01', 'aa:41:16:f3:81:fc', '123.123.123.123', 'offline');
 
@@ -175,32 +184,40 @@ INSERT INTO USERINTEAM (USERID, TEAMID)
 VALUES (4, 3);
 
 INSERT INTO PIREQUEST (MACADDRESS, IPADDRESS, REQUESTEDON)
-VALUES('52:8D:4E:9A:2F:71', '123.123.123.123', '2024-04-24 09:36:22');
+VALUES ('52:8D:4E:9A:2F:71', '123.123.123.123', '2024-04-24 09:36:22');
 INSERT INTO PIREQUEST (MACADDRESS, IPADDRESS, REQUESTEDON)
-VALUES('A7:B1:3E:6F:8C:D2', '123.123.123.124', '2024-04-25 18:45:10');
+VALUES ('A7:B1:3E:6F:8C:D2', '123.123.123.124', '2024-04-25 18:45:10');
 
-alter table DASHBOARD add constraint FK_DASHBOARDFROMTEAM foreign key (TEAMID)
-    references TEAM (TEAMID) on delete restrict on update restrict;
+alter table DASHBOARD
+    add constraint FK_DASHBOARDFROMTEAM foreign key (TEAMID)
+        references TEAM (TEAMID) on delete restrict on update restrict;
 
-alter table PI add constraint FK_DASHBOARDONPI foreign key (DASHBOARDID)
-    references DASHBOARD (DASHBOARDID) on delete restrict on update restrict;
+alter table PI
+    add constraint FK_DASHBOARDONPI foreign key (DASHBOARDID)
+        references DASHBOARD (DASHBOARDID) on delete restrict on update restrict;
 
-alter table PI add constraint FK_PIINROOM foreign key (ROOMNO)
-    references ROOM (ROOMNO) on delete restrict on update restrict;
+alter table PI
+    add constraint FK_PIINROOM foreign key (ROOMNO)
+        references ROOM (ROOMNO) on delete restrict on update restrict;
 
-alter table TEAMINROOM add constraint FK_TEAMINROOM foreign key (TEAMID)
-    references TEAM (TEAMID) on delete restrict on update restrict;
+alter table TEAMINROOM
+    add constraint FK_TEAMINROOM foreign key (TEAMID)
+        references TEAM (TEAMID) on delete restrict on update restrict;
 
-alter table TEAMINROOM add constraint FK_TEAMINROOM2 foreign key (ROOMNO)
-    references ROOM (ROOMNO) on delete restrict on update restrict;
+alter table TEAMINROOM
+    add constraint FK_TEAMINROOM2 foreign key (ROOMNO)
+        references ROOM (ROOMNO) on delete restrict on update restrict;
 
-alter table USERINTEAM add constraint FK_USERINTEAM foreign key (USERID)
-    references USERS (USERID) on delete cascade  on update restrict;
+alter table USERINTEAM
+    add constraint FK_USERINTEAM foreign key (USERID)
+        references USERS (USERID) on delete cascade on update restrict;
 
-alter table USERINTEAM add constraint FK_USERINTEAM2 foreign key (TEAMID)
-    references TEAM (TEAMID) on delete cascade on update restrict;
+alter table USERINTEAM
+    add constraint FK_USERINTEAM2 foreign key (TEAMID)
+        references TEAM (TEAMID) on delete cascade on update restrict;
 
-alter table USERSESSION add constraint FK_USERSESSION foreign key (USERID)
-    references USERS (USERID) on delete cascade on update restrict;
+alter table USERSESSION
+    add constraint FK_USERSESSION foreign key (USERID)
+        references USERS (USERID) on delete cascade on update restrict;
 
 

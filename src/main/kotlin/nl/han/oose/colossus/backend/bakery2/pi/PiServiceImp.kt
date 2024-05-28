@@ -31,6 +31,7 @@ class PiServiceImp : PiService {
     override fun setDashboardDao(dao: DashboardsDao) {
         dashboardDao = dao
     }
+
     override fun setMessagingTemplate(messagingTemplate: SimpMessagingTemplate) {
         this.messagingTemplate = messagingTemplate
     }
@@ -42,7 +43,7 @@ class PiServiceImp : PiService {
         socketResponseDto.setInstruction("reboot")
         socketResponseDto.setBody(piRebootDto)
         val macAddress = piDao.getMacAddress(piId)
-        messagingTemplate.convertAndSend("/topic/pi-listener/$macAddress",socketResponseDto)
+        messagingTemplate.convertAndSend("/topic/pi-listener/$macAddress", socketResponseDto)
     }
 
     override fun pingPi(piId: Int) {
@@ -119,7 +120,9 @@ class PiServiceImp : PiService {
 
         val assignedDashboard = PiSetDashboardDto()
         val dashboardUrl = dashboardDao.getDashboardUrl(request.getDashboardId())
+        val dashboardRefresh = dashboardDao.getDashboardRefresh(request.getDashboardId())
         assignedDashboard.setUrl(dashboardUrl)
+        assignedDashboard.setRefresh(dashboardRefresh)
 
         val socketResponseDto = SocketResponseDto()
         socketResponseDto.setBody(assignedDashboard)

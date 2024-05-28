@@ -71,7 +71,7 @@ class AuthenticationDaoTests {
     @Test
     fun tokenExistsReturnsTrueWhenTokenIsFound() {
         // Arrange
-        `when`(mockResultSet.getInt(1)).thenReturn(1)
+        `when`(mockResultSet.next()).thenReturn(true)
 
         // Act
         val result = sut.tokenExists("existingToken")
@@ -83,7 +83,7 @@ class AuthenticationDaoTests {
     @Test
     fun tokenExistsReturnsFalseIfTokenINotFound() {
         // Arrange
-        `when`(mockResultSet.getInt(1)).thenReturn(0)
+        `when`(mockResultSet.next()).thenReturn(false)
 
         // Act
         val result = sut.tokenExists("nonExistingToken")

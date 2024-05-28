@@ -46,6 +46,7 @@ class DashboardMapperImp : DashboardsMapper {
             dashboard.getInt("dashboardId"),
             dashboard.getString("dashboardUrl"),
             dashboard.getString("name"),
+            dashboard.getInt("refreshRate"),
             team,
             dashboard.getBoolean("hasAccess")
         )
