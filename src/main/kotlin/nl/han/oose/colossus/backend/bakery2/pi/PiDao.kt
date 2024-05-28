@@ -7,7 +7,7 @@ import nl.han.oose.colossus.backend.bakery2.dto.PiDto
 import nl.han.oose.colossus.backend.bakery2.picommunicator.dto.PiSignUpRequestDto
 
 interface PiDao {
-    fun getPis(user: Int): PiCollectionDto
+    fun getPisFromUser(user: Int): PiCollectionDto
     fun setPiMapper(mapper: PiMapper)
     fun setDatabaseConnection(connection: DatabaseConnection)
     fun removeDashboardFromPis(dashboardId: Int)

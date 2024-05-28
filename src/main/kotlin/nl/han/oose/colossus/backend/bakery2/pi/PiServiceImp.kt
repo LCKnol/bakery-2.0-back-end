@@ -68,7 +68,7 @@ class PiServiceImp : PiService {
     }
 
     override fun getPisFromUser(user: Int): PiCollectionDto {
-        val pis = piDao.getPis(user)
+        val pis = piDao.getPisFromUser(user)
         return pis
     }
 

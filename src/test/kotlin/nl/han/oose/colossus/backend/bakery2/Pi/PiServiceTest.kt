@@ -43,13 +43,13 @@ class PiServiceTest {
     fun testGetPis() {
         // Arrange
         val expectedPis: PiCollectionDto = PiCollectionDto()
-        `when`(piDao.getPis(1)).thenReturn(expectedPis)
+        `when`(piDao.getPisFromUser(1)).thenReturn(expectedPis)
 
         // Act
         val actualPis: PiCollectionDto = sut.getPisFromUser(1)
 
         // Assert
-        verify(piDao).getPis(1)
+        verify(piDao).getPisFromUser(1)
         assertEquals(expectedPis, actualPis)
     }
 
