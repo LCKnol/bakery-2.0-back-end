@@ -100,4 +100,16 @@ class UserDaoImp : UserDao {
         preparedStatement.close()
         connection.close()
     }
+
+    override fun emailExists(email: String): Boolean {
+        val connection = databaseConnection.getConnection()
+        val query = "SELECT email FROM USERS WHERE email = ?"
+        val preparedStatement = connection.prepareStatement(query)
+        preparedStatement.setString(1, email)
+        val resultSet = preparedStatement.executeQuery()
+        val result = resultSet.next()
+        preparedStatement.close()
+        connection.close()
+        return result
+    }
 }

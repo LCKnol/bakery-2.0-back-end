@@ -1,3 +1,4 @@
+import junit.framework.Assert.*
 import nl.han.oose.colossus.backend.bakery2.authentication.AuthenticationDao
 import nl.han.oose.colossus.backend.bakery2.authentication.AuthenticationService
 import nl.han.oose.colossus.backend.bakery2.authentication.AuthenticationServiceImp
@@ -28,7 +29,7 @@ class AuthenticationServiceTests {
         userDao = mock(UserDao::class.java)
         sut.setAuthenticationDao(authenticationDao)
         sut.setUserDao(userDao)
-        }
+    }
 
 
     @Test
@@ -53,7 +54,7 @@ class AuthenticationServiceTests {
         val email = "user@example.com"
         val password = "correctPassword"
         val storedHash = BCrypt.hashpw(password, BCrypt.gensalt())
-        val mockUser : UserDto = UserDto(12, "e", "e", "d", "d", ArrayList<TeamDto>(),true)
+        val mockUser= UserDto(12, "e", "e", "d", "d", ArrayList<TeamDto>(), true)
 
         `when`(authenticationDao.findPassword(email)).thenReturn(storedHash)
         `when`(userDao.getUser(anyString())).thenReturn(mockUser)
@@ -71,41 +72,80 @@ class AuthenticationServiceTests {
 
 
     @Test
-        fun testDestroySession() {
-            // Arrange
-            val token = "testToken123"
+    fun testDestroySession() {
+        // Arrange
+        val token = "testToken123"
 
-            // Act
-            sut.destroySession(token)
+        // Act
+        sut.destroySession(token)
 
-            // Assert
-            verify(authenticationDao).deleteSession(token)
-        }
+        // Assert
+        verify(authenticationDao).deleteSession(token)
+    }
 
-        @Test
-        fun validateTokenThrowHttpUnauthorizedExceptionIfTokenDoesNotExist() {
-            // Arrange
-            val token = "nonExistentToken"
-            `when`(authenticationDao.tokenExists(token)).thenReturn(false)
+    @Test
+    fun validateTokenThrowHttpUnauthorizedExceptionIfTokenDoesNotExist() {
+        // Arrange
+        val token = "nonExistentToken"
+        `when`(authenticationDao.tokenExists(token)).thenReturn(false)
 
-            // Act & Assert
-            assertThrows<HttpUnauthorizedException> {
-                sut.validateToken(token)
-            }
-        }
-
-        @Test
-        fun validateTokenSucceed() {
-            // Arrange
-            val token = "existingToken"
-            `when`(authenticationDao.tokenExists(token)).thenReturn(true)
-
-            // Act
+        // Act & Assert
+        assertThrows<HttpUnauthorizedException> {
             sut.validateToken(token)
-
-            // Assert
-            verify(authenticationDao).tokenExists(token)
         }
     }
+
+    @Test
+    fun validateTokenSucceed() {
+        // Arrange
+        val token = "existingToken"
+        `when`(authenticationDao.tokenExists(token)).thenReturn(true)
+
+        // Act
+        sut.validateToken(token)
+
+        // Assert
+        verify(authenticationDao).tokenExists(token)
+    }
+
+    @Test
+    fun testHandleGoogleSignInReturnsEmptyTokenWhenUserDoesNotExist() {
+
+        //Arrange
+        val email = "nonexistinguser@example.com"
+        val userExists = false
+
+        //Act
+        val result = sut.handleGoogleSignIn(email, userExists)
+
+        //Assert
+        assertEquals("", result.token)
+    }
+
+    @Test
+    fun testHandleGoogleSignInReturnsLoginResponseWhenUserExists() {
+
+        //Arrange
+        val email = "test@gmail.com"
+        val userExists = true
+        val token = "generatedToken"
+        val user = UserDto(-1, "test",
+            "user", email,
+            "password", ArrayList<TeamDto>(), false)
+
+        `when`(userDao.getUser(anyString())).thenReturn(user)
+        `when`(authenticationDao.tokenExists(token)).thenReturn(false)
+        doNothing().`when`(authenticationDao).insertToken(MockitoHelper.anyObject(), MockitoHelper.anyObject())
+
+        //Act
+        val response = sut.handleGoogleSignIn(user.getEmail(), userExists)
+
+        //Assert
+        verify(authenticationDao).insertToken(MockitoHelper.anyObject(), MockitoHelper.anyObject())
+
+        assertNotNull(response.token)
+        assertFalse(response.isAdmin)
+    }
+}
 
 
