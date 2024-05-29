@@ -98,6 +98,20 @@ class DashboardsDaoImp : DashboardsDao {
     }
 
     @Throws(ServerErrorException::class)
+    override fun getDashboardRefresh(dashboardId: Int): Int {
+        var refresh = 0
+        val connection = databaseConnection.getConnection()
+        val statement = connection.prepareStatement("SELECT REFRESHRATE FROM DASHBOARD WHERE DASHBOARDID = ?")
+        statement.setInt(1, dashboardId)
+        val result = statement.executeQuery()
+        while (result.next()) {
+            refresh = result.getInt("REFRESHRATE")
+        }
+        statement.close()
+        connection.close()
+        return refresh
+    }
+    @Throws(ServerErrorException::class)
     override fun deleteDashboard(dashboardId: Int) {
         val query = "DELETE FROM DASHBOARD WHERE DASHBOARDID = ?"
         try {
