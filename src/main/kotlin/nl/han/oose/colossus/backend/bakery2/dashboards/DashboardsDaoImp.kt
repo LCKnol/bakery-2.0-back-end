@@ -31,11 +31,10 @@ class DashboardsDaoImp : DashboardsDao {
     override fun addDashboard(dashboardDto: DashboardDto) {
         val connection = databaseConnection.getConnection()
         val statement =
-            connection.prepareStatement("INSERT INTO DASHBOARD (TEAMID,NAME,DASHBOARDURL,REFRESHRATE) VALUES(?,?,?,?)")
+            connection.prepareStatement("INSERT INTO DASHBOARD (TEAMID,NAME,DASHBOARDURL) VALUES(?,?,?)")
         statement.setInt(1, dashboardDto.getTeam().getId())
         statement.setString(2, dashboardDto.getDashboardName())
         statement.setString(3, dashboardDto.getDashboardUrl())
-        statement.setInt(4, dashboardDto.getDashboardRefresh())
         statement.executeUpdate()
         statement.close()
         connection.close()
@@ -73,12 +72,11 @@ class DashboardsDaoImp : DashboardsDao {
     override fun editDashboard(dashboardDto: DashboardDto) {
         val connection = databaseConnection.getConnection()
         val statement =
-            connection.prepareStatement("UPDATE DASHBOARD SET TEAMID = ?, NAME = ?, DASHBOARDURL = ?, REFRESHRATE = ? WHERE DASHBOARDID = ?")
+            connection.prepareStatement("update DASHBOARD set teamid = ?, name = ?, DASHBOARDURL = ? where DASHBOARDID = ?")
         statement.setInt(1, dashboardDto.getTeam().getId())
         statement.setString(2, dashboardDto.getDashboardName())
         statement.setString(3, dashboardDto.getDashboardUrl())
-        statement.setInt(4, dashboardDto.getDashboardRefresh())
-        statement.setInt(5, dashboardDto.getId())
+        statement.setInt(4, dashboardDto.getId())
         statement.executeUpdate()
         statement.close()
         connection.close()
@@ -97,21 +95,6 @@ class DashboardsDaoImp : DashboardsDao {
         statement.close()
         connection.close()
         return url
-    }
-
-    @Throws(ServerErrorException::class)
-    override fun getDashboardRefresh(dashboardId: Int): Int {
-        var refresh = 0
-        val connection = databaseConnection.getConnection()
-        val statement = connection.prepareStatement("SELECT REFRESHRATE FROM DASHBOARD WHERE DASHBOARDID = ?")
-        statement.setInt(1, dashboardId)
-        val result = statement.executeQuery()
-        while (result.next()) {
-            refresh = result.getInt("REFRESHRATE")
-        }
-        statement.close()
-        connection.close()
-        return refresh
     }
 
     @Throws(ServerErrorException::class)

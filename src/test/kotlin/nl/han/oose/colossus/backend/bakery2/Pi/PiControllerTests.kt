@@ -21,6 +21,7 @@ class PiControllerTests {
     private lateinit var piService: PiService
     private lateinit var userService: UserService
     private lateinit var headerService: HeaderService
+
     @Test
     @BeforeEach
     fun setUp() {
@@ -118,6 +119,7 @@ class PiControllerTests {
         assertEquals(HttpStatus.OK, response.statusCode)
         verify(piService).assignDashboardToPi(piDto)
     }
+
     @Test
     fun testEditPi() {
         // Arrange
@@ -137,6 +139,7 @@ class PiControllerTests {
         verify(userService).getUserId(token)
         verify(piService).editPi(piDto, userId)
     }
+
     @Test
     fun testAssignDashboardToPi() {
         // Arrange
@@ -149,6 +152,7 @@ class PiControllerTests {
         assertEquals(HttpStatus.OK, response.statusCode)
         verify(piService).assignDashboardToPi(piDto)
     }
+
     @Test
     fun testRebootPi() {
         // Arrange
@@ -178,22 +182,22 @@ class PiControllerTests {
     }
 
     @Test
-    fun turnTvOnAndOff(){
+    fun turnTvOnAndOff() {
         // Arrange
         val piId = 1
         val option = true
 
         // Act
-        val response = sut.setTvPower(piId,option)
+        val response = sut.setTvPower(piId, option)
 
         // Assert
         assertEquals(HttpStatus.OK, response.statusCode)
-        verify(piService).setTvPower(piId,option)
+        verify(piService).setTvPower(piId, option)
 
     }
 
     @Test
-    fun testUpdateAllPis(){
+    fun testUpdateAllPis() {
         // Arrange
 
         // Act
@@ -205,7 +209,7 @@ class PiControllerTests {
     }
 
     @Test
-    fun testPingAllPis(){
+    fun testPingAllPis() {
         // Arrange
 
         // Act
@@ -217,11 +221,11 @@ class PiControllerTests {
     }
 
     @Test
-    fun testRebootAllPis(){
+    fun testRebootAllPis() {
         // Arrange
 
         // Act
-        val response = sut.reebootAllPis()
+        val response = sut.rebootAllPis()
 
         // Assert
         assertEquals(HttpStatus.OK, response.statusCode)

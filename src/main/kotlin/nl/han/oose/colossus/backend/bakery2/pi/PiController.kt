@@ -112,7 +112,7 @@ class PiController {
 
     @GetMapping("/reboot/{piId}")
     @Authenticate
-    fun rebootPi(@PathVariable piId:Int): ResponseEntity<HttpStatus> {
+    fun rebootPi(@PathVariable piId: Int): ResponseEntity<HttpStatus> {
         piService.rebootPi(piId)
         return ResponseEntity(HttpStatus.OK)
     }
@@ -129,25 +129,27 @@ class PiController {
     @GetMapping("tv/{piId}/{option}")
     @Authenticate
     fun setTvPower(@PathVariable piId: Int, @PathVariable option: Boolean): ResponseEntity<HttpStatus> {
-        this.piService.setTvPower(piId,option)
+        this.piService.setTvPower(piId, option)
         return ResponseEntity(HttpStatus.OK)
     }
 
     @GetMapping("/update")
     @Authenticate
-    fun updateAllPis(): ResponseEntity<HttpStatus>{
+    fun updateAllPis(): ResponseEntity<HttpStatus> {
         this.piService.updateAllPis()
         return ResponseEntity(HttpStatus.OK)
     }
+
     @GetMapping("/pingAll")
     @Authenticate
-    fun pingAllPis(): ResponseEntity<HttpStatus>{
+    fun pingAllPis(): ResponseEntity<HttpStatus> {
         this.piService.pingAllPis()
         return ResponseEntity(HttpStatus.OK)
     }
+
     @GetMapping("/rebootAll")
     @Authenticate
-    fun reebootAllPis(): ResponseEntity<HttpStatus>{
+    fun rebootAllPis(): ResponseEntity<HttpStatus> {
         this.piService.rebootAllPis()
         return ResponseEntity(HttpStatus.OK)
     }

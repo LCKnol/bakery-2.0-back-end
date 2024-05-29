@@ -39,18 +39,19 @@ class PiServiceImp : PiService {
     override fun rebootPi(piId: Int) {
         reboot(piId)
     }
+
     override fun pingPi(piId: Int) {
         ping(piId)
     }
 
-    private fun ping(piId: Int){
+    private fun ping(piId: Int) {
         val socketResponseDto = SocketResponseDto()
         socketResponseDto.setInstruction("ping")
         val macAddress = this.piDao.getMacAddress(piId)
         messagingTemplate.convertAndSend("/topic/pi-listener/$macAddress", socketResponseDto)
     }
 
-    private fun reboot(piId: Int){
+    private fun reboot(piId: Int) {
         val piRebootDto = PiRebootDto()
         piRebootDto.setReboot(true)
         val socketResponseDto = SocketResponseDto()
@@ -78,7 +79,7 @@ class PiServiceImp : PiService {
         val socketResponseDto = SocketResponseDto()
         socketResponseDto.setInstruction("update-pi")
         val pis = piDao.getAllPis()
-        for(pi in pis.getPis()) {
+        for (pi in pis.getPis()) {
             val macAddress = pi.getMacAddress()
             messagingTemplate.convertAndSend("/topic/pi-listener/$macAddress", socketResponseDto)
         }
