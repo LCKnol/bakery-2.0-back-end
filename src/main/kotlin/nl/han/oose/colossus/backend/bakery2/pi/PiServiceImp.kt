@@ -8,8 +8,8 @@ import nl.han.oose.colossus.backend.bakery2.exceptions.HttpNotFoundException
 import nl.han.oose.colossus.backend.bakery2.picommunicator.dto.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Primary
-import org.springframework.stereotype.Component
 import org.springframework.messaging.simp.SimpMessagingTemplate
+import org.springframework.stereotype.Component
 
 @Primary
 @Component
@@ -37,19 +37,27 @@ class PiServiceImp : PiService {
     }
 
     override fun rebootPi(piId: Int) {
+        reboot(piId)
+    }
+
+    override fun pingPi(piId: Int) {
+        ping(piId)
+    }
+
+    private fun ping(piId: Int) {
+        val socketResponseDto = SocketResponseDto()
+        socketResponseDto.setInstruction("ping")
+        val macAddress = this.piDao.getMacAddress(piId)
+        messagingTemplate.convertAndSend("/topic/pi-listener/$macAddress", socketResponseDto)
+    }
+
+    private fun reboot(piId: Int) {
         val piRebootDto = PiRebootDto()
         piRebootDto.setReboot(true)
         val socketResponseDto = SocketResponseDto()
         socketResponseDto.setInstruction("reboot")
         socketResponseDto.setBody(piRebootDto)
         val macAddress = piDao.getMacAddress(piId)
-        messagingTemplate.convertAndSend("/topic/pi-listener/$macAddress", socketResponseDto)
-    }
-
-    override fun pingPi(piId: Int) {
-        val socketResponseDto = SocketResponseDto()
-        socketResponseDto.setInstruction("ping")
-        val macAddress = this.piDao.getMacAddress(piId)
         messagingTemplate.convertAndSend("/topic/pi-listener/$macAddress", socketResponseDto)
     }
 
@@ -65,6 +73,30 @@ class PiServiceImp : PiService {
         socketResponseDto.setBody(piSetTvDto)
         val macAddress = this.piDao.getMacAddress(piId)
         messagingTemplate.convertAndSend("/topic/pi-listener/$macAddress", socketResponseDto)
+    }
+
+    override fun updateAllPis() {
+        val socketResponseDto = SocketResponseDto()
+        socketResponseDto.setInstruction("update-pi")
+        val pis = piDao.getAllPis()
+        for (pi in pis.getPis()) {
+            val macAddress = pi.getMacAddress()
+            messagingTemplate.convertAndSend("/topic/pi-listener/$macAddress", socketResponseDto)
+        }
+    }
+
+    override fun pingAllPis() {
+        val pis = piDao.getAllPis()
+        for (pi in pis.getPis()) {
+            ping(pi.getId())
+        }
+    }
+
+    override fun rebootAllPis() {
+        val pis = piDao.getAllPis()
+        for (pi in pis.getPis()) {
+            reboot(pi.getId())
+        }
     }
 
     override fun getPis(user: Int): PiCollectionDto {

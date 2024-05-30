@@ -25,4 +25,7 @@ interface PiService {
     fun pingPi(piId: Int)
     fun setPiStatus(piStatus: PiStatus, piId: Int)
     fun setTvPower(piId: Int, option: Boolean)
+    fun updateAllPis()
+    fun pingAllPis()
+    fun rebootAllPis()
 }
