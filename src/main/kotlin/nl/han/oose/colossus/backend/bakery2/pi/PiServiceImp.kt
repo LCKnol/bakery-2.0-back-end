@@ -5,6 +5,8 @@ import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiRequestsCollectionDto
 import nl.han.oose.colossus.backend.bakery2.exceptions.HttpNotFoundException
+import nl.han.oose.colossus.backend.bakery2.exceptions.HttpUnauthorizedException
+import nl.han.oose.colossus.backend.bakery2.header.HeaderService
 import nl.han.oose.colossus.backend.bakery2.picommunicator.dto.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Primary
@@ -23,6 +25,7 @@ class PiServiceImp : PiService {
 
     @Autowired
     private lateinit var messagingTemplate: SimpMessagingTemplate
+
 
     override fun setPiDao(dao: PiDao) {
         piDao = dao
@@ -72,6 +75,11 @@ class PiServiceImp : PiService {
         return pis
     }
 
+    fun checkIfUserOwnsPi(user:Int,request: PiDto):Boolean{
+        val pis = get
+       return pis.getPis().any{ PiDto -> PiDto.getId() == request.getId()}
+    }
+
     override fun getAllPis(): PiCollectionDto {
         return piDao.getAllPis()
     }
@@ -103,7 +111,11 @@ class PiServiceImp : PiService {
     }
 
     override fun editPi(piDto: PiDto, userId: Int) {
-        piDao.editPi(piDto)
+        if (checkIfUserOwnsPi(userId,piDto)) {
+            piDao.editPi(piDto)
+        }else {
+            throw HttpUnauthorizedException("You are not allowed to edit this pi")
+        }
     }
 
     override fun updatePiIp(piSignUpRequestDto: PiSignUpRequestDto) {
