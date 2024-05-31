@@ -8,6 +8,7 @@ import nl.han.oose.colossus.backend.bakery2.exceptions.HttpNotFoundException
 import nl.han.oose.colossus.backend.bakery2.exceptions.HttpUnauthorizedException
 import nl.han.oose.colossus.backend.bakery2.header.HeaderService
 import nl.han.oose.colossus.backend.bakery2.picommunicator.dto.*
+import nl.han.oose.colossus.backend.bakery2.users.UserDao
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Primary
 import org.springframework.stereotype.Component
@@ -26,6 +27,12 @@ class PiServiceImp : PiService {
     @Autowired
     private lateinit var messagingTemplate: SimpMessagingTemplate
 
+    @Autowired
+    private lateinit var userDao: UserDao
+
+    @Autowired
+    private lateinit var headerService: HeaderService
+
 
     override fun setPiDao(dao: PiDao) {
         piDao = dao
@@ -40,6 +47,7 @@ class PiServiceImp : PiService {
     }
 
     override fun rebootPi(piId: Int) {
+        checkIfUserOwnsPi(piId)
         val piRebootDto = PiRebootDto()
         piRebootDto.setReboot(true)
         val socketResponseDto = SocketResponseDto()
@@ -61,6 +69,7 @@ class PiServiceImp : PiService {
     }
 
     override fun setTvPower(piId: Int, option: Boolean) {
+        checkIfUserOwnsPi(piId)
         val socketResponseDto = SocketResponseDto()
         val piSetTvDto = PiSetTvDto()
         piSetTvDto.setOption(option)
@@ -75,9 +84,12 @@ class PiServiceImp : PiService {
         return pis
     }
 
-    fun checkIfUserOwnsPi(user:Int,request: PiDto):Boolean{
-        val pis = get
-       return pis.getPis().any{ PiDto -> PiDto.getId() == request.getId()}
+    fun checkIfUserOwnsPi(piId: Int ) {
+        val currentUser = userDao.getUser(headerService.getToken())
+        val pis = piDao.getPisFromUser(currentUser!!.getId())
+        if (!pis.getPis().any{ piDto -> piDto.getId() == piId} && !currentUser.getIsAdmin() ){
+            throw HttpUnauthorizedException("You do not have access this pi")
+        }
     }
 
     override fun getAllPis(): PiCollectionDto {
@@ -111,11 +123,7 @@ class PiServiceImp : PiService {
     }
 
     override fun editPi(piDto: PiDto, userId: Int) {
-        if (checkIfUserOwnsPi(userId,piDto)) {
             piDao.editPi(piDto)
-        }else {
-            throw HttpUnauthorizedException("You are not allowed to edit this pi")
-        }
     }
 
     override fun updatePiIp(piSignUpRequestDto: PiSignUpRequestDto) {
@@ -128,6 +136,7 @@ class PiServiceImp : PiService {
     }
 
     override fun assignDashboardToPi(request: PiDto) {
+        checkIfUserOwnsPi(request.getId())
         piDao.assignDashboard(request.getId(), request.getDashboardId())
 
         val assignedDashboard = PiSetDashboardDto()
