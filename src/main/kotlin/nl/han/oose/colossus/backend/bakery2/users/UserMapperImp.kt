@@ -12,6 +12,7 @@ class UserMapperImp : UserMapper {
         val userInfoDTO = UserInfoDto()
         var firstname: String? = null
         var lastname: String? = null
+        var isAdmin: Boolean? = false
         val uniqueTeams = HashSet<String>()
         val uniqueRooms = HashSet<String>()
         val teams = ArrayList<TeamDto>()
@@ -20,6 +21,7 @@ class UserMapperImp : UserMapper {
         while (resultSet.next()) {
             firstname = resultSet.getString("firstname")
             lastname = resultSet.getString("lastname")
+            isAdmin = resultSet.getBoolean("isAdmin")
 
             val teamname = resultSet.getString("teamname")
             val roomno = resultSet.getString("roomno")
@@ -38,6 +40,7 @@ class UserMapperImp : UserMapper {
 
         userInfoDTO.setFirstname(firstname ?: "")
         userInfoDTO.setLastname(lastname ?: "")
+        userInfoDTO.setIsAdmin(isAdmin ?: false)
         userInfoDTO.setTeams(teams)
         userInfoDTO.setRooms(rooms)
         return userInfoDTO
