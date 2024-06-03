@@ -4,7 +4,9 @@ import nl.han.oose.colossus.backend.bakery2.dashboards.DashboardsDao
 import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiRequestsCollectionDto
+import nl.han.oose.colossus.backend.bakery2.header.HeaderService
 import nl.han.oose.colossus.backend.bakery2.picommunicator.dto.PiSignUpRequestDto
+import nl.han.oose.colossus.backend.bakery2.users.UserDao
 import org.springframework.messaging.simp.SimpMessagingTemplate
 
 interface PiService {
@@ -28,4 +30,7 @@ interface PiService {
     fun updateAllPis()
     fun pingAllPis()
     fun rebootAllPis()
+    fun setUserDao(dao: UserDao)
+    fun setHeaderService(service: HeaderService)
+    fun checkIfUserOwnsPi(piId: Int)
 }

@@ -33,7 +33,12 @@ class PiServiceImp : PiService {
     @Autowired
     private lateinit var headerService: HeaderService
 
-
+    override fun setUserDao(dao: UserDao) {
+        userDao = dao
+    }
+    override fun setHeaderService(service: HeaderService) {
+        headerService = service
+    }
     override fun setPiDao(dao: PiDao) {
         piDao = dao
     }
@@ -116,7 +121,7 @@ class PiServiceImp : PiService {
         }
     }
 
-    fun checkIfUserOwnsPi(piId: Int ) {
+    override fun checkIfUserOwnsPi(piId: Int ) {
         val currentUser = userDao.getUser(headerService.getToken())
         val pis = piDao.getPisFromUser(currentUser!!.getId())
         if (!pis.getPis().any{ piDto -> piDto.getId() == piId} && !currentUser.getIsAdmin() ){

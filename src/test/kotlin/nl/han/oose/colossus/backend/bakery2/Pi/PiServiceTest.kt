@@ -4,18 +4,19 @@ package nl.han.oose.colossus.backend.bakery2.Pi
 import junit.framework.Assert.assertEquals
 import junit.framework.Assert.assertNotNull
 import nl.han.oose.colossus.backend.bakery2.dashboards.DashboardsDao
-import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDto
-import nl.han.oose.colossus.backend.bakery2.dto.PiDto
-import nl.han.oose.colossus.backend.bakery2.dto.PiRequestsCollectionDto
+import nl.han.oose.colossus.backend.bakery2.dto.*
 import nl.han.oose.colossus.backend.bakery2.exceptions.HttpNotFoundException
+import nl.han.oose.colossus.backend.bakery2.header.HeaderService
 import nl.han.oose.colossus.backend.bakery2.pi.PiDao
 import nl.han.oose.colossus.backend.bakery2.pi.PiService
 import nl.han.oose.colossus.backend.bakery2.pi.PiServiceImp
 import nl.han.oose.colossus.backend.bakery2.pi.PiStatus
 import nl.han.oose.colossus.backend.bakery2.picommunicator.dto.SocketResponseDto
+import nl.han.oose.colossus.backend.bakery2.users.UserDao
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.mockito.Mockito
 import org.mockito.Mockito.*
 import org.springframework.messaging.simp.SimpMessagingTemplate
 
@@ -25,15 +26,21 @@ class PiServiceTest {
     private lateinit var sut: PiService
 
     private lateinit var piDao: PiDao
+    private lateinit var userDao: UserDao
     private lateinit var dashboardsDao: DashboardsDao
     private lateinit var messagingTemplate: SimpMessagingTemplate
+    private lateinit var headerService: HeaderService
 
     @BeforeEach
     fun setUp() {
         sut = PiServiceImp()
         dashboardsDao = mock(DashboardsDao::class.java)
+        headerService = mock(HeaderService::class.java)
         piDao = mock(PiDao::class.java)
+        userDao = mock(UserDao::class.java)
         messagingTemplate = mock(SimpMessagingTemplate::class.java)
+        sut.setUserDao(userDao)
+        sut.setHeaderService(headerService)
         sut.setMessagingTemplate(messagingTemplate)
         sut.setDashboardDao(dashboardsDao)
         sut.setPiDao(piDao)
@@ -225,10 +232,34 @@ class PiServiceTest {
     @Test
     fun turnTvOnAndOff(){
         // Arrange
+        var userDto = UserDto(
+            id = 1,
+            firstName = "Arnoud",
+            lastName = "Visi",
+            email = "Avisi@outlook.com",
+            password = "mypassword",
+            isAdmin = true,
+            teams =  ArrayList<TeamDto>()
+        )
+
+        val piDto = PiDto().apply {
+            setId(1)
+            setName("Pi Device")
+            setStatus("Active")
+            setDashboardName("Main Dashboard")
+            setMacAddress("00:1A:22:33:44:55")
+            setRoomNo("101B")
+        }
+        var piCollectionDto = PiCollectionDto()
+        piCollectionDto.getPis().add(piDto)
         val piId = 1
         val option = true
         val macAddress = "00:11:22:33:44:55"
         `when`(piDao.getMacAddress(piId)).thenReturn(macAddress)
+        `when` (headerService.getToken()).thenReturn("")
+        `when` (userDao.getUser("")).thenReturn(userDto)
+        `when` (piDao.getPisFromUser(1)).thenReturn(piCollectionDto)
+
 
         // Act
         sut.setTvPower(piId,option)
