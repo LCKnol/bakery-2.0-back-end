@@ -1,17 +1,14 @@
 package nl.han.oose.colossus.backend.bakery2.pi
 
 import nl.han.oose.colossus.backend.bakery2.database.DatabaseConnection
-import nl.han.oose.colossus.backend.bakery2.dto.DashboardDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiRequestsCollectionDto
 import nl.han.oose.colossus.backend.bakery2.picommunicator.dto.PiSignUpRequestDto
-import nl.han.oose.colossus.backend.bakery2.exceptions.HttpNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Primary
 import org.springframework.stereotype.Component
 import org.springframework.web.server.ServerErrorException
-import java.sql.SQLException
 
 @Primary
 @Component
@@ -31,7 +28,7 @@ class PiDaoImp : PiDao {
     }
 
     @Throws(ServerErrorException::class)
-    override fun getPis(user: Int): PiCollectionDto {
+    override fun getPisFromUser(user: Int): PiCollectionDto {
         val connection = databaseConnection.getConnection()
         val preparedStatement =
             connection.prepareStatement("SELECT p.*, d.NAME AS dashboardname FROM PI p LEFT JOIN DASHBOARD d ON p.DASHBOARDID = d.DASHBOARDID WHERE p.roomno IN (SELECT roomno FROM TEAMINROOM WHERE teamid IN (SELECT teamid FROM USERINTEAM WHERE userid = ?))")

@@ -42,16 +42,16 @@ class PiControllerTests {
         // Arrange
         val pi = PiCollectionDto()
         `when`(headerService.getUserId()).thenReturn(1)
-        `when`(piService.getPis(1)).thenReturn(pi)
+        `when`(piService.getPisFromUser(1)).thenReturn(pi)
 
         // Act
-        val response: ResponseEntity<PiCollectionDto> = sut.getPis()
+        val response: ResponseEntity<PiCollectionDto> = sut.getPisFromUser()
 
         // Assert
         assertEquals(HttpStatus.OK, response.statusCode)
         assertEquals(pi, response.body)
         verify(headerService).getUserId()
-        verify(piService).getPis(1)
+        verify(piService).getPisFromUser(1)
     }
 
     @Test
