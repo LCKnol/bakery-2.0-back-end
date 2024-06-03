@@ -168,7 +168,6 @@ class PiServiceImp : PiService {
     }
 
     override fun assignDashboardToPi(request: PiDto) {
-        checkIfUserOwnsPi(request.getId())
         piDao.assignDashboard(request.getId(), request.getDashboardId())
 
         val assignedDashboard = PiSetDashboardDto()
