@@ -237,4 +237,59 @@ class PiServiceTest {
         verify(piDao).getMacAddress(piId)
         verify(messagingTemplate).convertAndSend(eq("/topic/pi-listener/$macAddress"), any(SocketResponseDto::class.java))
     }
+
+    @Test
+    fun testUpdateAllPis() {
+        // Arrange
+        val pi1 = PiDto().apply { setMacAddress("00:11:22:33:44:55") }
+        val pi2 = PiDto().apply { setMacAddress("66:77:88:99:AA:BB") }
+        val piCollection = PiCollectionDto().apply {
+            setPis(listOf(pi1, pi2))
+        }
+        `when`(piDao.getAllPis()).thenReturn(piCollection)
+
+        // Act
+        sut.updateAllPis()
+
+        // Assert
+
+        verify(piDao).getAllPis()
+        verify(messagingTemplate).convertAndSend(eq("/topic/pi-listener/${pi1.getMacAddress()}"), any(SocketResponseDto::class.java))
+        verify(messagingTemplate).convertAndSend(eq("/topic/pi-listener/${pi2.getMacAddress()}"), any(SocketResponseDto::class.java))
+    }
+    @Test
+    fun testPingAllPis() {
+        // Arrange
+        val pi1 = PiDto().apply { setMacAddress("00:11:22:33:44:55") }
+        val pi2 = PiDto().apply { setMacAddress("66:77:88:99:AA:BB") }
+        val piCollection = PiCollectionDto().apply {
+            setPis(listOf(pi1, pi2))
+        }
+        `when`(piDao.getAllPis()).thenReturn(piCollection)
+
+        // Act
+        sut.pingAllPis()
+
+        // Assert
+
+        verify(piDao).getAllPis()
+    }
+    @Test
+    fun testRebootAllPis() {
+        // Arrange
+        val pi1 = PiDto().apply { setMacAddress("00:11:22:33:44:55") }
+        val pi2 = PiDto().apply { setMacAddress("66:77:88:99:AA:BB") }
+        val piCollection = PiCollectionDto().apply {
+            setPis(listOf(pi1, pi2))
+        }
+        `when`(piDao.getAllPis()).thenReturn(piCollection)
+
+        // Act
+        sut.rebootAllPis()
+
+        // Assert
+
+        verify(piDao).getAllPis()
+    }
 }
+
