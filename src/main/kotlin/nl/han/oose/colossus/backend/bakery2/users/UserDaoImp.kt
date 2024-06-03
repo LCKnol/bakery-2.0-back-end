@@ -28,7 +28,7 @@ class UserDaoImp : UserDao {
     @Throws(ServerErrorException::class)
     override fun getUserInfo(token: String): UserInfoDto {
         val connection = databaseConnection.getConnection()
-        val preparedStatement = connection.prepareStatement("select u.firstname, u.lastname, t.teamname, tr.roomno from USERS u left join USERINTEAM ut on u.userid = ut.userid left join TEAMINROOM tr on ut.teamid = tr.teamid left join TEAM t on t.TEAMID = ut.TEAMID where u.userid = (select userid from USERSESSION where token = ?)")
+        val preparedStatement = connection.prepareStatement("select u.firstname, u.lastname, t.teamname, tr.roomno, u.isAdmin from USERS u left join USERINTEAM ut on u.userid = ut.userid left join TEAMINROOM tr on ut.teamid = tr.teamid left join TEAM t on t.TEAMID = ut.TEAMID where u.userid = (select userid from USERSESSION where token = ?)")
         preparedStatement.setString(1, token)
         val resultSet = preparedStatement.executeQuery()
         val user = userMapper.mapUserInfo(resultSet)
@@ -99,5 +99,17 @@ class UserDaoImp : UserDao {
         preparedStatement.executeUpdate()
         preparedStatement.close()
         connection.close()
+    }
+
+    override fun emailExists(email: String): Boolean {
+        val connection = databaseConnection.getConnection()
+        val query = "SELECT email FROM USERS WHERE email = ?"
+        val preparedStatement = connection.prepareStatement(query)
+        preparedStatement.setString(1, email)
+        val resultSet = preparedStatement.executeQuery()
+        val result = resultSet.next()
+        preparedStatement.close()
+        connection.close()
+        return result
     }
 }

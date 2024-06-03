@@ -13,4 +13,5 @@ interface DashboardsDao {
     fun addDashboard(dashboardDto: DashboardDto)
     fun editDashboard(dashboardDto: DashboardDto)
     fun getDashboardUrl(dashboardId: Int): String
+    fun getDashboardRefresh(dashboardId: Int): Int
 }

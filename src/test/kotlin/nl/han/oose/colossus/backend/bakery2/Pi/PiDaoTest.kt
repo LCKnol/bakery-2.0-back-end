@@ -1,30 +1,20 @@
 package nl.han.oose.colossus.backend.bakery2.Pi
 
 import junit.framework.Assert.assertEquals
-import junit.framework.Assert.assertTrue
 import nl.han.oose.colossus.backend.bakery2.database.DatabaseConnection
-import nl.han.oose.colossus.backend.bakery2.dto.DashboardDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDto
-import nl.han.oose.colossus.backend.bakery2.dto.PiDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiRequestsCollectionDto
 import nl.han.oose.colossus.backend.bakery2.pi.PiDao
 import nl.han.oose.colossus.backend.bakery2.pi.PiDaoImp
 import nl.han.oose.colossus.backend.bakery2.pi.PiMapper
-import nl.han.oose.colossus.backend.bakery2.pi.PiStatus
 import nl.han.oose.colossus.backend.bakery2.util.MockitoHelper
 import nl.han.oose.colossus.backend.bakery2.util.ScriptRunner
 import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.mockito.Mockito.*
-import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
 import java.io.InputStreamReader
-import java.sql.Connection
-import java.sql.PreparedStatement
-import java.sql.ResultSet
 
 
 class PiDaoTest {
@@ -56,7 +46,7 @@ class PiDaoTest {
         `when`(piMapper.mapPis(MockitoHelper.anyObject())).thenReturn(pi)
 
         // act
-        val result = sut.getPis(1)
+        val result = sut.getPisFromUser(1)
 
         //assert
         verify(piMapper).mapPis(MockitoHelper.anyObject())
