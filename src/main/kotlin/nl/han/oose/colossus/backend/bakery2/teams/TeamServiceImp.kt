@@ -68,4 +68,5 @@ class TeamServiceImp: TeamService {
     override fun getAllTeamInfo(): TeamInfoCollectionDto {
         return teamDao.getAllTeamInfo()
     }
+
 }
