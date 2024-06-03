@@ -48,14 +48,14 @@ class RoomController {
 
     @DeleteMapping(path = ["removeFromRoom/{roomNo}/{teamId}"],produces = [MediaType.APPLICATION_JSON_VALUE])
     @Authenticate
-    fun removeUserFromTeam(@PathVariable roomNo: String,@PathVariable teamId: Int): ResponseEntity<HttpStatus> {
+    fun removeTeamFromRoom(@PathVariable roomNo: String, @PathVariable teamId: Int): ResponseEntity<HttpStatus> {
         roomService.removeTeamFromRoom(roomNo,teamId)
         return ResponseEntity(HttpStatus.OK)
     }
 
     @PostMapping(path = ["addToRoom/{roomNo}/{teamId}"],produces = [MediaType.APPLICATION_JSON_VALUE])
     @Authenticate
-    fun assignUsertoTeam(@PathVariable roomNo: String, @PathVariable teamId: Int): ResponseEntity<HttpStatus> {
+    fun addTeamToRoom(@PathVariable roomNo: String, @PathVariable teamId: Int): ResponseEntity<HttpStatus> {
         roomService.addTeamToRoom(roomNo,teamId)
 
         return ResponseEntity(HttpStatus.OK)

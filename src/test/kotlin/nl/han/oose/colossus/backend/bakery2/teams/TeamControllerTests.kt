@@ -2,6 +2,7 @@ package nl.han.oose.colossus.backend.bakery2.teams
 
 import junit.framework.Assert.assertEquals
 import nl.han.oose.colossus.backend.bakery2.dto.TeamCollectionDto
+import nl.han.oose.colossus.backend.bakery2.dto.TeamInfoCollectionDto
 import nl.han.oose.colossus.backend.bakery2.header.HeaderService
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -94,5 +95,18 @@ class TeamControllerTests {
         assertEquals(HttpStatus.OK, response.statusCode)
         assertEquals(teams, response.body)
         verify(teamService).getTeamsNotInRoom(roomNo.trim())
+    }
+
+    @Test
+    fun testGetAllTeamInfo() {
+        // Arrange
+        val teamInfoCollection = TeamInfoCollectionDto()
+        Mockito.`when`(teamService.getAllTeamInfo()).thenReturn(teamInfoCollection)
+        // Act
+        val response = sut.getAllTeamInfo()
+        // Assert
+        assertEquals(HttpStatus.OK, response.statusCode)
+        assertEquals(teamInfoCollection, response.body)
+        verify(teamService).getAllTeamInfo()
     }
 }

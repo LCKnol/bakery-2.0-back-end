@@ -78,13 +78,13 @@ class RoomControllerTests {
     }
 
     @Test
-    fun testRemoveUserFromTeamWorksCorrectly() {
+    fun testRemoveTeamFromRoomWorksCorrectly() {
         // Arrange
         val roomNo = "13.01"
         val teamId = 1
 
         // Act
-        val response = sut.removeUserFromTeam(roomNo, teamId)
+        val response = sut.removeTeamFromRoom(roomNo, teamId)
 
         // Assert
         assertEquals(HttpStatus.OK, response.statusCode)
@@ -92,13 +92,13 @@ class RoomControllerTests {
     }
 
     @Test
-    fun testAssignUserToTeamWorksCorrectly() {
+    fun testAssignUserToTeamToRoomWorksCorrectly() {
         // Arrange
         val roomNo = "13.01"
         val teamId = 1
 
         // Act
-        val response = sut.assignUsertoTeam(roomNo, teamId)
+        val response = sut.addTeamToRoom(roomNo, teamId)
 
         // Assert
         assertEquals(HttpStatus.OK, response.statusCode)
