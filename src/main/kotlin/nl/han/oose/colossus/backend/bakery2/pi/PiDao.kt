@@ -19,7 +19,7 @@ interface PiDao {
     fun updatePiIp(piSignUpRequestDto: PiSignUpRequestDto)
     fun getPi(piId: Int): PiDto?
     fun getMacAddress(piId: Int):String
-    fun assignDashboard(dashboardId: Int, piId: Int)
+    fun assignDashboard(piId: Int,dashboardId: Int)
     fun getPi(piId: Int?, macAddress: String?): PiDto?
     fun updateStatus(status: String, piId: Int)
 }
