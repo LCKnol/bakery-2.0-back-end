@@ -2,7 +2,7 @@ package nl.han.oose.colossus.backend.bakery2.dto
 
 class DashboardCollectionDto {
 
-    private var dashboards:ArrayList<DashboardDto> = ArrayList()
+    private var dashboards: ArrayList<DashboardDto> = ArrayList()
 
 
     fun setDashboards(newValue: ArrayList<DashboardDto>) {
