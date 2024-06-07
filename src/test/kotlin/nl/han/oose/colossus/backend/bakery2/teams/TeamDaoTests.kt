@@ -2,6 +2,8 @@ package nl.han.oose.colossus.backend.bakery2.teams
 
 import nl.han.oose.colossus.backend.bakery2.database.DatabaseConnection
 import nl.han.oose.colossus.backend.bakery2.dto.TeamCollectionDto
+import nl.han.oose.colossus.backend.bakery2.dto.TeamDto
+import nl.han.oose.colossus.backend.bakery2.dto.TeamInfoDto
 import nl.han.oose.colossus.backend.bakery2.util.MockitoHelper
 import nl.han.oose.colossus.backend.bakery2.util.ScriptRunner
 import org.junit.jupiter.api.Assertions
@@ -26,6 +28,7 @@ class TeamDaoTests {
         sut.setDatabaseConnection(dbConnection)
         sut.setTeamMapper(teamMapper)
     }
+
 
     @Test
     fun getAllTeamsFromUser() {
@@ -110,4 +113,29 @@ class TeamDaoTests {
         verify(teamMapper).mapUserTeams(MockitoHelper.anyObject())
         Assertions.assertEquals(result, teamCollectionDto)
     }
+    @Test
+    fun addTeamTest() {
+        // Arrange
+        val teamInfoDto = TeamInfoDto().apply {
+            setName("Test Team")
+        }
+        dbConnection = DatabaseConnection()
+        val connection = dbConnection.getConnection()
+        val statement = connection.prepareStatement("SELECT * FROM TEAM WHERE TEAMNAME = ?")
+        statement.setString(1, teamInfoDto.getName())
+
+        // Act
+        sut.addTeam(teamInfoDto)
+        val resultSet = statement.executeQuery()
+        val result = resultSet.next()
+
+        // Assert
+        Assertions.assertTrue(result)
+        Assertions.assertEquals(teamInfoDto.getName(), resultSet.getString("TEAMNAME"))
+
+        // Clean up
+        statement.close()
+        connection.close()
+    }
+
 }

@@ -1,6 +1,9 @@
 package nl.han.oose.colossus.backend.bakery2.teams
 
 import nl.han.oose.colossus.backend.bakery2.dto.TeamCollectionDto
+import nl.han.oose.colossus.backend.bakery2.dto.TeamInfoCollectionDto
+import nl.han.oose.colossus.backend.bakery2.dto.TeamInfoDto
+import nl.han.oose.colossus.backend.bakery2.header.Admin
 import nl.han.oose.colossus.backend.bakery2.header.Authenticate
 import nl.han.oose.colossus.backend.bakery2.header.HeaderService
 import org.springframework.beans.factory.annotation.Autowired
@@ -34,11 +37,26 @@ class TeamController {
         return ResponseEntity(teamService.getTeamsFromUser(userId), HttpStatus.OK)
     }
 
+    @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE])
+    @Authenticate
+    @Admin
+    fun addTeam(@RequestBody teamInfoDto: TeamInfoDto): ResponseEntity<HttpStatus> {
+        teamService.addTeam(teamInfoDto)
+        return ResponseEntity(HttpStatus.CREATED)
+    }
+
+    @DeleteMapping(path = ["/{teamId}"])
+    @Authenticate
+    @Admin
+    fun removeTeam(@PathVariable teamId: Int) : ResponseEntity<HttpStatus> {
+        teamService.removeTeam(teamId)
+        return ResponseEntity(HttpStatus.NO_CONTENT)
+    }
 
     @GetMapping(path = ["/notinroom/{roomNo}"], produces = ["application/json"])
     @Authenticate
     fun getTeamsNotInRoom(@PathVariable roomNo: String): ResponseEntity<TeamCollectionDto> {
-        return ResponseEntity(teamService.getTeamsNotInRoom(roomNo.trim()), HttpStatus.OK)
+        return ResponseEntity(teamService.getTeamsNotInRoom(roomNo), HttpStatus.OK)
     }
 
     @GetMapping(path = ["/user/{userId}"],produces = [MediaType.APPLICATION_JSON_VALUE])
@@ -66,5 +84,11 @@ class TeamController {
     fun removeUserFromTeam(@PathVariable userId: Int,@PathVariable teamId: Int): ResponseEntity<HttpStatus> {
         teamService.removeUserFromTeam(userId,teamId)
         return ResponseEntity(HttpStatus.OK)
+    }
+
+    @GetMapping(path = ["/allInfo"],produces = [MediaType.APPLICATION_JSON_VALUE])
+    @Authenticate
+    fun getAllTeamInfo(): ResponseEntity<TeamInfoCollectionDto> {
+        return ResponseEntity(teamService.getAllTeamInfo(), HttpStatus.OK)
     }
 }

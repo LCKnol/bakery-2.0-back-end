@@ -1,12 +1,12 @@
 package nl.han.oose.colossus.backend.bakery2.pi
 
-import nl.han.oose.colossus.backend.bakery2.users.UserService
 import nl.han.oose.colossus.backend.bakery2.dto.PiCollectionDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiDto
 import nl.han.oose.colossus.backend.bakery2.dto.PiRequestsCollectionDto
 import nl.han.oose.colossus.backend.bakery2.header.Admin
 import nl.han.oose.colossus.backend.bakery2.header.Authenticate
 import nl.han.oose.colossus.backend.bakery2.header.HeaderService
+import nl.han.oose.colossus.backend.bakery2.users.UserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
@@ -42,9 +42,9 @@ class PiController {
 
     @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
     @Authenticate
-    fun getPis(): ResponseEntity<PiCollectionDto> {
+    fun getPisFromUser (): ResponseEntity<PiCollectionDto> {
         val userId = headerService.getUserId()
-        val pisResponse = piService.getPis(userId)
+        val pisResponse = piService.getPisFromUser(userId)
         return ResponseEntity(pisResponse, HttpStatus.OK)
     }
 
@@ -112,7 +112,7 @@ class PiController {
 
     @GetMapping("/reboot/{piId}")
     @Authenticate
-    fun rebootPi(@PathVariable piId:Int): ResponseEntity<HttpStatus> {
+    fun rebootPi(@PathVariable piId: Int): ResponseEntity<HttpStatus> {
         piService.rebootPi(piId)
         return ResponseEntity(HttpStatus.OK)
     }
@@ -129,7 +129,28 @@ class PiController {
     @GetMapping("tv/{piId}/{option}")
     @Authenticate
     fun setTvPower(@PathVariable piId: Int, @PathVariable option: Boolean): ResponseEntity<HttpStatus> {
-        this.piService.setTvPower(piId,option)
+        this.piService.setTvPower(piId, option)
+        return ResponseEntity(HttpStatus.OK)
+    }
+
+    @GetMapping("/update")
+    @Authenticate
+    fun updateAllPis(): ResponseEntity<HttpStatus> {
+        this.piService.updateAllPis()
+        return ResponseEntity(HttpStatus.OK)
+    }
+
+    @GetMapping("/pingAll")
+    @Authenticate
+    fun pingAllPis(): ResponseEntity<HttpStatus> {
+        this.piService.pingAllPis()
+        return ResponseEntity(HttpStatus.OK)
+    }
+
+    @GetMapping("/rebootAll")
+    @Authenticate
+    fun rebootAllPis(): ResponseEntity<HttpStatus> {
+        this.piService.rebootAllPis()
         return ResponseEntity(HttpStatus.OK)
     }
 }
