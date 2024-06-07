@@ -95,6 +95,10 @@ create table PIREQUEST
     primary key (REQUESTID)
 );
 
+# password: AvisiPassword
+INSERT INTO bakeryDB.USERS (USERID, FIRSTNAME, LASTNAME, PASSWORD, EMAIL, ISADMIN)
+VALUES (1, 'TestUser', 'Visi', '$2a$10$piwNZPAOhMhdG7Xlm/3kkOs/hZeYlfyQPAY/z7SurggdiLxfzu.KC', 'Avisi@outlook.com', 1);
+
 alter table DASHBOARD
     add constraint FK_DASHBOARDFROMTEAM foreign key (TEAMID)
         references TEAM (TEAMID) on delete cascade on update restrict;
